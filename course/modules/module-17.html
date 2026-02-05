@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 17: SAP Customer Experience (CX)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 17: SAP Customer Experience (CX)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> SAP CX (formerly C/4HANA) is SAP’s <strong>cloud CRM and customer-facing suite</strong>. It includes Sales Cloud (opportunities, quotes, orders), Service Cloud (support tickets, field service), Marketing Cloud (campaigns, leads), and Commerce Cloud (B2B/B2C storefronts). Companies use CX for the “front office” (sales, marketing, service, e-commerce) while keeping S/4HANA as the system of record for fulfillment, product master, pricing, and finance. Orders created in CX can be sent to S/4HANA for delivery and billing; product and price can flow from S/4HANA to CX. Integration is via APIs and often SAP BTP (CPI, Event Mesh). Key terms: <strong>CRM</strong>, <strong>Sales/Service/Marketing/Commerce Cloud</strong>, <strong>CDP</strong> (unified customer data).
+    </div>
+
+    <p>SAP CX covers the full customer journey in the cloud. Integration with S/4HANA is via APIs and BTP.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>CX covers the full customer journey: <strong>Marketing Cloud:</strong> Campaigns, lead management, and (with CDP) unified customer data. <strong>Sales Cloud:</strong> Opportunities, quotes, and (with Revenue Cloud) subscription and billing. <strong>Service Cloud:</strong> Cases/tickets, knowledge base, field service. <strong>Commerce Cloud:</strong> B2B and B2C storefronts; cart and checkout can create orders in S/4HANA or in Commerce. <strong>CDP:</strong> Single view of customer from many sources. <strong>Revenue Cloud:</strong> Subscription billing and revenue recognition. Orders and pricing can be authored in CX and replicated to S/4HANA for fulfillment and FI; or S/4HANA can be the source of product and price and CX the front-end.</p>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Sales Cloud:</strong> Accounts and contacts; opportunities and pipeline; quotes and orders. Integration: order can create sales order in S/4HANA (SD); product and price from S/4HANA or CX.</li>
+        <li><strong>Service Cloud:</strong> Service tickets (cases); knowledge base and self-service; field service (scheduling, mobile). Warranty and installed base can come from S/4HANA.</li>
+        <li><strong>Marketing Cloud:</strong> Campaigns, segments, and lead scoring; integration with CDP for customer data. Leads can flow to Sales Cloud.</li>
+        <li><strong>Commerce Cloud:</strong> Catalog, cart, checkout; B2B (e.g. customer-specific pricing, contract) and B2C. Order can be sent to S/4HANA for delivery and billing.</li>
+        <li><strong>Revenue Cloud:</strong> Subscription and usage-based billing; revenue recognition rules. Can integrate with S/4HANA FI for revenue posting.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> Tenant entities: Account, Contact, Opportunity, Quote, Order, Case (ticket), Product, etc. No customer DB; UIs and APIs. Sync to/from S/4HANA (order, product, customer, pricing) via CPI or direct APIs. <strong>Control plane:</strong> Product-specific admin (Sales, Service, Marketing, Commerce); SAP Build for custom UIs; Integration Suite (CPI) and IAS. See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> SaaS only; multiple products (Sales, Service, Marketing, Commerce) can be licensed together. <strong>Integration:</strong> S/4HANA: order creation (CX → SD), product and pricing (S/4HANA → CX or bidirectional), customer (sync); FI/AR (billing, revenue). BTP (CPI, API Management, Event Mesh); IAS for SSO (Module 22, 29).</p>
+
+    <div class="example-box">
+        <h4>Example: Quote in Sales Cloud to order in S/4HANA</h4>
+        <p>Sales rep works in Sales Cloud; order is fulfilled in S/4HANA.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Opportunity and quote (Sales Cloud):</strong> Rep has opportunity for customer “Acme.” Creates quote: 2× Product A @ 100 EUR, 1× Product B @ 200 EUR. Quote total 400 EUR. Customer accepts.</li>
+            <li><strong>Order creation:</strong> Rep converts quote to order in Sales Cloud. Integration (CPI or API) creates sales order in S/4HANA: customer Acme, items Product A (2), Product B (1), price from quote. Order number in S/4HANA is returned and stored in CX.</li>
+            <li><strong>Fulfillment (S/4HANA):</strong> Delivery (VL01N) and billing (VF01) happen in S/4HANA. Revenue and AR post to FI. Optional: status or invoice data can be sent back to CX for visibility.</li>
+        </ol>
+        <p>Result: Sell in CX; fulfill and revenue in S/4HANA.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Key CX entities and S/4HANA link</h4>
+        <table>
+            <tr><th>CX entity</th><th>S/4HANA link</th></tr>
+            <tr><td>Account / Contact</td><td>Customer master (KNA1, etc.) sync</td></tr>
+            <tr><td>Opportunity / Quote / Order</td><td>Sales order (VBAK/VBAP) create or reference</td></tr>
+            <tr><td>Product</td><td>Material master, pricing (S/4HANA or CX)</td></tr>
+            <tr><td>Case (Service)</td><td>Optional: link to SD/PM; installed base</td></tr>
+        </table>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: CX ↔ S/4HANA order flow</h4>
+        <p>Click to see how a deal in CX becomes an order in S/4HANA.</p>
+        <button type="button" id="cx-step1">1. Quote in Sales Cloud</button>
+        <button type="button" id="cx-step2">2. Order creation (API)</button>
+        <button type="button" id="cx-step3">3. Fulfillment in S/4HANA</button>
+        <div id="cx-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key concepts</h3>
+    <p><strong>CX vs SD:</strong> CX = cloud CRM and digital experience; SD = ERP order, delivery, billing. Typical pattern: CX for selling and service; S/4HANA for order execution and FI. <strong>Integration patterns:</strong> Order from CX to S/4HANA (create sales order); product and price from S/4HANA to CX; customer sync both ways. <strong>BTP:</strong> CPI for orchestration; API Management for APIs; Event Mesh for events (Module 22, 29).</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: SAP CX includes:</h4>
+            <ul class="quiz-options">
+                <li>A) Only MM</li>
+                <li>B) Sales Cloud, Service Cloud, Marketing Cloud, Commerce Cloud</li>
+                <li>C) Only FI</li>
+                <li>D) Only Basis</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>CX = Customer Experience (sales, service, marketing, commerce).</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: Service Cloud is for:</h4>
+            <ul class="quiz-options">
+                <li>A) Only procurement</li>
+                <li>B) Service tickets, knowledge base, field service</li>
+                <li>C) Only production</li>
+                <li>D) Only warehouse</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Service Cloud = customer service and support.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: CX integrates with S/4HANA for:</h4>
+            <ul class="quiz-options">
+                <li>A) Only QM</li>
+                <li>B) Only PM</li>
+                <li>C) Orders, pricing, product master, FI/AR</li>
+                <li>D) Only PS</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: C</strong><br>Orders, pricing, product, billing/revenue flow to S/4HANA.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: Where is the sales order typically created when using Sales Cloud with S/4HANA?</h4>
+            <ul class="quiz-options">
+                <li>A) Only in FI</li>
+                <li>B) In S/4HANA (SD), triggered by order creation from Sales Cloud via API/CPI</li>
+                <li>C) Only in MM</li>
+                <li>D) Only in PP</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>Sales Cloud sends order data to S/4HANA; SD creates the sales order for fulfillment.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'Sales rep creates quote in Sales Cloud (products, quantities, prices). Customer accepts. Quote is ready to convert to order.',
+            'Order is created in Sales Cloud and sent to S/4HANA via CPI or API. S/4HANA SD creates sales order (VBAK/VBAP); order number returned to CX.',
+            'Delivery and billing are done in S/4HANA (VL01N, VF01). Revenue and AR post to FI. CX can show order status from S/4HANA.'
+        ];
+        var flowEl = document.getElementById('cx-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('cx-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

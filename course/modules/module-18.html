@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 18: SAP Transportation Management (TM)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 18: SAP Transportation Management (TM)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> Transportation Management (TM) handles the <strong>freight</strong> side of logistics: once a delivery leaves the warehouse (SD/EWM), how do you plan the shipment, choose a carrier, tender the load, track it, and settle the freight cost? TM creates <strong>freight orders</strong> (the need to move goods) and <strong>shipments</strong> (the actual move with carrier and dates). It can run <strong>embedded</strong> in S/4HANA or as a <strong>standalone</strong> system. EWM covers the warehouse; TM covers the transport leg. Freight costs can be posted to FI. Key terms: <strong>freight order</strong>, <strong>shipment</strong>, <strong>tendering</strong>, <strong>carrier</strong>.
+    </div>
+
+    <p>SAP TM covers freight planning, carrier selection, tendering, execution, and freight settlement. It is triggered by SD deliveries or EWM outbound.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>TM answers: “How do we move goods from A to B at the right cost and time?” Key areas: <strong>Freight order:</strong> Represents the requirement to move goods (from delivery or manual). <strong>Planning:</strong> Load building (combine orders into shipments), route and carrier selection, optimization. <strong>Tendering:</strong> Send request to carrier; receive rate and confirmation. <strong>Execution:</strong> Shipment created; tracking and status events (e.g. picked up, in transit, delivered). <strong>Freight settlement:</strong> Carrier invoice; post freight cost to FI (cost object, G/L). Integration with SD (delivery document) and EWM (outbound order) provides the source of demand.</p>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Freight order:</strong> Created from SD delivery or EWM outbound (or manually). Contains source/destination, weight/volume, requested dates. Can be planned and tendered.</li>
+        <li><strong>Planning and optimization:</strong> Build loads (group freight orders); select carrier and service; optimize routes. Planning runs can suggest best combination.</li>
+        <li><strong>Shipment:</strong> Execution object: one or more freight units (shipment legs). Carrier and planned dates. Status updates (events) during execution.</li>
+        <li><strong>Tendering and carrier selection:</strong> Send tender to carrier (or use rate contract); carrier confirms; rate and capacity locked.</li>
+        <li><strong>Freight settlement:</strong> After execution, carrier invoice is entered or received. Freight cost is posted to FI (cost center, G/L); can be allocated to delivery or order.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> TM tables (e.g. /SCMTMS/*): freight order, freight unit, shipment, carrier, rate. Processing in application server. <strong>Control plane:</strong> TM customizing (SPRO): business partner (carrier), location, product (service), rate and settlement config. See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> On‑premise and S/4HANA. TM can be <strong>embedded</strong> (same S/4HANA system) or <strong>standalone</strong> (separate TM system, integration via RFC/IDoc). <strong>Integration:</strong> SD (deliveries trigger freight demand); EWM (outbound delivery); FI (freight cost posting).</p>
+
+    <div class="example-box">
+        <h4>Example: Outbound delivery to freight order to settlement</h4>
+        <p>SD delivery is created for a customer order; TM plans and executes the shipment.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Trigger (SD/EWM):</strong> Outbound delivery 8000000123 is created (VL01N). TM receives the delivery: freight order is created (or updated) with source plant, ship-to address, weight, and requested delivery date.</li>
+            <li><strong>Planning:</strong> Planner runs planning (or it is automatic): freight order is assigned to a carrier (e.g. from rate contract). Shipment is created. Tender sent to carrier; carrier confirms. Shipment status: planned.</li>
+            <li><strong>Execution and settlement:</strong> Goods are handed to carrier; events are posted (picked up, in transit). On delivery, status “delivered.” Carrier sends invoice (e.g. 500 EUR). Freight settlement in TM: post to FI—Debit freight expense 500, Credit carrier payable 500. Cost can be allocated to the delivery or order.</li>
+        </ol>
+        <p>Result: One shipment from delivery to delivery; freight cost in FI.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>TM document flow (simplified)</h4>
+        <table>
+            <tr><th>Object</th><th>Description</th></tr>
+            <tr><td>Freight order</td><td>Requirement to move goods (from delivery)</td></tr>
+            <tr><td>Freight unit / Shipment</td><td>Execution: carrier, legs, status</td></tr>
+            <tr><td>Freight settlement</td><td>Carrier invoice → FI posting</td></tr>
+        </table>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: TM flow</h4>
+        <p>Click to see the flow from delivery to freight cost.</p>
+        <button type="button" id="tm-step1">1. Delivery → Freight order</button>
+        <button type="button" id="tm-step2">2. Plan &amp; ship</button>
+        <button type="button" id="tm-step3">3. Settle to FI</button>
+        <div id="tm-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key tables and concepts</h3>
+    <p>TM uses namespace <code>/SCMTMS/</code>: freight order, freight unit, shipment, carrier, and related tables. <strong>Concepts:</strong> Freight order vs shipment; tendering; freight settlement document; integration with SD delivery and EWM outbound.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: TM is used for:</h4>
+            <ul class="quiz-options">
+                <li>A) Only sales order</li>
+                <li>B) Freight and transportation planning and execution</li>
+                <li>C) Only FI</li>
+                <li>D) Only QM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>TM = Transportation Management (freight orders, carrier, settlement).</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: TM is triggered by:</h4>
+            <ul class="quiz-options">
+                <li>A) Only CO</li>
+                <li>B) SD (deliveries) and EWM (outbound)</li>
+                <li>C) Only MM</li>
+                <li>D) Only PS</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Deliveries and outbound warehouse trigger TM.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: Freight costs from TM post to:</h4>
+            <ul class="quiz-options">
+                <li>A) Only SD</li>
+                <li>B) Only MM</li>
+                <li>C) FI</li>
+                <li>D) Only QM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: C</strong><br>Freight settlement posts to FI.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: How can TM be deployed with S/4HANA?</h4>
+            <ul class="quiz-options">
+                <li>A) Only as Ariba</li>
+                <li>B) Embedded in S/4HANA or standalone</li>
+                <li>C) Only as Concur</li>
+                <li>D) Only as SuccessFactors</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>TM runs embedded in S/4HANA or as a separate TM system.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'SD delivery or EWM outbound creates demand. TM creates freight order (source, destination, weight, dates).',
+            'Planning: assign carrier, create shipment, tender. Execution: handover to carrier; post events (picked up, in transit, delivered).',
+            'Carrier invoice received. Freight settlement in TM: post freight cost to FI (expense and carrier payable). Cost can allocate to delivery.'
+        ];
+        var flowEl = document.getElementById('tm-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('tm-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 1: Foundation concepts</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .highlight-box, .warning-box { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .success-box { background: #d4edda; border-left: 4px solid #28a745; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .step-box h4 { margin-top: 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .interactive-container h4 { margin-top: 0; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-weight: 500; margin: 4px 8px 4px 0; transition: background 0.2s, transform 0.2s; }
+        button:hover { background: #5568d3; transform: translateY(-2px); }
+        button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .reveal-box { display: none; margin-top: 12px; padding: 16px; background: #e8f0ff; border-radius: 6px; border: 1px solid #667eea; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-weight: 500; margin-top: 8px; }
+        .show-answer-btn:hover { background: #218838; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        @media (max-width: 768px) { body { padding: 14px; } .example-box, .quiz-section, .interactive-container { padding: 18px; } }
+    </style>
+</head>
+<body>
+    <h2>Module 1: Foundation concepts</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> If you are new to SAP, think of this module as learning the “map” before visiting the “cities.” SAP has many products (ERP for finance and logistics, cloud apps for HR and procurement, and a platform for integration). To avoid getting lost, we use four ideas everywhere: <strong>data plane</strong> (where business data lives and is processed), <strong>control plane</strong> (where we configure, secure, and connect systems), <strong>deployment</strong> (where the system runs: your data center or the cloud), and <strong>integration</strong> (how systems talk to each other). Once you understand these, every later module will make more sense.
+    </div>
+
+    <p>This chapter establishes the shared concepts used across <strong>all</strong> SAP modules and products. Every later chapter (Modules 2–31) will refer back to these ideas. Understanding them once here will make it much easier to see how each solution fits into the bigger picture.</p>
+
+    <h3>Why these concepts matter</h3>
+    <p>In any SAP landscape—whether you have only one <strong>S/4HANA</strong> system (SAP’s current ERP suite, the successor to <strong>ECC</strong>) or a mix of S/4HANA, cloud products, and <strong>BTP</strong> (SAP Business Technology Platform, used for integration and extensions)—two questions always apply: <em>Where does the business data live and get processed?</em> (data plane) and <em>Where do we configure, secure, and connect systems?</em> (control plane). Deployment choices (on‑premise, cloud, hybrid) and integration patterns (APIs, middleware, events) determine how you run and connect these pieces.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> Imagine a company: the <strong>data plane</strong> is like the filing cabinets and the work done on the documents (invoices, orders, payments). The <strong>control plane</strong> is like the rules (who can access which cabinet, how documents are filed, and how different departments send documents to each other). Using this vocabulary avoids confusion when you move from Finance (FI) to HR cloud (SuccessFactors) to integration (CPI).
+    </div>
+
+    <h3>Data plane</h3>
+    <p><strong>Definition:</strong> The data plane is where business data is <strong>stored</strong>, <strong>processed</strong>, and <strong>transacted</strong>. It holds the operational and analytical data that applications read and write—for example, sales orders, purchase orders, invoices, and general ledger entries. It does <em>not</em> include the “where and how” of configuration or security; that belongs to the control plane.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> Whenever you create, change, or read a business record (an invoice, a customer order, an employee record), you are touching the data plane. The data plane is the “what happened” and “what is the current state”; the control plane is the “how we allowed it” and “how we set it up.”
+    </div>
+
+    <div class="example-box">
+        <h4>Data plane in SAP ERP / S/4HANA</h4>
+        <p>In an on‑premise or hosted ERP system, the data plane consists of:</p>
+        <ul>
+            <li><strong>Storage:</strong> The database (SAP HANA in S/4HANA, or legacy databases in ECC) holds all application tables. Each SAP module uses specific table names: for example, FI (Finance) stores document headers in <code>BKPF</code> and line items in <code>BSEG</code>; MM (Materials Management) stores purchase orders in <code>EKKO</code>/<code>EKPO</code> and material documents in <code>MKPF</code>/<code>MSEG</code>; SD (Sales &amp; Distribution) stores sales orders in <code>VBAK</code>/<code>VBAP</code> and delivery data in <code>LIKP</code>/<code>LIPS</code>. You do not need to memorize these now—just know that each module has its own set of tables, and they all live in the same physical database.</li>
+            <li><strong>Processing:</strong> The application servers (running ABAP, SAP’s main programming language, and optionally Java) execute business logic: validations, calculations, document creation, and postings. When a user posts a goods receipt in MM, the program reads the purchase order, creates material document records (that is data plane), and may trigger a posting to FI (again, data plane). In that moment, no configuration or user management is changed—only business data is read and written.</li>
+        </ul>
+        <p>So for ERP, the data plane = <strong>database + application server</strong> executing transactions and reports.</p>
+    </div>
+
+    <div class="example-box">
+        <h4>Data plane in SAP cloud products</h4>
+        <p>In SAP SuccessFactors (HR), Ariba (procurement), Concur (expenses), SAP Analytics Cloud, and similar products, you do <strong>not</strong> have direct access to database tables like in ERP. Instead:</p>
+        <ul>
+            <li>Data is stored in SAP‑operated (or partner) data centers as <strong>entities</strong>—logical objects such as User, Employee, Position, Goal in SuccessFactors; Purchase Order, Invoice in Ariba; Expense Report in Concur. You cannot run SQL against them; you work with the product’s own data model.</li>
+            <li>You access and change this data through <strong>UIs</strong> (the product’s screens and apps) and <strong>APIs</strong> (OData, REST—standard ways for applications to exchange data). Replication or integration may copy data to S/4HANA or Datasphere, so the same information may exist in more than one place; the <em>source of truth</em> for each product is still in its own cloud <strong>tenant</strong> (your dedicated instance of that product).</li>
+        </ul>
+        <p>So for cloud products, the data plane = <strong>tenant data (entities) + product application layer</strong>; you interact via UIs and APIs, not SQL.</p>
+    </div>
+
+    <div class="example-box">
+        <h4>Data plane in SAP Datasphere and BW</h4>
+        <p>In SAP Datasphere (cloud) and SAP BW/4HANA (on‑premise or cloud), the data plane is the <strong>semantic layer</strong> and stored datasets: views, persisted tables, and models that consolidate data from ERP and other sources for reporting and analytics. SAC (SAP Analytics Cloud) then connects to these as data sources. So the data plane for analytics = <strong>Datasphere/BW objects + data stored there</strong>.</p>
+    </div>
+
+    <div class="info-box"><strong>Takeaway:</strong> For any module or product, ask: <em>Where is the business data stored, and where is it processed?</em> That is the data plane for that solution.</div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: See data plane vs control plane by solution</h4>
+        <p>Select a solution type below to see what belongs to the <strong>data plane</strong> and what belongs to the <strong>control plane</strong> for that solution.</p>
+        <div style="margin: 16px 0;">
+            <button type="button" onclick="showPlane('erp')">SAP ERP / S/4HANA</button>
+            <button type="button" onclick="showPlane('cloud')">SAP Cloud (e.g. SuccessFactors)</button>
+            <button type="button" onclick="showPlane('btp')">SAP BTP</button>
+        </div>
+        <div id="plane-reveal" class="reveal-box"></div>
+    </div>
+
+    <h3>Control plane</h3>
+    <p><strong>Definition:</strong> The control plane is where system behavior is <strong>configured</strong>, <strong>orchestrated</strong>, and <strong>governed</strong>. It does not hold day‑to‑day business transactions (those are in the data plane); it defines <em>how</em> the system runs, <em>who</em> can do what, and <em>how</em> systems connect to each other.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> The control plane is where administrators and consultants set the rules: which company codes exist, which document types are allowed, which users have access to which transactions, and how data is sent to or received from other systems. Changing the control plane does not create a new invoice or order—it changes how future invoices and orders will be created and who can do it.
+    </div>
+
+    <div class="example-box">
+        <h4>Control plane in SAP ERP / S/4HANA</h4>
+        <ul>
+            <li><strong>Basis / system administration:</strong> Client, instance, application server profile, transport (STMS), patches, and upgrades. This defines <em>which</em> systems exist and how they are maintained.</li>
+            <li><strong>Configuration (customizing):</strong> <strong>SPRO</strong> (transaction for the Implementation Guide / IMG) and related configuration tables (e.g. company code in T001, purchasing group in T024) define company codes, plants, document types, account determination—i.e. <em>how</em> the data plane behaves (which accounts are used, which number ranges, etc.).</li>
+            <li><strong>Security:</strong> Users (SU01), roles (PFCG), and authorizations control <em>who</em> can access which transactions and data. A user without the right role cannot post an FI document even though the data plane is ready to store it.</li>
+            <li><strong>Integration configuration:</strong> RFC destinations (SM59), OData/Gateway setup, and (when used) PI/PO or CPI connection details control <em>how</em> data flows between this system and others.</li>
+        </ul>
+    </div>
+
+    <div class="example-box">
+        <h4>Control plane in SAP BTP</h4>
+        <p>BTP is largely a <strong>control plane</strong> for the broader landscape:</p>
+        <ul>
+            <li><strong>Global account and subaccounts:</strong> Entitlements and quotas define which services (Integration Suite, Datasphere, ABAP environment, etc.) are available and in which region.</li>
+            <li><strong>Identity (IAS):</strong> Central identity and authentication for SAP and non‑SAP apps; single sign‑on and federation so users do not log in separately to each product.</li>
+            <li><strong>Integration Suite:</strong> CPI (Cloud Integration) flows, API Management policies, and Event Mesh topics/subscriptions control <em>how</em> S/4HANA and cloud products exchange data.</li>
+        </ul>
+        <p>Extensions and apps that run <em>on</em> BTP (e.g. an ABAP Cloud app or a Cloud Foundry app) may have their own small data plane (e.g. app-specific tables), but BTP itself is the place you go to <em>manage</em> integration and extension, not to store core business transactions.</p>
+    </div>
+
+    <div class="info-box"><strong>Takeaway:</strong> For any module or product, ask: <em>Where is configuration, identity, and integration routing managed?</em> That is the control plane.</div>
+
+    <h3>Deployment</h3>
+    <p>Deployment defines <em>where</em> and <em>how</em> a solution is run: in your data center (on‑premise), in SAP’s cloud, or a combination (hybrid). This affects who operates the system, who applies upgrades, and how you connect to other systems. As a beginner, it is enough to know: same SAP product (e.g. S/4HANA) can run at your site or in SAP’s cloud; cloud products (SuccessFactors, Ariba, etc.) run only in the cloud.</p>
+
+    <table>
+        <tr><th>Deployment type</th><th>Description</th><th>Example</th></tr>
+        <tr><td><strong>On‑premise</strong></td><td>SAP NetWeaver (S/4HANA, ECC, BW) runs in your data center. You control infrastructure, database, and Basis; you schedule upgrades and patches.</td><td>Company runs S/4HANA 2022 in its own DC; all core ERP modules (FI, CO, MM, SD, PP, etc.) run there.</td></tr>
+        <tr><td><strong>S/4HANA Cloud</strong></td><td>ERP is operated by SAP or a partner. Subscription-based; release and maintenance are managed by SAP. Extensions are encouraged on BTP to keep the core “clean.”</td><td>Company subscribes to S/4HANA Cloud; uses BTP for custom apps and CPI for integration with Ariba.</td></tr>
+        <tr><td><strong>Cloud products (SaaS)</strong></td><td>SuccessFactors, Ariba, Concur, CX, IBP, SAC, Datasphere, Signavio, etc. No customer deployment of the application—you get a tenant and configure via admin UIs and APIs. Concepts: <strong>tenant</strong>, <strong>region</strong>, <strong>connectivity</strong> to S/4HANA and BTP.</td><td>Company uses SuccessFactors for HR; tenant is in EU; CPI on BTP connects it to S/4HANA for employee and cost center data.</td></tr>
+        <tr><td><strong>Hybrid</strong></td><td>Typical pattern: S/4HANA (cloud or on‑prem) + BTP + one or more cloud products. BTP is the control plane for integration and extension; the data plane spans S/4HANA (transactional data) and cloud products (their own data stores).</td><td>S/4HANA on‑prem for core ERP; SuccessFactors for HR; Ariba for procurement; BTP for CPI and custom Fiori apps.</td></tr>
+    </table>
+
+    <h3>Integration</h3>
+    <p>Integration is about <strong>connecting</strong> systems so that data and processes flow correctly—for example, sending employee data from SuccessFactors to S/4HANA, or sending an invoice from Ariba to FI. The <em>design</em> of these connections (which system talks to which, which protocol, which mapping) is part of the <strong>control plane</strong>; the actual <em>flow of data</em> uses the data planes of the connected systems.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> When one system needs to send data to another (e.g. “create an FI document when an invoice is approved in Ariba”), someone configures an integration flow (e.g. in SAP CPI on BTP). That configuration is control plane; the invoice in Ariba and the resulting document in S/4HANA are data plane.
+    </div>
+
+    <div class="step-box">
+        <h4>Example: How does a vendor invoice get from Ariba to S/4HANA FI?</h4>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Control plane (BTP):</strong> An integration flow (iFlow) in SAP CPI is configured to listen for “invoice created” from Ariba and to call S/4HANA’s API (or IDoc) to create an FI document. Security (credentials, certificates) is also configured in BTP/CPI.</li>
+            <li><strong>Data plane (Ariba):</strong> The invoice exists in Ariba as an entity; when it is submitted, Ariba sends the payload to CPI (outbound).</li>
+            <li><strong>Data plane (S/4HANA):</strong> CPI calls S/4HANA; the application server creates a document in BKPF/BSEG (and possibly MM for the purchase order reference). The data now lives in the ERP data plane.</li>
+        </ol>
+        <p>So: <strong>control plane</strong> = the CPI flow and its configuration; <strong>data plane</strong> = the invoice in Ariba and the FI document in S/4HANA.</p>
+    </div>
+
+    <p>Key integration patterns you will see in later modules:</p>
+    <ul>
+        <li><strong>Within ERP (same system):</strong> Document flow, automatic postings, and shared master data (e.g. FI–MM–SD–CO). No middleware needed—just function calls and shared tables.</li>
+        <li><strong>ERP ↔ cloud:</strong> SAP CPI (iFlows), OData/REST/BAPIs, IDocs/RFC, SAP Event Mesh. The control plane (CPI, API Management, Event Mesh) is often on BTP.</li>
+        <li><strong>Cloud to cloud:</strong> Often via BTP (e.g. SuccessFactors ↔ S/4HANA for employee data; Ariba ↔ S/4HANA for P2P; Concur ↔ S/4HANA for expense posting).</li>
+        <li><strong>Analytics:</strong> Datasphere and SAC connect to S/4HANA, BW, and cloud products via connectors and APIs; data is replicated or accessed live for reporting.</li>
+    </ul>
+
+    <div class="highlight-box">Later modules (2–31) will reference “Module 1” when they mention data plane, control plane, deployment, or integration. Bookmark this chapter and use it as your reference whenever you need to clarify where something “lives” or “who controls it.”</div>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Question 1: What is the data plane?</h4>
+            <ul class="quiz-options">
+                <li>A) Where systems are configured and secured</li>
+                <li>B) Where business data is stored and processed</li>
+                <li>C) The SAP cloud only</li>
+                <li>D) The same as the control plane</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1">
+                <strong>Correct Answer: B</strong><br>
+                The data plane is where business data is stored and processed (e.g. ERP tables and application server, or cloud entities and APIs).
+            </div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 2: Which is part of the control plane in ERP?</h4>
+            <ul class="quiz-options">
+                <li>A) Transaction tables like BKPF</li>
+                <li>B) Basis, customizing (SPRO), and security (users/roles)</li>
+                <li>C) Only SAP BTP</li>
+                <li>D) Cloud tenant data</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2">
+                <strong>Correct Answer: B</strong><br>
+                Basis, customizing, and security (users, roles, authorizations) are control plane—they govern how and who accesses the system.
+            </div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 3: How do SAP cloud products (e.g. SuccessFactors, Ariba) deploy?</h4>
+            <ul class="quiz-options">
+                <li>A) On‑premise only</li>
+                <li>B) SaaS only—tenant, region, connectivity</li>
+                <li>C) Same as S/4HANA on‑prem</li>
+                <li>D) Only via BTP ABAP</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3">
+                <strong>Correct Answer: B</strong><br>
+                Cloud products are SaaS only; customers get a tenant and configure via admin UIs and APIs; connectivity to S/4HANA and BTP is key.
+            </div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 4: In a hybrid landscape, where is the integration flow (e.g. Ariba → S/4HANA) typically designed and run?</h4>
+            <ul class="quiz-options">
+                <li>A) Only inside the Ariba tenant</li>
+                <li>B) In SAP BTP (e.g. CPI) or on‑premise PI/PO</li>
+                <li>C) Only in S/4HANA Basis</li>
+                <li>D) Only in SuccessFactors</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4">
+                <strong>Correct Answer: B</strong><br>
+                Integration flows are part of the control plane and run in middleware: BTP (CPI) or on‑premise PI/PO.
+            </div>
+        </div>
+    </div>
+    <script>
+        function showAnswer(n) {
+            document.getElementById('answer-' + n).classList.add('show');
+            var btn = document.getElementById('btn-' + n);
+            btn.disabled = true;
+            btn.textContent = 'Answer Revealed';
+        }
+        function showPlane(type) {
+            var box = document.getElementById('plane-reveal');
+            var html = '';
+            if (type === 'erp') {
+                html = '<strong>SAP ERP / S/4HANA</strong><br>' +
+                    '<strong>Data plane:</strong> Database (BKPF, BSEG, MARA, EKKO, VBAK, etc.), application server (ABAP) processing transactions and reports.<br>' +
+                    '<strong>Control plane:</strong> Basis (client, transport, STMS), SPRO customizing (company code, document types, account determination), security (SU01, PFCG), RFC/OData config (SM59).';
+            } else if (type === 'cloud') {
+                html = '<strong>SAP Cloud (e.g. SuccessFactors)</strong><br>' +
+                    '<strong>Data plane:</strong> Tenant entities (User, Employee, Position, Goal, etc.) stored in SAP data centers; accessed via UIs and APIs (OData/REST). No direct DB access.<br>' +
+                    '<strong>Control plane:</strong> Admin Center, provisioning, RBP (rule-based permissions), integration center; IAS for SSO.';
+            } else if (type === 'btp') {
+                html = '<strong>SAP BTP</strong><br>' +
+                    '<strong>Data plane:</strong> BTP is mainly control plane. Extensions (e.g. ABAP environment, Cloud Foundry apps) may store their own data (e.g. draft tables, app DB).<br>' +
+                    '<strong>Control plane:</strong> Global account, subaccounts, entitlements, IAS (identity), Integration Suite (CPI, API Management, Event Mesh), multi-region orchestration.';
+            }
+            box.innerHTML = html;
+            box.classList.add('show');
+        }
+    </script>
+</body>
+</html>

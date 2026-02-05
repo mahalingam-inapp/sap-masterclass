@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 11: Human Capital Management (HCM)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 11: Human Capital Management (HCM)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> Human Capital Management (HCM) in SAP ERP is the <strong>on-premise</strong> HR solution: employee data, organization structure, time recording, and payroll. Employee data is stored in <strong>infotypes</strong>—time-dependent records such as “basic pay” or “address” with a validity period, so you keep history. <strong>Organizational Management</strong> defines the structure: org units, positions, jobs, and which person holds which position. <strong>Time management</strong> covers clock-in/out, leave, and absences. <strong>Payroll</strong> calculates gross and net pay and can post salary costs to FI. Many companies are moving to cloud HCM (SuccessFactors)—covered in Modules 13–14—but core ERP HCM is still widely used or integrated with cloud.
+    </div>
+
+    <p>SAP HCM in ERP covers personnel administration, organizational management, time management, and payroll. Cloud HCM (SuccessFactors, Fieldglass) is covered in Modules 13 and 14; this module focuses on the core ERP HCM component.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>HCM supports the employee lifecycle: hiring, personnel data (address, contract, cost center assignment), organization structure (positions, jobs, org units), time recording (attendances, absences, leave), and payroll (salary, tax, deductions, bank transfer). Results can be posted to FI (salary expense, payables). Training (LSO), recruitment (RCM), and talent modules exist in ECC/S/4HANA; SAP’s strategic direction is cloud (SuccessFactors) for many of these areas.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> An <strong>infotype</strong> is a type of personnel record—e.g. “0002 Personal Data” or “0008 Basic Pay.” Each infotype has a validity period (from–to date), so when someone’s salary changes, you create a new record and the old one stays for history. The organization structure (org unit → position → person) is used for reporting (“who reports to whom”) and often for cost center assignment and authorizations.
+    </div>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Personnel Administration (PA):</strong> Infotypes store employee data: 0001 (org assignment), 0002 (personal data), 0006 (address), 0007 (planned working time), 0008 (basic pay), etc. Each infotype has validity period; history is kept. PA30 (maintain), PA20 (display).</li>
+        <li><strong>Organizational Management (OM):</strong> Object types: org unit, position, job, person. Structure: company → org unit → position (held by person). Used for reporting, authorization, and cost center assignment. PP01 (org structure), PPOME (org chart).</li>
+        <li><strong>Time Management (PT):</strong> Time events (clock in/out), attendances, absences (leave, sickness). Leave requests and approval; quota (annual leave). Integration with payroll: absences can deduct pay or trigger allowances.</li>
+        <li><strong>Payroll:</strong> Payroll run (country-specific: e.g. PYxx for Germany, US, etc.) reads infotypes (pay, tax, deductions) and time data, calculates gross and net, and creates payroll results. Posting to FI: salary expense, employee payables, tax and social. Payslips and bank transfer (payment run).</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> Infotypes (e.g. PA0001, PA0002) and cluster tables (payroll results). Data is time-dependent (validity period). <strong>Control plane:</strong> Personnel area, employee group/subgroup, pay scale and wage types, payroll schema and customizing (SPRO). See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> On‑premise (ECC, S/4HANA). S/4HANA Cloud can use SuccessFactors for HCM (Module 13) and keep payroll on-premise or use SAP SuccessFactors Employee Central Payroll. <strong>Integration:</strong> Postings to FI (salary, tax); optional integration with SuccessFactors (Employee Central), Concur (expenses), and external payroll services (Module 29).</p>
+
+    <div class="example-box">
+        <h4>Example: New hire and first payroll</h4>
+        <p>Company hires a new employee in cost center 1000, position 10001234.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Create personnel number and org assignment (PA30):</strong> Create employee, infotype 0001 (org assignment): personnel area 1000, employee group/subgroup, cost center 1000, position 10001234. Infotype 0002 (name, DOB), 0006 (address), 0008 (basic pay: 50,000 EUR/year). Valid from hire date.</li>
+            <li><strong>Time recording:</strong> Employee records time (or manager enters). Absences (e.g. leave) are recorded. Payroll reads this for the period.</li>
+            <li><strong>Payroll run (e.g. PC00_M99_CALC):</strong> Payroll for month: gross from infotype 0008 and time data; tax and deductions calculated; net pay and employer contributions. Results stored in cluster. <strong>Posting run:</strong> Post to FI: Dr Salary expense (cost center 1000), Cr Employee payables, Cr Tax payables, etc.</li>
+        </ol>
+        <p>Result: Employee in org structure; first salary expense and liabilities in FI.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Sample infotypes (simplified)</h4>
+        <table>
+            <tr><th>Infotype</th><th>Description</th><th>Example data</th></tr>
+            <tr><td>0001</td><td>Org assignment</td><td>Cost center 1000, position 10001234, personnel area 1000</td></tr>
+            <tr><td>0002</td><td>Personal data</td><td>Name, DOB, gender</td></tr>
+            <tr><td>0008</td><td>Basic pay</td><td>50,000 EUR/year, wage type 1001</td></tr>
+        </table>
+        <p>Each infotype has validity (from–to). Payroll uses current valid records and time data for the payroll period.</p>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: HCM data and payroll flow</h4>
+        <p>Click to see how data flows from org/personnel to payroll and FI.</p>
+        <button type="button" id="hcm-step1">1. Personnel &amp; org data</button>
+        <button type="button" id="hcm-step2">2. Time data</button>
+        <button type="button" id="hcm-step3">3. Payroll → FI</button>
+        <div id="hcm-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key tables and concepts</h3>
+    <table>
+        <tr><th>Concept</th><th>Purpose</th></tr>
+        <tr><td>PA0001, PA0002, …</td><td>Infotypes (personnel and org data, time-dependent)</td></tr>
+        <tr><td>T001P</td><td>Personnel area</td></tr>
+        <tr><td>T527X</td><td>Position/org structure (OM)</td></tr>
+        <tr><td>Payroll cluster</td><td>Stores payroll results (country-specific)</td></tr>
+    </table>
+
+    <h3>Important T-codes and concepts</h3>
+    <p><strong>Personnel:</strong> PA30 (maintain infotypes), PA20 (display). <strong>Org:</strong> PP01 (org structure), PPOME (org chart). <strong>Payroll:</strong> Country-specific (e.g. PC00_M99_CALC for payroll run). <strong>Concepts:</strong> Infotype; validity; personnel area vs company code; payroll schema and wage types.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: On-premise HCM includes:</h4>
+            <ul class="quiz-options">
+                <li>A) PA, OM, Time Management, Payroll</li>
+                <li>B) Only SD</li>
+                <li>C) Only MM</li>
+                <li>D) Only BTP</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: A</strong><br>PA, OM, PT, Payroll are core on-premise HCM.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: Infotypes store:</h4>
+            <ul class="quiz-options">
+                <li>A) Only material</li>
+                <li>B) Personnel data (e.g. org, address, payroll)</li>
+                <li>C) Only sales order</li>
+                <li>D) Only FI document</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Infotypes hold employee and org data in HCM.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: Cloud HCM (SuccessFactors, Fieldglass) is covered in:</h4>
+            <ul class="quiz-options">
+                <li>A) Only Module 5</li>
+                <li>B) Only Module 8</li>
+                <li>C) Modules 13 and 14</li>
+                <li>D) Only Module 20</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: C</strong><br>Module 13 = SuccessFactors, Module 14 = Fieldglass.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: Payroll in HCM typically posts to FI as:</h4>
+            <ul class="quiz-options">
+                <li>A) Only sales revenue</li>
+                <li>B) Salary expense (cost center), employee and tax payables</li>
+                <li>C) Only inventory</li>
+                <li>D) Only asset</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>Payroll posts salary expense to cost center and payables (employee, tax) to FI.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'Personnel and org data: infotypes (PA0001 org assignment, 0008 basic pay, etc.) and OM (position, cost center). Defines who works where and for how much.',
+            'Time data: attendances, absences (leave, sickness). Used by payroll to calculate variable pay and deductions.',
+            'Payroll run calculates gross, tax, net. Posting run: Dr Salary expense (cost center from org), Cr Employee payables, Cr Tax. FI and CO updated.'
+        ];
+        var flowEl = document.getElementById('hcm-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('hcm-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

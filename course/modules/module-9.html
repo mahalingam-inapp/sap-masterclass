@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 9: Plant Maintenance (PM)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 9: Plant Maintenance (PM)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> Plant Maintenance (PM) is the part of SAP that manages <strong>maintaining and repairing</strong> equipment and facilities—machines, pumps, buildings, etc. You maintain master data: <strong>functional locations</strong> (hierarchical places, e.g. “Building A → Line 1 → Machine 3”) and <strong>equipment</strong> (individual assets like a specific pump). <strong>Preventive maintenance</strong> is planned in advance (e.g. “inspect every 30 days”); <strong>corrective maintenance</strong> is triggered by a failure or defect. A <strong>maintenance order</strong> is like a work order: it has operations (labor, external service), materials (spare parts from MM), and costs that post to CO. Notifications record defects or requests; they can be converted to orders. PM integrates with MM (spare parts) and CO (costs).
+    </div>
+
+    <p>SAP PM covers preventive and corrective maintenance. Maintenance orders are created from notifications or maintenance plans; they consume materials (MM) and post costs to CO (and optionally to FI for capitalizations).</p>
+
+    <h3>Purpose and scope</h3>
+    <p>PM ensures that assets are maintained on schedule (preventive) or repaired when failures occur (corrective). Key sub-areas: Master data (functional location, equipment); Maintenance plans (recurring tasks); Notifications (defect or activity report); Maintenance orders (work order with operations, materials, and cost); Capacity and planning; Integration with MM (spare parts, procurement) and CO (cost collection and settlement). QM quality notifications can trigger PM notifications for defect analysis.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> A <strong>maintenance plan</strong> says “every 30 days, do task X on equipment E.” The system then generates call objects (e.g. a maintenance order or notification) when the cycle is due. A <strong>notification</strong> is raised when someone reports a problem; you can then create a maintenance order from it, execute the work (issue materials, confirm labor), and settle the order to a cost center or asset so that costs are tracked correctly.
+    </div>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Functional location (IFLO):</strong> Hierarchical structure (e.g. Site → Building → Line → Machine). Used to organize where equipment is installed and to plan maintenance at a location level.</li>
+        <li><strong>Equipment (EQUI):</strong> Individual technical object (e.g. pump, motor). Can be installed at a functional location. Equipment history (orders, notifications) is tracked.</li>
+        <li><strong>Maintenance plan:</strong> Defines recurring tasks (e.g. “inspect pump every 30 days” or “every 1,000 operating hours”). System generates call objects (maintenance order or notification) based on cycle.</li>
+        <li><strong>Notification (QMEL/IW21):</strong> Reports a defect or request for maintenance. Can be created manually or from QM. Notification can be converted to maintenance order.</li>
+        <li><strong>Maintenance order (IW31/IW32):</strong> Order has operations (labor, external service), material components (spare parts), and cost. Release → execution (confirm operations, issue materials) → technical completion → settle to CO (cost center, order, or asset).</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> Equipment (EQUI), functional location (IFLO), order (AUFK, AFKO, AFPO for operations), notification (QMEL), maintenance plan and call objects. <strong>Control plane:</strong> Order type, maintenance plan type, settlement rules, and PM customizing (SPRO). See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> On‑premise and S/4HANA Cloud. <strong>Integration:</strong> Materials and procurement from MM; costs to CO (and FI for capitalization); link to QM (defect notification) and PP (equipment as work center).</p>
+
+    <div class="example-box">
+        <h4>Example: Corrective maintenance — from notification to order and cost</h4>
+        <p>Operator reports a defect on pump EQUI-1000 (functional location LINE-A).</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Notification (IW21):</strong> Create notification: short text “Pump vibration,” object EQUI-1000. Notification 8000000123 is saved. No cost yet.</li>
+            <li><strong>Maintenance order (IW31 or from notification):</strong> Create order for EQUI-1000. Add operation “Repair pump” (work center, duration). Add material component: spare part PUMP-SEAL, 1 PC. Order 1000000456. Release order.</li>
+            <li><strong>Execution:</strong> Technician confirms operation (time); spare part is issued (MIGO or from order). Costs (labor, material) post to order. <strong>Technical completion:</strong> Order completed. <strong>Settlement (KO8G or automatic):</strong> Order costs settle to cost center 1000 (repair cost) or to asset (if capitalization).</li>
+        </ol>
+        <p>Result: Defect documented; repair cost in CO (and optionally on asset in FI).</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Sample maintenance order (simplified)</h4>
+        <table>
+            <tr><th>Order</th><th>Object</th><th>Operation</th><th>Material</th><th>Settlement</th></tr>
+            <tr><td>1000000456</td><td>EQUI-1000 (Pump)</td><td>Repair pump, 2 h</td><td>PUMP-SEAL × 1</td><td>Cost center 1000</td></tr>
+        </table>
+        <p>Costs: labor (from work center), material (from MM issue). After settlement: cost center 1000 shows repair cost.</p>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: PM order flow</h4>
+        <p>Click to see the sequence from defect to settlement.</p>
+        <button type="button" id="pm-step1">1. Notification (defect)</button>
+        <button type="button" id="pm-step2">2. Maintenance order</button>
+        <button type="button" id="pm-step3">3. Execute &amp; settle</button>
+        <div id="pm-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key tables</h3>
+    <table>
+        <tr><th>Table</th><th>Purpose</th></tr>
+        <tr><td>EQUI</td><td>Equipment master</td></tr>
+        <tr><td>IFLO</td><td>Functional location</td></tr>
+        <tr><td>AUFK</td><td>Order header (maintenance order)</td></tr>
+        <tr><td>AFKO, AFPO</td><td>Order operations</td></tr>
+        <tr><td>QMEL</td><td>Notification (quality/maintenance)</td></tr>
+    </table>
+
+    <h3>Important T-codes and concepts</h3>
+    <p><strong>Orders:</strong> IW31 (create), IW32 (change), IW33 (display). <strong>Notification:</strong> IW21 (create), IW22 (change). <strong>Plans:</strong> IP30 (maintenance plan). <strong>Concepts:</strong> Functional location vs equipment; notification vs order; settlement to cost center or asset.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: PM manages:</h4>
+            <ul class="quiz-options">
+                <li>A) Equipment and maintenance orders</li>
+                <li>B) Only sales</li>
+                <li>C) Only procurement</li>
+                <li>D) Only payroll</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: A</strong><br>PM = Plant Maintenance: equipment, functional locations, orders.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: EQUI is:</h4>
+            <ul class="quiz-options">
+                <li>A) Sales document</li>
+                <li>B) Equipment master</li>
+                <li>C) Purchase order</li>
+                <li>D) G/L account</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>EQUI = equipment; IFLO = functional location.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: PM order costs post to:</h4>
+            <ul class="quiz-options">
+                <li>A) Only SD</li>
+                <li>B) Only MM</li>
+                <li>C) CO (and FI)</li>
+                <li>D) Only QM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: C</strong><br>Maintenance orders are costed in CO; settlement can go to cost center or asset.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: A maintenance notification is typically used to:</h4>
+            <ul class="quiz-options">
+                <li>A) Post vendor invoice</li>
+                <li>B) Report a defect or request for maintenance (then convert to order)</li>
+                <li>C) Create sales order</li>
+                <li>D) Run MRP</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>Notification documents the defect; order executes the work and collects cost.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'Notification created (e.g. IW21): defect or request, linked to equipment or functional location. No cost yet.',
+            'Maintenance order created (from notification or manually). Operations and material components added. Order released.',
+            'Technician confirms operations; materials issued. Order technically completed. Settlement: costs to cost center (or asset).'
+        ];
+        var flowEl = document.getElementById('pm-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('pm-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

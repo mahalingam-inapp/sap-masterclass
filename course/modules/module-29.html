@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 29: Integration (PI/CPI)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 29: Integration (PI/CPI)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> <strong>Integration</strong> is how you get data from one system to another—e.g. employee data from SuccessFactors to S/4HANA, or an invoice from Ariba to S/4HANA FI. <strong>CPI</strong> (Cloud Integration, on BTP) is where you design <strong>iFlows</strong> (integration flows): receive data from system A, map it to the format system B expects, and send it. On‑premise middleware is <strong>PI/PO</strong>. You do not store business data in CPI; you configure the path and mapping (control plane), and the actual data flows through. Key terms: <strong>CPI</strong>, <strong>iFlow</strong>, <strong>IDoc</strong>, <strong>OData</strong>, <strong>BAPI</strong>, <strong>Event Mesh</strong>.
+    </div>
+
+    <p>Integration connects SAP and non-SAP systems. CPI (cloud) and PI/PO (on‑premise) provide routing, mapping, and connectivity—the control plane for integration.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>Integration answers: “How do we get data and events from system A to system B?” Key areas: <strong>CPI iFlows:</strong> Design integration flow (sender adapter → mapping → receiver adapter). Example: S/4HANA sends cost center via OData; CPI maps to SuccessFactors format; CPI calls SuccessFactors API. <strong>IDoc:</strong> Intermediate Document—SAP’s document format for A2A and B2B (e.g. ORDERS05 for sales order). Outbound from S/4HANA; inbound to partner or another SAP system. <strong>BAPI/RFC:</strong> Call S/4HANA function modules from external systems or from CPI. <strong>OData/REST:</strong> Modern APIs; S/4HANA and cloud products expose OData. <strong>Event Mesh:</strong> Publish events (e.g. “Sales order created”); subscribers (CPI, BTP app) react. <strong>API Management:</strong> Publish, secure, and throttle APIs (Module 22).</p>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>CPI (Cloud Integration):</strong> Create iFlow in BTP. Sender: e.g. SFTP, HTTP, IDoc, OData, or timer. Message is transformed (mapping: XML, JSON, CSV). Receiver: e.g. S/4HANA (OData, RFC), SuccessFactors (OData), Ariba. Prebuilt content for many SAP-to-SAP scenarios. Monitor message processing in CPI.</li>
+        <li><strong>IDoc:</strong> Outbound: S/4HANA creates IDoc (e.g. on document save); IDoc is sent to PI/PO or CPI (or directly to partner). Inbound: CPI/PI receives IDoc or file; maps to IDoc format; sends to S/4HANA for processing (e.g. create sales order). WE02 (IDoc list), WE19 (test inbound).</li>
+        <li><strong>RFC (SM59):</strong> Remote Function Call—S/4HANA (or other system) exposes function modules; another system calls them via RFC destination. CPI can use RFC adapter to call S/4HANA. SM59 maintains RFC destinations in S/4HANA.</li>
+        <li><strong>OData:</strong> S/4HANA and cloud products expose OData services. CPI and external apps call these for read/write. REST and JSON for cloud-to-cloud.</li>
+        <li><strong>Event Mesh:</strong> Event-driven: S/4HANA (or SuccessFactors) publishes event; Event Mesh delivers to subscribers (CPI iFlow, BTP app). Decoupled, asynchronous.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> Business data lives in source and target systems (S/4HANA, SuccessFactors, etc.). Integration middleware does not store it long-term; it moves and transforms it. <strong>Control plane:</strong> CPI iFlows, API Management policies, Event Mesh topics and subscriptions, and RFC/OData configuration define how data flows. See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> PI/PO on‑premise; CPI on BTP (cloud). SAP recommends CPI for new and cloud scenarios. <strong>Integration:</strong> CPI connects S/4HANA with SuccessFactors, Ariba, Concur, CX, IBP, and non-SAP. Module 22 (BTP) and product-specific modules (13–23) describe the endpoints; this module describes the “how” (protocols, patterns).</p>
+
+    <div class="example-box">
+        <h4>Example: Replicate cost center from S/4HANA to SuccessFactors via CPI</h4>
+        <p>When a cost center is created or changed in S/4HANA, it should appear in SuccessFactors for org structure.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Trigger (S/4HANA):</strong> Cost center is created in S/4HANA (OM or API). Option A: S/4HANA sends event to Event Mesh (“Cost center changed”). Option B: CPI iFlow runs on schedule and reads new/changed cost centers via OData. Option C: S/4HANA calls outbound to CPI (e.g. REST).</li>
+            <li><strong>CPI iFlow:</strong> iFlow is triggered. It reads cost center data (from event payload or OData call to S/4HANA). Mapping: transform to SuccessFactors format (e.g. cost center as org attribute or custom object). Call SuccessFactors OData API to create or update the cost center. Handle errors (retry, alert).</li>
+            <li><strong>Result:</strong> Cost center exists in SuccessFactors. EC org structure and reports show the same cost center. Optional: reverse sync (SuccessFactors → S/4HANA) depends on scenario.</li>
+        </ol>
+        <p>Result: One integration flow; two systems in sync without manual entry.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Integration building blocks</h4>
+        <table>
+            <tr><th>Component</th><th>Purpose</th></tr>
+            <tr><td>CPI iFlow</td><td>Orchestrate: receive → map → send (BTP)</td></tr>
+            <tr><td>IDoc</td><td>Document format for SAP-to-SAP / B2B</td></tr>
+            <tr><td>BAPI / RFC</td><td>Call S/4HANA business logic from outside</td></tr>
+            <tr><td>OData / REST</td><td>Modern APIs for read/write</td></tr>
+            <tr><td>Event Mesh</td><td>Event-driven; publish/subscribe</td></tr>
+        </table>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: CPI iFlow (high level)</h4>
+        <p>Click to see the flow of an integration.</p>
+        <button type="button" id="int-step1">1. Sender (trigger)</button>
+        <button type="button" id="int-step2">2. Map &amp; transform</button>
+        <button type="button" id="int-step3">3. Receiver</button>
+        <div id="int-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key concepts and T-codes</h3>
+    <p><strong>IDoc:</strong> Intermediate Document—structure (control, data segments); outbound from SAP or inbound to SAP. WE02 (list), WE19 (inbound test). <strong>BAPI:</strong> Business API—stable interface to create/change/read business objects. <strong>CPI:</strong> Cloud Integration on BTP; iFlows replace many PI/PO scenarios. <strong>SM59:</strong> RFC destinations in S/4HANA for outbound calls. <strong>Event Mesh:</strong> Decoupled; publisher does not know subscribers.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: CPI stands for:</h4>
+            <ul class="quiz-options">
+                <li>A) Cost center</li>
+                <li>B) Cloud Integration (SAP Integration Suite on BTP)</li>
+                <li>C) Only SD</li>
+                <li>D) Only MM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>CPI = Cloud Platform Integration (BTP).</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: IDoc is used for:</h4>
+            <ul class="quiz-options">
+                <li>A) Only Fiori</li>
+                <li>B) Document-based integration (e.g. order, invoice exchange)</li>
+                <li>C) Only report</li>
+                <li>D) Only batch</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>IDoc = Intermediate Document for A2A/B2B messaging.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: BAPI is:</h4>
+            <ul class="quiz-options">
+                <li>A) Only table</li>
+                <li>B) Business API (programming interface to SAP logic)</li>
+                <li>C) Only IDoc</li>
+                <li>D) Only RFC</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>BAPI = Business Application Programming Interface.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: Where does CPI run?</h4>
+            <ul class="quiz-options">
+                <li>A) Only on-premise PI</li>
+                <li>B) On BTP (Cloud); part of Integration Suite</li>
+                <li>C) Only in S/4HANA database</li>
+                <li>D) Only in BW</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>CPI runs on SAP BTP as part of Integration Suite.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'Sender: message arrives at CPI (e.g. from S/4HANA via OData/RFC, or from Event Mesh, or from schedule). iFlow is triggered.',
+            'Mapping: message is transformed (e.g. XML to JSON, field mapping, filter). Optional: call another system for lookup. Payload is ready for receiver.',
+            'Receiver: CPI sends message to target (e.g. SuccessFactors OData, Ariba API, S/4HANA IDoc). Target processes; CPI logs status. Error handling: retry or alert.'
+        ];
+        var flowEl = document.getElementById('int-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('int-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 28: Fiori & User Experience</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 28: Fiori & User Experience</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> <strong>Fiori</strong> is SAP’s modern, web-based UI. Instead of the classic SAP GUI (transaction-based), users open the <strong>Fiori Launchpad</strong> in the browser and see <strong>tiles</strong> (one per app). Each app does one thing—e.g. “Manage Purchase Orders” or “Display G/L Account Balance”—and connects to S/4HANA via OData or BAPI. The same backend data is used; only the way users reach it changes. Fiori can run <strong>embedded</strong> in S/4HANA or on BTP (Launchpad service). Key terms: <strong>Fiori Launchpad</strong>, <strong>tile</strong>, <strong>catalog</strong>, <strong>OData</strong>.
+    </div>
+
+    <p>Fiori provides role-based, responsive apps that connect to S/4HANA via OData and BAPIs. The UI layer is control plane for how users reach the data plane.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>Fiori provides: <strong>Fiori Launchpad:</strong> Home page with catalog (groups of apps), tiles (one per app), and role-based visibility. User logs on once and sees only the apps assigned to their roles. <strong>Fiori apps:</strong> Standard apps (from SAP) and custom apps. Each app is typically one transaction or one use case; it calls the backend via OData or BAPI. <strong>Fiori design:</strong> Guidelines for layout, controls, and responsiveness. <strong>SAP Build:</strong> Low-code option to build Fiori-like apps. <strong>SAP GUI and Web GUI:</strong> Classic UI still used for some transactions; Fiori is the strategic direction for new and refreshed UX.</p>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Launchpad:</strong> Central entry; catalog defines which apps (tiles) appear. Tiles can be static (link to app) or dynamic (e.g. count of open items). Role determines which catalog groups and tiles the user sees. Embedded Launchpad in S/4HANA or BTP Launchpad service (which can show apps from S/4HANA and from BTP).</li>
+        <li><strong>Standard Fiori apps:</strong> SAP delivers hundreds of apps (e.g. “Create Sales Order,” “Manage Purchase Orders,” “Display G/L Account Balance”). They consume OData services or BAPIs from S/4HANA. Activate and assign to catalog/role.</li>
+        <li><strong>Custom Fiori apps:</strong> Build with SAP Fiori elements (template-based on CDS/OData) or SAPUI5 freestyle. Expose OData service in S/4HANA (from CDS view or custom); app calls it. Deploy to S/4HANA (embedded) or BTP.</li>
+        <li><strong>Gateway and OData:</strong> SAP Gateway (in S/4HANA or standalone) exposes OData services. Fiori apps are Gateway clients. BAPI can also be called from Fiori (e.g. for create/save).</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> Data stays in S/4HANA (or other backend). Fiori apps only display and send requests; they do not store business data. <strong>Control plane:</strong> Launchpad catalog, groups, and tiles; role assignment (which users see which apps); Gateway/OData service registration and authorization. See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> <strong>Embedded Fiori:</strong> Launchpad and apps run in S/4HANA (same system as backend). <strong>BTP Launchpad service:</strong> Launchpad runs on BTP; apps can be from S/4HANA (federated) or from BTP. <strong>Integration:</strong> Fiori apps call S/4HANA via OData and BAPIs; IAS for SSO when using BTP or multiple systems (Module 22, 29).</p>
+
+    <div class="example-box">
+        <h4>Example: User opens “Display G/L Account Balance” in Fiori</h4>
+        <p>Accountant uses Fiori instead of transaction S_ALR_87012284.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Logon and Launchpad:</strong> User logs on to Fiori Launchpad (embedded in S/4HANA or BTP). Launchpad shows tiles based on user’s roles. User clicks tile “Display G/L Account Balance.”</li>
+            <li><strong>App and OData:</strong> Fiori app loads. It calls an OData service (e.g. /sap/opu/odata/sap/API_...) that reads G/L balance data from S/4HANA (e.g. from CDS view or BAPI). Request is sent over HTTP(S); backend returns JSON. App displays the data in a table or chart.</li>
+            <li><strong>Authorization:</strong> Backend (S/4HANA) checks user’s authorizations for the OData service and underlying data (e.g. company code). If OK, data is returned; otherwise error. Same principle as transaction authorization.</li>
+        </ol>
+        <p>Result: Same data as classic transaction; modern UI and one launchpad for many apps.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Fiori building blocks</h4>
+        <table>
+            <tr><th>Component</th><th>Purpose</th></tr>
+            <tr><td>Fiori Launchpad</td><td>Entry point; catalog, groups, tiles; role-based</td></tr>
+            <tr><td>Fiori app</td><td>One task; uses OData/BAPI to talk to backend</td></tr>
+            <tr><td>Gateway / OData</td><td>Expose S/4HANA data and logic as OData services</td></tr>
+            <tr><td>Catalog / Role</td><td>Which apps (tiles) the user sees</td></tr>
+        </table>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: From Launchpad to backend</h4>
+        <p>Click to see how a Fiori app gets its data.</p>
+        <button type="button" id="fiori-step1">1. Launchpad &amp; tile</button>
+        <button type="button" id="fiori-step2">2. App calls OData</button>
+        <button type="button" id="fiori-step3">3. S/4HANA returns data</button>
+        <div id="fiori-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key concepts</h3>
+    <p><strong>Tile and catalog:</strong> Tile = link to an app; catalog = set of tiles. Role determines which catalogs and tiles are visible. <strong>OData:</strong> RESTful API; Fiori apps typically use OData to read and write. <strong>Embedded vs BTP Launchpad:</strong> Embedded = everything in S/4HANA. BTP Launchpad = launchpad on BTP; can show apps from S/4HANA (federated) and from BTP. <strong>SAP GUI:</strong> Classic UI still used; Fiori is the strategic UX for new and refreshed scenarios.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: Fiori apps typically call the backend via:</h4>
+            <ul class="quiz-options">
+                <li>A) Only IDoc</li>
+                <li>B) OData and BAPIs</li>
+                <li>C) Only RFC</li>
+                <li>D) Only batch input</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>Fiori uses OData and BAPIs to talk to S/4HANA.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: Fiori Launchpad provides:</h4>
+            <ul class="quiz-options">
+                <li>A) Only MM transaction</li>
+                <li>B) Central entry point (catalog, tiles, role-based apps)</li>
+                <li>C) Only FI</li>
+                <li>D) Only CO</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Launchpad = single entry with catalog and tiles.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: Fiori can run:</h4>
+            <ul class="quiz-options">
+                <li>A) Only on-premise SAP GUI</li>
+                <li>B) Embedded in S/4HANA and on BTP (Launchpad service)</li>
+                <li>C) Only in BW</li>
+                <li>D) Only in Basis</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>Fiori runs in S/4HANA or BTP Launchpad.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: What is SAP Gateway used for in Fiori?</h4>
+            <ul class="quiz-options">
+                <li>A) Only material master</li>
+                <li>B) Exposing OData services from S/4HANA for Fiori and other clients</li>
+                <li>C) Only SD delivery</li>
+                <li>D) Only production order</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>Gateway hosts and exposes OData services that Fiori apps consume.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'User opens Fiori Launchpad (embedded or BTP). Sees tiles based on roles. Clicks a tile (e.g. Display G/L Account Balance).',
+            'Fiori app loads and sends OData request to S/4HANA (via Gateway). Request includes filters (e.g. company code, fiscal year). Backend checks authorization.',
+            'S/4HANA (or CDS view) reads data from database; returns JSON. App displays data in UI. User can filter, drill down—all via further OData calls.'
+        ];
+        var flowEl = document.getElementById('fiori-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('fiori-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

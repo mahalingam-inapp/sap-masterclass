@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 13: SAP SuccessFactors</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 13: SAP SuccessFactors</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> SuccessFactors is SAP’s <strong>cloud HR (HCM)</strong> suite. Unlike on-premise HCM (Module 11), you do not run a database or server—SAP hosts everything. You get a <strong>tenant</strong> (your company’s instance) and use web apps for recruiting, employee data (Employee Central), goals and performance, compensation, learning, and succession. Employee and organizational data are the “source of truth” here; many companies replicate this data to S/4HANA (e.g. for cost center assignment or payroll) or to Concur, Ariba, and Fieldglass. Key idea: <strong>SaaS only</strong>—no table names like in ERP; you work with entities (User, Employee, Position) and UIs/APIs.
+    </div>
+
+    <p>SAP SuccessFactors covers the full employee lifecycle in the cloud. Data lives in SAP-operated tenants and is accessed via web UIs and APIs. Integration with S/4HANA and other cloud products is common.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>SuccessFactors addresses talent acquisition (Recruiting), new-hire experience (Onboarding), core HR and org structure (Employee Central), goal and performance management (Performance &amp; Goals), compensation planning (EC Compensation), learning and development (Learning Management), and succession planning. Workforce Analytics provides reporting and people insights. Employee Central can replace or complement on-premise PA/OM; payroll can stay on-premise (S/4HANA) or use SAP SuccessFactors Employee Central Payroll (ECP) or third-party payroll with replication from EC.</p>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Recruiting (RMK):</strong> Job requisitions, candidate application, screening, interviews, offers. Integrates with onboarding.</li>
+        <li><strong>Onboarding:</strong> New-hire tasks, documents, and workflows so new employees are productive quickly.</li>
+        <li><strong>Employee Central (EC):</strong> Core HR in the cloud: organization structure (org units, positions, jobs), employee profile (personal, employment, compensation), position management. Foundation for other modules (goals, performance, comp).</li>
+        <li><strong>Goals (PM-GM) and Performance (PM):</strong> Set goals; performance review cycles; 360 feedback; calibration. Tied to compensation and development.</li>
+        <li><strong>Compensation (EC Comp):</strong> Merit and bonus planning; budget allocation; approval workflows.</li>
+        <li><strong>Learning (LMS):</strong> Learning assignments, courses, certifications; compliance training; integration with content providers.</li>
+        <li><strong>Succession:</strong> Talent pools, succession plans, readiness for key positions.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> No customer-accessible database. Data is stored as <strong>entities</strong> in the tenant (User, Employee, Position, Goal, Course, etc.). Access is via UIs (SuccessFactors apps) and <strong>APIs</strong> (OData, compound employee API). Replication and integration push/pull data to S/4HANA, payroll, or BI. <strong>Control plane:</strong> <strong>Admin Center</strong> (provisioning, company settings, picklists, integration center); <strong>RBP</strong> (rule-based permissions) for who sees what; <strong>IAS</strong> (SAP Identity Authentication Service) for SSO and identity; Integration Center for inbound/outbound mappings. See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> SaaS only. Customer gets a <strong>tenant</strong> (e.g. one per company or per region). Region (data center) is chosen at provisioning. <strong>Integration:</strong> S/4HANA (employee, cost center, org for payroll and FI); payroll (ECP or third-party via CPI/file); Concur (expenses); Ariba/Fieldglass where used; IAS for SSO; CPI and Integration Center for sync and APIs (Module 29).</p>
+
+    <div class="example-box">
+        <h4>Example: New hire from Recruiting to Employee Central</h4>
+        <p>A hiring manager creates a requisition; a candidate is hired and appears in Employee Central.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Requisition (Recruiting):</strong> Manager creates job req for “Software Engineer” in department X. Candidates apply; interviews and offer are managed in Recruiting. Offer is accepted.</li>
+            <li><strong>Onboarding:</strong> New hire is triggered. Onboarding tasks: complete I-9, sign policies, assign equipment. Optional integration creates the employee in EC when offer is accepted or on start date.</li>
+            <li><strong>Employee Central:</strong> Employee record is created: personal data, org assignment (position, cost center), employment details. This data can be replicated to S/4HANA (cost center for cost allocation) or to payroll. Goals and learning can be assigned from EC data.</li>
+        </ol>
+        <p>Result: Single employee record in the cloud; S/4HANA and payroll stay in sync via integration.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Key SuccessFactors entities (conceptual)</h4>
+        <table>
+            <tr><th>Entity / Area</th><th>Purpose</th></tr>
+            <tr><td>User</td><td>Login and permissions (linked to Employee)</td></tr>
+            <tr><td>Employee</td><td>Core HR record (personal, employment, comp)</td></tr>
+            <tr><td>Position / Job / Org Unit</td><td>Organization structure in EC</td></tr>
+            <tr><td>Goal</td><td>Goals (PM-GM) linked to employee/position</td></tr>
+            <tr><td>Performance document</td><td>Review cycle, ratings, feedback</td></tr>
+            <tr><td>Learning assignment</td><td>Course, due date, completion (LMS)</td></tr>
+        </table>
+        <p>No direct “tables”; these are managed via Admin Center and APIs. RBP controls which users see which employees and data.</p>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: SuccessFactors module flow</h4>
+        <p>Click to see how the employee lifecycle flows across SuccessFactors modules.</p>
+        <button type="button" id="sf-step1">1. Recruiting → Hire</button>
+        <button type="button" id="sf-step2">2. Onboarding</button>
+        <button type="button" id="sf-step3">3. EC + Performance + Learning</button>
+        <div id="sf-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key concepts and admin</h3>
+    <p><strong>Admin Center:</strong> Company settings, foundation objects (picklists, country, currency), integration center (inbound/outbound), provisioning. <strong>RBP (rule-based permissions):</strong> Defines who can view/edit which employees and fields (e.g. by org, position, location). <strong>Integration Center:</strong> Mappings for replication to/from S/4HANA, payroll, and other systems. <strong>IAS:</strong> Central identity and SSO for SAP cloud apps. <strong>EC vs on-premise HCM:</strong> EC is the cloud replacement for PA/OM; many customers run EC + on-premise or ECP payroll.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: SuccessFactors is:</h4>
+            <ul class="quiz-options">
+                <li>A) On-premise only</li>
+                <li>B) SAP cloud HCM (talent, EC, learning, etc.)</li>
+                <li>C) Only MM</li>
+                <li>D) Only FI</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>SuccessFactors = cloud HCM suite.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: Employee Central (EC) provides:</h4>
+            <ul class="quiz-options">
+                <li>A) Only sales orders</li>
+                <li>B) Org structure, employee profile, position management</li>
+                <li>C) Only procurement</li>
+                <li>D) Only warehouse</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>EC = core HR in the cloud (org, employee, position).</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: SuccessFactors integrates with S/4HANA for:</h4>
+            <ul class="quiz-options">
+                <li>A) Only SD</li>
+                <li>B) Only MM</li>
+                <li>C) Employee data, cost center (and payroll where used)</li>
+                <li>D) Only QM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: C</strong><br>Employee and cost center replication; payroll integration options.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: Where is SuccessFactors configuration and permissions managed?</h4>
+            <ul class="quiz-options">
+                <li>A) Only in S/4HANA SPRO</li>
+                <li>B) Admin Center and RBP (rule-based permissions)</li>
+                <li>C) Only in MM</li>
+                <li>D) Only in FI</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>Admin Center and RBP govern settings and who sees what in SuccessFactors.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'Recruiting: requisition → candidates → interviews → offer → hire. Candidate becomes new hire in the system.',
+            'Onboarding: new-hire tasks, documents, equipment. Employee may be created in EC at this stage (or on start date).',
+            'EC holds org and employee record. Performance (goals, reviews), Compensation, and Learning use EC data. Data can replicate to S/4HANA and payroll.'
+        ];
+        var flowEl = document.getElementById('sf-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('sf-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

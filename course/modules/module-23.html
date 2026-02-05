@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 23: SAP Signavio</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 23: SAP Signavio</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> Signavio is about <strong>understanding and improving</strong> how business processes actually run. <strong>Process mining</strong> (“what really happens?”) takes event data from S/4HANA or other systems (e.g. “order created,” “delivery posted,” “invoice sent”) and builds a picture of the real process—including bottlenecks, rework, and deviations from the ideal. <strong>Process Manager</strong> is for designing and documenting processes (e.g. in BPMN). Signavio is <strong>cloud</strong> and integrates with S/4HANA and BTP so you can mine real data and, with SAP Build Process Automation, automate improved processes. It does not replace ERP; it helps you see and improve how work gets done. Key terms: <strong>process mining</strong>, <strong>event log</strong>, <strong>Process Intelligence</strong>, <strong>Process Manager</strong>.
+    </div>
+
+    <p>SAP Signavio provides process mining and process management. It integrates with S/4HANA and BTP for analysis and automation.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>Signavio addresses: <strong>Process mining:</strong> “What actually happens?” Event log (case ID, activity, timestamp) from ERP or CRM is loaded; Signavio discovers the process model and shows variants, cycle time, and bottlenecks. <strong>Process modeling and governance:</strong> Design and document processes (BPMN); collaborate; link to Signavio Process Governance for policies and controls. <strong>Insights and KPIs:</strong> Dashboards on process performance (e.g. order-to-cash duration, rework rate). Integration with SAP Build Process Automation allows “design → mine → automate” so that improved processes can be automated on BTP.</p>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Process Intelligence (process mining):</strong> Connect to S/4HANA (or SuccessFactors, etc.) to extract event logs (e.g. order created, order released, delivery created, billing done). Signavio builds process model from the data. View: process map, variants, cycle time, rework. Filter by segment, time, cost.</li>
+        <li><strong>Process Manager:</strong> Model processes in BPMN; publish and share; link to risk and control (Process Governance). Collaborative process repository.</li>
+        <li><strong>Process Governance:</strong> Link process models to policies, risks, and controls. Compliance and audit view.</li>
+        <li><strong>Connectors:</strong> Prebuilt connectors to S/4HANA (e.g. order-to-cash, procure-to-pay event logs), SuccessFactors, and other sources. Event log format: case ID (e.g. order number), activity name, timestamp, optional attributes (cost center, amount).</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> Event logs (extracted from source systems) and process models/KPIs stored in Signavio. No direct DB in customer systems; data is pulled via connectors. <strong>Control plane:</strong> Signavio admin (tenant, connectors, users); BTP integration for SAP Build and events. See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> Cloud (Signavio tenant). <strong>Integration:</strong> S/4HANA (event log extraction for O2C, P2P, etc.); SuccessFactors (e.g. hire-to-retire); SAP Build Process Automation (consume process models, trigger workflows); BTP (events, APIs). Connectors and APIs for extraction and for pushing insights back.</p>
+
+    <div class="example-box">
+        <h4>Example: Order-to-cash process mining with S/4HANA</h4>
+        <p>Company wants to see how order-to-cash really runs and where it slows down.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Extract event log (Signavio):</strong> Signavio connector to S/4HANA extracts events: for each sales order (case ID = order number), activities such as “Order created,” “Delivery created,” “Goods issue,” “Billing document created,” with timestamps. Optional: cost center, amount. Data is loaded into Signavio Process Intelligence.</li>
+            <li><strong>Process mining:</strong> Signavio discovers the process from the log. Output: process map (which steps follow which), variants (e.g. 60% go Order → Delivery → Billing; 30% have a return step). Metrics: average cycle time (order to billing), bottleneck at “Delivery created,” rework (loops). Dashboard: cycle time by region, by product.</li>
+            <li><strong>Improvement:</strong> Team identifies that orders without delivery block take 5 days; with block they take 12. They fix the block logic. Next month, re-mine to confirm improvement. Optionally, automate exception path with SAP Build Process Automation.</li>
+        </ol>
+        <p>Result: Data-driven view of O2C; targeted improvement and optional automation.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Signavio components</h4>
+        <table>
+            <tr><th>Component</th><th>Purpose</th></tr>
+            <tr><td>Process Intelligence</td><td>Process mining from event logs (discover, analyze, KPIs)</td></tr>
+            <tr><td>Process Manager</td><td>Process modeling (BPMN), collaboration, repository</td></tr>
+            <tr><td>Process Governance</td><td>Policies, risks, controls linked to process</td></tr>
+            <tr><td>Connectors</td><td>S/4HANA, SuccessFactors, etc. for event log extraction</td></tr>
+        </table>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: Process mining flow</h4>
+        <p>Click to see how process mining works.</p>
+        <button type="button" id="sig-step1">1. Event log from S/4HANA</button>
+        <button type="button" id="sig-step2">2. Discover process</button>
+        <button type="button" id="sig-step3">3. Insights &amp; improve</button>
+        <div id="sig-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key concepts</h3>
+    <p><strong>Process mining:</strong> Use event data (case, activity, time) to discover the real process and measure performance. No modeling by hand—data drives the model. <strong>Event log:</strong> Each row = one event (e.g. “Order 10001234, Activity = Billing created, Timestamp = 2025-02-01 10:00”). <strong>Signavio vs SAP Build:</strong> Signavio = analyze and model; SAP Build Process Automation = execute workflows. They can be used together (model in Signavio, automate in Build).</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: Signavio Process Intelligence provides:</h4>
+            <ul class="quiz-options">
+                <li>A) Only sales order</li>
+                <li>B) Process mining from event logs</li>
+                <li>C) Only FI</li>
+                <li>D) Only MM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>Process Intelligence = process mining (discover processes from data).</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: Process mining uses:</h4>
+            <ul class="quiz-options">
+                <li>A) Only material master</li>
+                <li>B) Event logs from systems (e.g. S/4HANA, SuccessFactors)</li>
+                <li>C) Only CO</li>
+                <li>D) Only PM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Event logs from ERP/CRM feed process mining.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: Signavio integrates with:</h4>
+            <ul class="quiz-options">
+                <li>A) Only QM</li>
+                <li>B) S/4HANA, SuccessFactors, SAP Build, BTP</li>
+                <li>C) Only PS</li>
+                <li>D) Only Basis</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>Connectors to S/4HANA, SuccessFactors; BTP and SAP Build.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: What is an "event" in process mining?</h4>
+            <ul class="quiz-options">
+                <li>A) Only a purchase order</li>
+                <li>B) A single step in a process for a case (e.g. "Billing created" for order 10001234 at a given time)</li>
+                <li>C) Only a G/L posting</li>
+                <li>D) Only a production order</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>Event = one activity for one case (order) at one timestamp; the log is many events.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'Connector extracts event log from S/4HANA (or SuccessFactors): case ID (e.g. order), activity name, timestamp. Loaded into Signavio Process Intelligence.',
+            'Process mining engine discovers the process from the log: which activities follow which, variants, cycle time, bottlenecks, rework. Process map and KPIs are generated.',
+            'Teams use dashboards to see cycle time, bottlenecks, and deviations. They improve process (fix blocks, automate). Can connect to SAP Build to automate steps.'
+        ];
+        var flowEl = document.getElementById('sig-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('sig-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

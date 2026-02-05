@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 8: Quality Management (QM)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 8: Quality Management (QM)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> Quality Management (QM) in SAP handles <strong>inspection</strong> of materials and products: what to inspect, how to inspect it, and whether to accept or reject the stock. When you post a goods receipt (MM) or complete a production step (PP), the system can automatically create an <strong>inspection lot</strong>—one “instance” of inspection for that batch or order. Inspectors record results (e.g. measurements) against an <strong>inspection plan</strong>; then a <strong>usage decision</strong> (accept/reject) determines if the stock goes to unrestricted use or stays blocked. QM integrates tightly with MM (stock status after inspection) and PP (in-process and final inspection), and can link to PM for defect and repair follow-up.
+    </div>
+
+    <p>SAP QM supports quality planning, inspection, and usage decisions. Inspection lots are created automatically (e.g. at goods receipt or during production); results and usage decision determine whether stock can be used. QM integrates with MM and PP, and can link to PM for defect reporting.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>QM covers quality planning (inspection types, inspection plans, characteristics, sampling), quality in procurement (inspection at goods receipt), quality in production (in-process and final inspection), usage decision (accept, reject, scrap), quality certificates, and quality notifications (for defects and corrective actions). Inspection plans define what to inspect and how; inspection lots are the execution instance (one lot per trigger event). Results and usage decision update stock status (e.g. unrestricted vs blocked).</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> An <strong>inspection plan</strong> is like a checklist: “For material X at goods receipt, check characteristic 1 (length), characteristic 2 (weight), and use sampling plan Y.” When a delivery arrives and GR is posted, the system creates an inspection lot and the inspector records the actual values. After the usage decision, the system moves the stock to “unrestricted” (can be used) or keeps it “blocked” (rework or scrap).
+    </div>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Quality planning:</strong> Inspection type (e.g. incoming, in-process, final). Inspection plan: sequence of operations and characteristics (e.g. “length 10±0.1 mm”). Master inspection characteristic (catalog of measurable attributes). Sampling: how many units to inspect (e.g. AQL).</li>
+        <li><strong>Inspection lot:</strong> Created automatically when GR is posted (incoming) or at production order operation (in-production). Lot has material, quantity, source (PO, order). Inspections are carried out per the plan; results are recorded (QE51N, results recording).</li>
+        <li><strong>Usage decision:</strong> After results are recorded, inspector performs usage decision (QE02 or Fiori): accept (stock to unrestricted), reject (blocked or scrap), or partial. Stock status is updated; rejected stock may need rework or scrap.</li>
+        <li><strong>Quality notifications:</strong> For defects or complaints. Can trigger tasks (e.g. PM order) and document root cause and corrective action.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> Inspection lot (QALS), inspection results (QAVE and result tables), inspection plan (PLKO, PLPO), characteristics (AUSP). <strong>Control plane:</strong> Inspection type and inspection plan configuration; quality info record (QMAT) for vendor–material; SPRO settings for automatic lot creation and usage decision. See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> On‑premise and S/4HANA Cloud. <strong>Integration:</strong> Triggered by MM (goods receipt → inspection lot) and PP (production order operation → inspection lot). Stock status after usage decision is in MM. Defects can link to PM (maintenance notification/order).</p>
+
+    <div class="example-box">
+        <h4>Example: Incoming inspection at goods receipt</h4>
+        <p>Material RAW-X is subject to incoming inspection. Vendor sends 100 PC; plant uses inspection type 01 (incoming) and inspection plan with two characteristics: “Weight” and “Purity.”</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Goods receipt (MIGO):</strong> Post GR for 100 PC against PO. Because material is inspection-relevant, system creates inspection lot 5000000123 automatically. Stock goes to “in inspection” (or blocked) until usage decision.</li>
+            <li><strong>Results recording (QE51N):</strong> Inspector records results: Weight 9.98 g (OK), Purity 99.2% (OK). Results are saved against the inspection lot.</li>
+            <li><strong>Usage decision (QE02):</strong> Inspector decides “Accept.” System moves stock from “in inspection” to “unrestricted use.” Lot is closed. Material can now be used in production or issued.</li>
+        </ol>
+        <p>If usage decision were “Reject,” stock could remain blocked or be scrapped; quality notification might be created for the vendor.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Sample inspection lot and result (simplified)</h4>
+        <table>
+            <tr><th>Inspection lot</th><th>Material</th><th>Quantity</th><th>Source</th><th>Status</th></tr>
+            <tr><td>5000000123</td><td>RAW-X</td><td>100 PC</td><td>PO 4500012345, GR</td><td>In inspection → Accept</td></tr>
+        </table>
+        <p>Characteristics: Weight 9.98 g (spec 10±0.1) ✓; Purity 99.2% (min 99%) ✓. Usage decision: Accept → stock unrestricted.</p>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: QM inspection flow</h4>
+        <p>Click each step to see what happens in QM.</p>
+        <button type="button" id="qm-step1">1. Trigger (GR or production)</button>
+        <button type="button" id="qm-step2">2. Record results</button>
+        <button type="button" id="qm-step3">3. Usage decision</button>
+        <div id="qm-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key tables</h3>
+    <table>
+        <tr><th>Table</th><th>Purpose</th></tr>
+        <tr><td>QALS</td><td>Inspection lot (material, quantity, source, status)</td></tr>
+        <tr><td>QAVE</td><td>Inspection result (lot, characteristic, value)</td></tr>
+        <tr><td>QMAT</td><td>Quality info record (vendor–material inspection data)</td></tr>
+        <tr><td>PLKO, PLPO</td><td>Inspection plan (header, operations)</td></tr>
+        <tr><td>AUSP</td><td>Characteristic values (usage in QM)</td></tr>
+    </table>
+
+    <h3>Important T-codes and concepts</h3>
+    <p><strong>Inspection:</strong> QE51N (results recording), QA03 (display lot), QE02 (usage decision). <strong>Concepts:</strong> Inspection type; inspection plan; usage decision (accept/reject); stock in inspection vs unrestricted/blocked.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: Inspection lots in QM can be created from:</h4>
+            <ul class="quiz-options">
+                <li>A) Only FI</li>
+                <li>B) MM (goods receipt) and PP (production)</li>
+                <li>C) Only SD</li>
+                <li>D) Only CO</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>Inspection lots are triggered by GR (MM) or production (PP).</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: Usage decision determines:</h4>
+            <ul class="quiz-options">
+                <li>A) Only price</li>
+                <li>B) Stock status (e.g. accepted, rejected) after inspection</li>
+                <li>C) Only delivery</li>
+                <li>D) Only order</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Usage decision sets whether stock is accepted or rejected for use.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: QALS is:</h4>
+            <ul class="quiz-options">
+                <li>A) Sales order</li>
+                <li>B) Purchase order</li>
+                <li>C) Inspection lot table</li>
+                <li>D) G/L account</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: C</strong><br>QALS = inspection lot.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: Before usage decision, stock from an inspected lot is typically:</h4>
+            <ul class="quiz-options">
+                <li>A) Already unrestricted</li>
+                <li>B) In inspection (or blocked) and not freely usable</li>
+                <li>C) Only in FI</li>
+                <li>D) Deleted</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>Stock remains in inspection until usage decision; then it moves to unrestricted or stays blocked.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'Inspection lot is created automatically: at goods receipt (MM) or at production order operation (PP). Stock is in inspection or blocked.',
+            'Inspector records results per inspection plan (e.g. QE51N): characteristic values (dimensions, tests). Results stored in QAVE and related tables.',
+            'Usage decision (e.g. QE02): Accept → stock to unrestricted; Reject → stock blocked or scrap. Lot closed. Stock status updated in MM.'
+        ];
+        var flowEl = document.getElementById('qm-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('qm-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

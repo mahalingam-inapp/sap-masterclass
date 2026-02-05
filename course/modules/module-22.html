@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 22: SAP Business Technology Platform (BTP)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 22: SAP Business Technology Platform (BTP)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> BTP is SAP’s <strong>cloud platform</strong> for <strong>integration</strong>, <strong>extension</strong>, and <strong>development</strong>. It does not replace S/4HANA or SuccessFactors—it is the place where you <em>connect</em> them (e.g. CPI integration flows), <em>expose</em> APIs (API Management), and <em>build</em> custom apps (ABAP Cloud, SAP Build) or use analytics (Datasphere). Think of BTP as the “glue and workshop”: integration (CPI, Event Mesh) is control plane; extensions and Datasphere may have their own data. BTP is <strong>cloud only</strong> and is organized in <strong>global account</strong> → <strong>subaccount</strong>; you enable services (e.g. Integration Suite, Datasphere) per subaccount. Key terms: <strong>CPI</strong>, <strong>API Management</strong>, <strong>Event Mesh</strong>, <strong>subaccount</strong>.
+    </div>
+
+    <p>SAP BTP provides integration, extension, and analytics services in the cloud. It connects S/4HANA and cloud products and hosts custom apps and Datasphere.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>BTP provides: <strong>Integration Suite:</strong> CPI (Cloud Integration) for iFlows (A2A, B2B); API Management for APIs; Event Mesh for event-driven integration. <strong>Extension Suite:</strong> ABAP environment (Steampunk) for ABAP Cloud apps; SAP Build (low-code apps, process automation); other runtimes (e.g. Java, Node). <strong>Datasphere:</strong> Data warehouse and semantic layer (Module 21). <strong>Identity (IAS):</strong> SAP Identity Authentication Service for SSO and identity federation. <strong>Other services:</strong> Workflow, document management, etc. BTP is organized by <strong>global account</strong> → <strong>subaccount</strong> → <strong>services</strong>. Entitlements (what you can use) and region (where it runs) are set at subaccount level.</p>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>CPI (Cloud Integration):</strong> Design iFlows that connect systems: S/4HANA ↔ SuccessFactors, Ariba, Concur, etc. Adapters (OData, REST, IDoc, SFTP, etc.); mapping and routing. Prebuilt content for many SAP-to-SAP scenarios. See Module 29.</li>
+        <li><strong>API Management:</strong> Publish APIs (from S/4HANA or BTP apps); apply policies (rate limit, auth); expose to internal or external consumers. Part of Integration Suite.</li>
+        <li><strong>Event Mesh:</strong> Publish events (e.g. “Sales order created” from S/4HANA); subscribers (BTP app, CPI) react. Decoupled, event-driven integration.</li>
+        <li><strong>ABAP environment (Steampunk):</strong> ABAP Cloud in BTP; develop extensions that call S/4HANA via released APIs. Deploy via BTP (no transport to S/4HANA).</li>
+        <li><strong>IAS (Identity Authentication Service):</strong> Central identity for SAP cloud apps; SSO; federation with customer IdP (e.g. Azure AD).</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> BTP itself is mainly control plane. Data lives in: S/4HANA, SuccessFactors, etc. (source systems); Datasphere (analytics); BTP apps (e.g. Steampunk app with its own persistence). Integration flows in CPI move data but do not store it long-term. <strong>Control plane:</strong> Global account and subaccounts; entitlements and quotas; IAS (who can log on); Integration Suite (which flows, APIs, events); space and service instances. See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> BTP is cloud only; you choose region(s) for subaccounts. <strong>Integration:</strong> BTP is the hub: CPI connects S/4HANA to SuccessFactors, Ariba, Concur, CX, and non-SAP. API Management exposes S/4HANA OData/REST. Event Mesh connects event publishers (S/4HANA, SuccessFactors) and subscribers. IAS provides identity for all SAP cloud apps. Module 29 details integration patterns.</p>
+
+    <div class="example-box">
+        <h4>Example: CPI flow from S/4HANA to SuccessFactors</h4>
+        <p>When a new cost center is created in S/4HANA, replicate it to SuccessFactors for org structure.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Trigger (S/4HANA):</strong> Cost center 2000 is created (OM or API). S/4HANA can send an event (e.g. via Event Mesh) or CPI polls OData API for new cost centers. Alternatively, S/4HANA calls out to CPI (outbound).</li>
+            <li><strong>CPI iFlow:</strong> iFlow is triggered (by event, schedule, or call). It reads cost center from S/4HANA (OData or RFC). Maps to SuccessFactors format (e.g. cost center as org attribute). Calls SuccessFactors API (OData) to create or update the cost center in EC.</li>
+            <li><strong>Result:</strong> Cost center exists in both S/4HANA and SuccessFactors. FI and HR use the same cost center for posting and org assignment.</li>
+        </ol>
+        <p>Result: One integration flow in BTP; two systems in sync.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>BTP main components</h4>
+        <table>
+            <tr><th>Component</th><th>Purpose</th></tr>
+            <tr><td>Integration Suite</td><td>CPI (iFlows), API Management, Event Mesh</td></tr>
+            <tr><td>Extension Suite</td><td>ABAP environment, SAP Build (apps, process automation)</td></tr>
+            <tr><td>Datasphere</td><td>Data warehouse and semantic layer (Module 21)</td></tr>
+            <tr><td>IAS</td><td>Identity and SSO for SAP cloud</td></tr>
+            <tr><td>Subaccount</td><td>Scope for entitlements, region, services</td></tr>
+        </table>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: BTP role in the landscape</h4>
+        <p>Click to see how BTP fits between systems.</p>
+        <button type="button" id="btp-step1">1. S/4HANA + cloud apps</button>
+        <button type="button" id="btp-step2">2. BTP: integrate</button>
+        <button type="button" id="btp-step3">3. BTP: extend</button>
+        <div id="btp-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key concepts</h3>
+    <p><strong>Global account / subaccount:</strong> Global account = contract; subaccount = where you enable services (CPI, Datasphere, etc.) and choose region. <strong>Entitlements:</strong> What services and how much (e.g. CPI messages per month). <strong>Clean Core:</strong> SAP recommends extending on BTP (and using released APIs) instead of modifying S/4HANA heavily. <strong>Integration Suite:</strong> One place for CPI, API Management, and Event Mesh (Module 29).</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: BTP is mainly:</h4>
+            <ul class="quiz-options">
+                <li>A) Only a database</li>
+                <li>B) Control plane for integration and extension (and runs extension apps)</li>
+                <li>C) Only SD</li>
+                <li>D) Only MM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>BTP = platform for integration, extension, identity; control plane.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: Integration Suite includes:</h4>
+            <ul class="quiz-options">
+                <li>A) Only FI</li>
+                <li>B) CPI, API Management, Event Mesh</li>
+                <li>C) Only QM</li>
+                <li>D) Only PM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Integration Suite = CPI, API Management, Event Mesh.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: BTP subaccount defines:</h4>
+            <ul class="quiz-options">
+                <li>A) Only sales order</li>
+                <li>B) Entitlements and where services run (region)</li>
+                <li>C) Only purchase order</li>
+                <li>D) Only material</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>Subaccount = scope for entitlements and deployment.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: What is IAS in BTP?</h4>
+            <ul class="quiz-options">
+                <li>A) Only material master</li>
+                <li>B) Identity Authentication Service—SSO and identity for SAP cloud apps</li>
+                <li>C) Only SD delivery</li>
+                <li>D) Only production order</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>IAS = central identity and SSO for SuccessFactors, Ariba, Concur, SAC, etc.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'S/4HANA, SuccessFactors, Ariba, Concur, CX, etc. each hold their own data. They need to be connected and kept in sync.',
+            'BTP Integration Suite: CPI runs iFlows (e.g. cost center S/4HANA → SuccessFactors). API Management exposes APIs. Event Mesh carries events between systems.',
+            'BTP Extension Suite: build new apps (ABAP Cloud, SAP Build) that call S/4HANA and cloud via APIs. Extensions run on BTP; S/4HANA stays clean.'
+        ];
+        var flowEl = document.getElementById('btp-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('btp-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

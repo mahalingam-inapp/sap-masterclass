@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAP Masterclass — From Navigation to Modules & Cloud Products</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0; padding: 0; height: 100vh; overflow: hidden;
+        }
+        .container {
+            width: 100%; min-height: 100vh; background: white;
+            display: flex; flex-direction: column; position: relative;
+        }
+        .main-wrapper { display: flex; flex: 1; position: relative; min-height: 0; }
+        .sidebar {
+            width: 280px; background: #f8f9fa; border-right: 2px solid #e0e0e0;
+            padding: 25px 20px; display: flex; flex-direction: column; gap: 20px;
+            overflow-y: auto; overflow-x: hidden; height: 100vh; max-height: 100vh;
+            transition: transform 0.3s ease; -webkit-overflow-scrolling: touch;
+        }
+        .content {
+            flex: 1; padding: 0; position: relative;
+            overflow-y: auto; overflow-x: hidden; width: 100%; height: 100vh;
+            -webkit-overflow-scrolling: touch;
+        }
+        .sidebar-title {
+            font-size: 1.8em; font-weight: 700; color: #667eea; margin-bottom: 5px;
+            padding-bottom: 15px; border-bottom: 2px solid #e0e0e0;
+            cursor: pointer; transition: color 0.3s ease;
+        }
+        .sidebar-title:hover { color: #764ba2; }
+        .sidebar-subheading {
+            font-size: 0.85em; font-weight: 700; color: #764ba2;
+            margin-top: 20px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .sidebar-tabs { display: flex; flex-direction: column; gap: 8px; }
+        .sidebar-tab {
+            padding: 12px 15px; cursor: pointer; border: none; background: transparent;
+            font-size: 0.9em; font-weight: 500; color: #666; text-align: left;
+            transition: all 0.3s ease; border-radius: 6px; border-left: 3px solid transparent;
+            touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+        }
+        .sidebar-tab:hover { background: #e8e8e8; color: #333; }
+        .sidebar-tab:active { transform: scale(0.98); }
+        .sidebar-tab.active {
+            color: #667eea; background: #e8f0ff; border-left-color: #667eea; font-weight: 600;
+        }
+        .mobile-menu-toggle {
+            display: none; position: fixed; top: 15px; left: 15px; z-index: 1001;
+            background: #667eea; color: white; border: none; padding: 12px 15px;
+            border-radius: 8px; cursor: pointer; font-size: 1.2em;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2); transition: all 0.3s ease;
+        }
+        .mobile-menu-toggle:hover { background: #764ba2; transform: scale(1.05); }
+        .mobile-menu-toggle.active { background: #764ba2; }
+        .sidebar-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); z-index: 999; opacity: 0;
+            transition: opacity 0.3s ease; pointer-events: none;
+        }
+        .sidebar-overlay.active { opacity: 1; pointer-events: auto; }
+        @media (min-width: 769px) {
+            .sidebar-overlay { display: none !important; pointer-events: none !important; opacity: 0 !important; }
+        }
+        .module-content { display: block; animation: fadeIn 0.3s ease; width: 100%; }
+        .module-iframe {
+            width: 100%; border: none; display: none; background: white;
+            margin: 0; padding: 0; vertical-align: top;
+        }
+        .module-iframe.active { display: block; }
+        #welcome-iframe { display: block; width: 100%; border: none; margin: 0; padding: 0; }
+        #module-container { width: 100%; position: relative; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 1024px) {
+            .sidebar { width: 260px; }
+            .sidebar-title { font-size: 1.5em; }
+        }
+        @media (max-width: 768px) {
+            .mobile-menu-toggle { display: block; }
+            .sidebar {
+                position: fixed; top: 0; left: 0; z-index: 1000;
+                transform: translateX(-100%); box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-overlay { display: block; }
+            .sidebar-tab { min-height: 44px; }
+        }
+        @media (max-width: 480px) {
+            .sidebar { width: 100%; max-width: 320px; padding: 15px 12px; }
+            .sidebar-title { font-size: 1.3em; }
+        }
+        @media (max-width: 360px) {
+            .sidebar { padding: 12px 10px; }
+            .sidebar-tab { padding: 10px 12px; font-size: 0.85em; }
+        }
+        @media (max-height: 500px) and (orientation: landscape) {
+            .sidebar { padding: 15px 12px; gap: 12px; }
+            .sidebar-tab { padding: 8px 12px; }
+        }
+    </style>
+</head>
+<body>
+    <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <div class="container">
+        <div class="main-wrapper">
+            <div class="sidebar" id="sidebar">
+                <div class="sidebar-title" onclick="showWelcome()">SAP Masterclass</div>
+                <div class="sidebar-tabs">
+                    <div class="sidebar-subheading">Foundation & Core ERP</div>
+                    <button class="sidebar-tab" onclick="showModule(1)">1: Foundation concepts</button>
+                    <button class="sidebar-tab" onclick="showModule(2)">2: SAP Overview & Navigation</button>
+                    <button class="sidebar-tab" onclick="showModule(3)">3: Financial Accounting (FI)</button>
+                    <button class="sidebar-tab" onclick="showModule(4)">4: Controlling (CO)</button>
+                    <button class="sidebar-tab" onclick="showModule(5)">5: Materials Management (MM)</button>
+                    <button class="sidebar-tab" onclick="showModule(6)">6: Sales and Distribution (SD)</button>
+                    <button class="sidebar-tab" onclick="showModule(7)">7: Production Planning (PP)</button>
+                    <button class="sidebar-tab" onclick="showModule(8)">8: Quality Management (QM)</button>
+                    <button class="sidebar-tab" onclick="showModule(9)">9: Plant Maintenance (PM)</button>
+                    <button class="sidebar-tab" onclick="showModule(10)">10: Project System (PS)</button>
+                    <button class="sidebar-tab" onclick="showModule(11)">11: Human Capital Management (HCM)</button>
+                    <button class="sidebar-tab" onclick="showModule(12)">12: Warehouse Management / EWM</button>
+                    <div class="sidebar-subheading">SAP Cloud & Products</div>
+                    <button class="sidebar-tab" onclick="showModule(13)">13: SAP SuccessFactors</button>
+                    <button class="sidebar-tab" onclick="showModule(14)">14: SAP Fieldglass</button>
+                    <button class="sidebar-tab" onclick="showModule(15)">15: SAP Ariba</button>
+                    <button class="sidebar-tab" onclick="showModule(16)">16: SAP Concur</button>
+                    <button class="sidebar-tab" onclick="showModule(17)">17: SAP Customer Experience (CX)</button>
+                    <button class="sidebar-tab" onclick="showModule(18)">18: SAP Transportation Management (TM)</button>
+                    <button class="sidebar-tab" onclick="showModule(19)">19: SAP Integrated Business Planning (IBP)</button>
+                    <button class="sidebar-tab" onclick="showModule(20)">20: SAP Analytics Cloud (SAC)</button>
+                    <button class="sidebar-tab" onclick="showModule(21)">21: SAP Datasphere</button>
+                    <button class="sidebar-tab" onclick="showModule(22)">22: SAP Business Technology Platform (BTP)</button>
+                    <button class="sidebar-tab" onclick="showModule(23)">23: SAP Signavio</button>
+                    <div class="sidebar-subheading">Technical & Modern ERP</div>
+                    <button class="sidebar-tab" onclick="showModule(24)">24: ABAP Basics</button>
+                    <button class="sidebar-tab" onclick="showModule(25)">25: Business Warehouse / BI (BW/BI)</button>
+                    <button class="sidebar-tab" onclick="showModule(26)">26: SAP Basis</button>
+                    <button class="sidebar-tab" onclick="showModule(27)">27: Security & Authorization</button>
+                    <button class="sidebar-tab" onclick="showModule(28)">28: Fiori & User Experience</button>
+                    <button class="sidebar-tab" onclick="showModule(29)">29: Integration (PI/CPI)</button>
+                    <button class="sidebar-tab" onclick="showModule(30)">30: SAP S/4HANA Overview</button>
+                    <button class="sidebar-tab" onclick="showModule(31)">31: Cross-Module Integration & Best Practices</button>
+                </div>
+            </div>
+            <div class="content">
+                <div id="welcome-container" class="module-content active">
+                    <iframe id="welcome-iframe" class="module-iframe" src="modules/welcome.html"></iframe>
+                </div>
+                <div id="module-container" class="module-content" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var totalModules = 31;
+        var iframes = {};
+        var courseStarted = false;
+        var currentModule = 1;
+
+        function initializeIframes() {
+            var container = document.getElementById('module-container');
+            if (container.children.length > 0) return;
+            for (var i = 1; i <= totalModules; i++) {
+                var iframe = document.createElement('iframe');
+                iframe.id = 'module-iframe-' + i;
+                iframe.className = 'module-iframe';
+                iframe.setAttribute('scrolling', 'no');
+                iframe.src = 'modules/module-' + i + '.html';
+                iframe.style.height = '3000px';
+                iframe.onload = function() { adjustIframeHeight(this); };
+                container.appendChild(iframe);
+                iframes[i] = iframe;
+            }
+        }
+
+        function adjustIframeHeight(iframe) {
+            try {
+                var doc = iframe.contentDocument || iframe.contentWindow.document;
+                var body = doc.body;
+                var html = doc.documentElement;
+                var height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight) + 40;
+                if (height < 400) height = 800;
+                iframe.style.height = height + 'px';
+            } catch (e) {}
+        }
+
+        function showModule(moduleNumber) {
+            if (!courseStarted) startCourse();
+            currentModule = moduleNumber;
+            var container = document.getElementById('module-container');
+            container.style.display = 'block';
+            document.getElementById('welcome-container').classList.remove('active');
+            document.getElementById('welcome-container').style.display = 'none';
+
+            for (var i = 1; i <= totalModules; i++) {
+                if (iframes[i]) iframes[i].classList.remove('active');
+            }
+            if (iframes[moduleNumber]) {
+                iframes[moduleNumber].classList.add('active');
+                adjustIframeHeight(iframes[moduleNumber]);
+            }
+
+            var tabs = document.querySelectorAll('.sidebar-tab');
+            tabs.forEach(function(t, idx) {
+                t.classList.toggle('active', idx === moduleNumber - 1);
+            });
+
+            document.querySelector('.content').scrollTop = 0;
+            var sidebar = document.getElementById('sidebar');
+            var overlay = document.getElementById('sidebar-overlay');
+            var toggle = document.getElementById('mobile-menu-toggle');
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+                toggle.classList.remove('active');
+            }
+        }
+
+        function showWelcome() {
+            courseStarted = false;
+            document.getElementById('welcome-container').style.display = 'block';
+            document.getElementById('welcome-container').classList.add('active');
+            document.getElementById('module-container').style.display = 'none';
+            document.querySelectorAll('.sidebar-tab').forEach(function(t) { t.classList.remove('active'); });
+            document.querySelector('.content').scrollTop = 0;
+            var sidebar = document.getElementById('sidebar');
+            var overlay = document.getElementById('sidebar-overlay');
+            var toggle = document.getElementById('mobile-menu-toggle');
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+                toggle.classList.remove('active');
+            }
+        }
+
+        function startCourse() {
+            courseStarted = true;
+            try { localStorage.setItem('courseStarted', 'true'); } catch (e) {}
+            initializeIframes();
+            showModule(1);
+        }
+
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'startCourse') startCourse();
+        });
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebar-overlay').classList.remove('active');
+                document.getElementById('mobile-menu-toggle').classList.remove('active');
+            }
+            for (var i = 1; i <= totalModules; i++) {
+                if (iframes[i] && iframes[i].classList.contains('active')) {
+                    adjustIframeHeight(iframes[i]);
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('courseStarted') === 'true' || (window.location.search && window.location.search.indexOf('skipWelcome=true') !== -1)) {
+                startCourse();
+            }
+            var toggle = document.getElementById('mobile-menu-toggle');
+            var overlay = document.getElementById('sidebar-overlay');
+            var sidebar = document.getElementById('sidebar');
+            toggle.addEventListener('click', function() {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('active');
+                toggle.classList.toggle('active');
+            });
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+                toggle.classList.remove('active');
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft' && currentModule > 1) showModule(currentModule - 1);
+                if (e.key === 'ArrowRight' && currentModule < totalModules) showModule(currentModule + 1);
+            });
+        });
+
+        setInterval(function() {
+            try {
+                var w = document.getElementById('welcome-iframe');
+                if (w && w.contentDocument && document.getElementById('welcome-container').style.display !== 'none') {
+                    var h = Math.max(w.contentDocument.body.scrollHeight, w.contentDocument.documentElement.scrollHeight) + 40;
+                    if (w.style.height !== h + 'px') w.style.height = h + 'px';
+                }
+            } catch (e) {}
+        }, 500);
+    </script>
+</body>
+</html>

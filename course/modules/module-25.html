@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 25: Business Warehouse / BI (BW/BI)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 25: Business Warehouse / Business Intelligence (BW/BI)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> BW (Business Warehouse) is SAP’s <strong>on‑premise data warehouse</strong>. Data is <strong>extracted</strong> from ERP (FI, CO, MM, SD, etc.), <strong>transformed</strong> and loaded into BW objects (DataStore Objects, InfoCubes, CompositeProviders). Reporting is done with BEx, Analysis for Office, or SAC (connected to BW). BW is a separate analytical layer—reporting and planning use BW data so that heavy queries do not slow down the transactional system. BW/4HANA is the HANA-based version. Many customers still use BW alongside S/4HANA; others move to SAP Datasphere (Module 21) for cloud. Key terms: <strong>ETL</strong>, <strong>DSO</strong>, <strong>InfoCube</strong>, <strong>BEx</strong>.
+    </div>
+
+    <p>SAP BW and BW/4HANA provide ETL, data modeling, and reporting. BW sits in the data plane as an analytical layer.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>BW answers: “Where do we get reporting data from transactional systems, and how do we model it for analysis?” Key areas: <strong>Extraction:</strong> DataSources and extractors pull data from S/4HANA/ECC (e.g. FI documents, SD sales, MM movements). <strong>Modeling:</strong> InfoObjects (characteristics and key figures); DSO (DataStore Object) for staging and persistent storage; InfoCubes (classic) or CompositeProvider/Open ODS (modern) for multidimensional reporting. <strong>Loading:</strong> DTP (Data Transfer Process) and transformation rules. <strong>Reporting:</strong> BEx query, Analysis for Office, SAC (connected to BW as a source).</p>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>InfoObjects:</strong> Reusable building blocks: characteristics (e.g. company code, cost center, material) and key figures (amount, quantity). Used in DSO, cubes, and queries.</li>
+        <li><strong>DSO (DataStore Object):</strong> Persistent storage with key (e.g. document, item). Data can be overwritten (e.g. change log) or aggregated. Used for staging and as source for CompositeProvider.</li>
+        <li><strong>CompositeProvider / Open ODS:</strong> Modern BW: combine multiple sources (DSO, InfoProvider, external) into one semantic layer for reporting. Replaces classic MultiProvider in many scenarios.</li>
+        <li><strong>Extraction:</strong> DataSource in source system (S/4HANA); replication to BW; transformation and DTP load into DSO or InfoProvider. Full and delta extraction.</li>
+        <li><strong>BEx and SAC:</strong> BEx query designer builds queries on InfoProviders; Analysis for Office and SAC consume these queries or connect to BW for ad-hoc analysis.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> BW database holds DSO, InfoCubes, CompositeProvider data; extraction reads from ERP. Reporting queries run against BW objects. <strong>Control plane:</strong> RSA1 (BW modeling); process chains and DTP for load; authorizations (BW roles); monitoring (RSA1, job overview). See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> BW/4HANA on‑premise (or hosted); runs on HANA. <strong>Integration:</strong> Data from S/4HANA (FI, CO, MM, SD, etc.) via extractors; can feed SAC and Datasphere. SAP recommends Datasphere for new cloud analytics; BW remains for existing BW content and on‑premise reporting.</p>
+
+    <div class="example-box">
+        <h4>Example: FI revenue in BW for reporting</h4>
+        <p>Finance wants a BW report showing revenue by company code and month.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>DataSource (S/4HANA):</strong> Standard FI DataSource for G/L line items (or revenue-specific) is activated in S/4HANA. It provides fields: company code, fiscal year, period, account, amount, etc. Replicate DataSource to BW.</li>
+            <li><strong>Modeling (BW):</strong> Create transformation from DataSource to DSO (e.g. map company code, period, revenue account, amount). Create DTP and load (full then delta). Build CompositeProvider or BEx query on top: dimensions = company code, time; key figure = revenue. Save query.</li>
+            <li><strong>Reporting:</strong> User runs BEx query or opens Analysis for Office / SAC connected to BW. Sees revenue by company code and month. Data is refreshed by load schedule (e.g. nightly delta).</li>
+        </ol>
+        <p>Result: One analytical layer in BW; reporting without querying transactional tables directly.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>BW object types (simplified)</h4>
+        <table>
+            <tr><th>Object</th><th>Purpose</th></tr>
+            <tr><td>InfoObject</td><td>Characteristic or key figure (reusable)</td></tr>
+            <tr><td>DSO</td><td>DataStore Object—staging, persistent storage</td></tr>
+            <tr><td>CompositeProvider</td><td>Combined view for reporting (modern)</td></tr>
+            <tr><td>DataSource / DTP</td><td>Extraction and load from source</td></tr>
+        </table>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: BW data flow</h4>
+        <p>Click to see how data moves from ERP to report.</p>
+        <button type="button" id="bw-step1">1. Extract from S/4HANA</button>
+        <button type="button" id="bw-step2">2. Load into BW</button>
+        <button type="button" id="bw-step3">3. Report (BEx / SAC)</button>
+        <div id="bw-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key concepts and T-codes</h3>
+    <p><strong>RSA1:</strong> BW modeling (InfoArea, InfoProvider, transformation, DTP). <strong>Process chain:</strong> Scheduled sequence of loads and jobs. <strong>Delta extraction:</strong> Only new/changed records since last run. <strong>BW vs Datasphere:</strong> BW = on‑premise data warehouse; Datasphere = cloud data warehouse and semantic layer (Module 21). Both can feed SAC.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: BW is used for:</h4>
+            <ul class="quiz-options">
+                <li>A) Only SD billing</li>
+                <li>B) ETL, data modeling, and analytics/reporting</li>
+                <li>C) Only MM</li>
+                <li>D) Only PM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>BW = Business Warehouse for analytics and reporting.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: DSO stands for:</h4>
+            <ul class="quiz-options">
+                <li>A) Sales order</li>
+                <li>B) DataStore Object (BW object for staging/persistent storage)</li>
+                <li>C) Purchase order</li>
+                <li>D) G/L account</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>DSO = DataStore Object in BW.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: BW gets data from:</h4>
+            <ul class="quiz-options">
+                <li>A) Only QM</li>
+                <li>B) FI, CO, MM, SD, and other ERP modules</li>
+                <li>C) Only PS</li>
+                <li>D) Only Basis</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>Extraction from ERP modules feeds BW.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: What is a DTP in BW?</h4>
+            <ul class="quiz-options">
+                <li>A) Only a sales order</li>
+                <li>B) Data Transfer Process—loads data from source to target (e.g. DSO)</li>
+                <li>C) Only a purchase order</li>
+                <li>D) Only a G/L account</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>DTP = Data Transfer Process; executes the load with transformation and filters.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'DataSource in S/4HANA (or ECC) is replicated to BW. Extraction runs (full or delta); data is read from source and sent to BW.',
+            'Transformation maps source fields to target. DTP loads data into DSO or InfoProvider. Process chain can schedule this (e.g. nightly).',
+            'BEx query or CompositeProvider exposes the data. Users run BEx, Analysis for Office, or SAC connected to BW. Report shows aggregated data.'
+        ];
+        var flowEl = document.getElementById('bw-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('bw-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

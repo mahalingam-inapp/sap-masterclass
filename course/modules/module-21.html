@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 21: SAP Datasphere</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 21: SAP Datasphere</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> Datasphere is SAP’s <strong>cloud data warehouse</strong> and semantic layer. Instead of each report connecting directly to S/4HANA, SuccessFactors, or Ariba (each with different table names and meanings), you bring data into Datasphere and build one <strong>business-friendly</strong> layer: <strong>spaces</strong> (logical areas), <strong>tables and views</strong>, and <strong>perspectives</strong> (views tailored for reporting). SAC and other tools then connect to Datasphere so that “revenue” or “customer” means the same everywhere. Datasphere runs on <strong>BTP</strong> (cloud only). Key terms: <strong>space</strong>, <strong>entity</strong>, <strong>perspective</strong>, <strong>semantic layer</strong>.
+    </div>
+
+    <p>SAP Datasphere integrates data from S/4HANA and cloud sources into a unified semantic layer for SAC and other consumers.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>Datasphere provides: <strong>Data integration:</strong> Connect to S/4HANA (OData, ABAP CDS), SuccessFactors, Ariba, files, and more. Replicate or virtualize data. <strong>Modeling:</strong> In a space, create local tables (from replication or ETL), views (graphical or SQL), and semantic layer (business entities, dimensions, measures). <strong>Perspectives:</strong> Expose a subset of the model to consumers (e.g. “Revenue” perspective for SAC) with proper semantics. <strong>Consumption:</strong> SAC connects to Datasphere via live connection; S/4HANA can consume Datasphere for embedded analytics; external BI tools can connect via SQL or APIs. Datasphere replaces or complements BW for many cloud-first analytics scenarios.</p>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Spaces:</strong> A space is a logical container: data connections (source systems), replicated or virtual tables, views, and perspectives. Access can be restricted by space.</li>
+        <li><strong>Connections and replication:</strong> Connect to S/4HANA (via connector), SuccessFactors, Ariba, etc. Data can be replicated (copy) or accessed via virtual tables (query at runtime).</li>
+        <li><strong>Modeling:</strong> Build views (graphical builder or SQL) that join and transform data. Define business entities (semantic layer) so that “Revenue” or “Customer” has one meaning across sources.</li>
+        <li><strong>Perspectives:</strong> A perspective is a published view for consumption—e.g. “Revenue by region” for SAC. Consumers see only what is in the perspective; semantics (labels, hierarchies) are consistent.</li>
+        <li><strong>Business builder:</strong> Prebuilt content (e.g. SAP Analytics content for S/4HANA) can be deployed into a space to jump-start models.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> Datasphere stores replicated data (in its cloud DB) and metadata (views, perspectives, semantics). For virtual access, data stays in source; Datasphere queries on demand. <strong>Control plane:</strong> BTP subaccount; spaces and authorizations; connection definitions. See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> BTP service; cloud only. <strong>Integration:</strong> Sources: S/4HANA, SuccessFactors, Ariba, Concur, files, and more. Consumers: SAC (primary), S/4HANA (embedded analytics), BW, external tools (SQL, OData). CPI can be used for custom ETL into or out of Datasphere (Module 22, 29).</p>
+
+    <div class="example-box">
+        <h4>Example: Revenue view in Datasphere for SAC</h4>
+        <p>Company wants one “Revenue” definition from S/4HANA and CX for SAC.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Connection (Datasphere):</strong> Create connection to S/4HANA (OData or ABAP CDS). Create connection to CX (if needed). In a space, add remote tables or views from S/4HANA (e.g. billing document, revenue G/L). Replicate or use virtual.</li>
+            <li><strong>View (Datasphere):</strong> Build view “Revenue_Actual”: join billing and G/L data; dimensions = company code, region, product, time; measure = revenue amount. Add semantics (currency, aggregation). Create perspective “Revenue” and publish this view.</li>
+            <li><strong>SAC (Module 20):</strong> In SAC, create live connection to Datasphere. Select perspective “Revenue.” Build story with chart “Revenue by region and month.” Data is queried from Datasphere (and thus from S/4HANA) at runtime.</li>
+        </ol>
+        <p>Result: One semantic definition of revenue; SAC and other consumers use it consistently.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Datasphere object types</h4>
+        <table>
+            <tr><th>Object</th><th>Purpose</th></tr>
+            <tr><td>Space</td><td>Container for connections, tables, views, perspectives</td></tr>
+            <tr><td>Connection</td><td>Link to source (S/4HANA, SuccessFactors, etc.)</td></tr>
+            <tr><td>View / Entity</td><td>Modeled data (join, transform, semantics)</td></tr>
+            <tr><td>Perspective</td><td>Published view for consumers (SAC, etc.)</td></tr>
+        </table>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: Datasphere data flow</h4>
+        <p>Click to see how data moves from source to consumer.</p>
+        <button type="button" id="dwc-step1">1. Connect sources</button>
+        <button type="button" id="dwc-step2">2. Model &amp; perspective</button>
+        <button type="button" id="dwc-step3">3. Consume in SAC</button>
+        <div id="dwc-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key concepts</h3>
+    <p><strong>Space:</strong> Logical boundary; one space can hold multiple sources and models. <strong>Semantic layer:</strong> Business meaning (entity, measure, dimension) so that “Revenue” or “Customer” is consistent. <strong>Perspective:</strong> What you expose to SAC or other tools. <strong>Datasphere vs BW:</strong> Datasphere = cloud, multi-source, semantic layer; BW = traditional SAP data warehouse. Many new analytics landscapes use Datasphere + SAC.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: Datasphere is used for:</h4>
+            <ul class="quiz-options">
+                <li>A) Only SD</li>
+                <li>B) Data warehouse and semantic layer in the cloud</li>
+                <li>C) Only MM</li>
+                <li>D) Only FI</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>Datasphere = data integration and modeling for analytics.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: Datasphere "spaces" are:</h4>
+            <ul class="quiz-options">
+                <li>A) Only purchase orders</li>
+                <li>B) Logical boundaries for data and modeling (tables, views)</li>
+                <li>C) Only sales orders</li>
+                <li>D) Only production orders</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Spaces contain data objects and semantic layer.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: Datasphere feeds data to:</h4>
+            <ul class="quiz-options">
+                <li>A) Only QM</li>
+                <li>B) Only PM</li>
+                <li>C) SAC, S/4HANA, and other consumers</li>
+                <li>D) Only PS</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: C</strong><br>SAC and other apps consume Datasphere data.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: What is a "perspective" in Datasphere?</h4>
+            <ul class="quiz-options">
+                <li>A) Only a purchase order</li>
+                <li>B) A published view for consumers (e.g. SAC) with business semantics</li>
+                <li>C) Only a sales order</li>
+                <li>D) Only a production order</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>Perspective = business-ready view exposed to SAC and other consumers.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'Create connection to S/4HANA, SuccessFactors, Ariba, etc. In a space, add remote tables or replicate data. Data is available in Datasphere (replicated or virtual).',
+            'Build views (join, transform); define business entities and semantics. Create perspective and publish so consumers can see one consistent view (e.g. Revenue).',
+            'SAC (or S/4HANA embedded analytics) connects to Datasphere. Select perspective. Build stories/dashboards. Queries run against Datasphere (and thus source systems).'
+        ];
+        var flowEl = document.getElementById('dwc-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('dwc-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

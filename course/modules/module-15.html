@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 15: SAP Ariba</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 15: SAP Ariba</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> Ariba is SAP’s <strong>cloud procurement</strong> solution. It covers both <strong>strategic sourcing</strong> (finding and selecting suppliers: eRFx, auctions) and <strong>procure-to-pay (P2P)</strong>: creating requisitions, purchase orders, and processing supplier invoices in the cloud. The <strong>Ariba Network</strong> is a network of buyers and suppliers—when you send a PO or receive an invoice, it can flow electronically through the network. Companies often integrate Ariba with S/4HANA: for example, a PO created in Ariba is replicated to S/4HANA for goods receipt and FI posting, or the invoice is sent from Ariba to S/4HANA via CPI. Key terms: <strong>P2P</strong>, <strong>Ariba Network</strong>, <strong>CPI</strong> (integration).
+    </div>
+
+    <p>SAP Ariba covers sourcing and P2P in the cloud. Integration with S/4HANA is typically via CPI or CIG.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>Ariba addresses the full procurement cycle in the cloud: <strong>Sourcing:</strong> eRFQ, eRFP, reverse auctions to select suppliers and negotiate terms. <strong>Contract management:</strong> Author and manage contracts; link to catalog and PO. <strong>Procure-to-pay:</strong> Catalog or free-text requisition → approval → PO → (optional GR in S/4HANA) → supplier sends invoice via Ariba Network → invoice matched and paid. Supplier lifecycle: onboarding, qualification, risk. Spend analytics and compliance (policy, delegation) are part of the suite. Many customers use Ariba for upstream (sourcing, contracts) and either Ariba or S/4HANA for downstream (PO, invoice, payment).</p>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Strategic sourcing:</strong> Create sourcing events (eRFQ, eRFP); suppliers respond; compare and award. Reverse auctions for competitive bidding. Results feed contracts.</li>
+        <li><strong>Contracts:</strong> Contract authoring, templates, approval. Contract release orders (CRO) can create POs against contract. Link to catalog.</li>
+        <li><strong>Requisition and PO:</strong> User shops from catalog or creates free-text req; approval workflow; PO is created and sent to supplier via Ariba Network. PO can replicate to S/4HANA (MM) for GR and tracking.</li>
+        <li><strong>Ariba Network:</strong> Suppliers receive POs and send invoices electronically. Invoices are matched to PO (and optionally GR in S/4HANA). Payment can be via Ariba or pushed to S/4HANA for payment run.</li>
+        <li><strong>Supplier management:</strong> Supplier onboarding, qualification, risk and performance. Central supplier master in the cloud.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> Tenant data: catalog, requisition, PO, contract, invoice, supplier. No customer DB; UIs and APIs. Replication to/from S/4HANA (PO, invoice, vendor) via CPI/CIG. <strong>Control plane:</strong> Ariba Admin (tenant, workflows, approval, integration settings); CIG or CPI for connection to S/4HANA. See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> SaaS only; Ariba Network is a shared network (buyers and suppliers). <strong>Integration:</strong> S/4HANA: PO from Ariba → S/4HANA for GR and FI; invoice from Ariba Network → S/4HANA for MIRO and AP; or PO created in S/4HANA and sent to Ariba for supplier. Catalog and vendor sync. CPI or CIG (Module 29) for replication.</p>
+
+    <div class="example-box">
+        <h4>Example: Procure from Ariba catalog to S/4HANA FI</h4>
+        <p>Employee needs office supplies; company uses Ariba for buying and S/4HANA for GR and payment.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Requisition (Ariba):</strong> User creates requisition from catalog (e.g. “Printer paper, 10 reams”) or free-text. Submits for approval. Approver approves.</li>
+            <li><strong>PO (Ariba):</strong> PO is created and sent to supplier via Ariba Network. PO is replicated to S/4HANA (e.g. via CIG): creates purchase order in MM (or reference document). Plant and cost center from requisition.</li>
+            <li><strong>GR and invoice (S/4HANA + Ariba):</strong> Warehouse posts goods receipt in S/4HANA (MIGO) against the replicated PO. Supplier submits invoice in Ariba Network; invoice is sent to S/4HANA. MIRO matches invoice to PO and GR; FI document is created (AP). Payment run in S/4HANA pays the vendor.</li>
+        </ol>
+        <p>Result: Buying in Ariba; fulfillment and payment in S/4HANA; one end-to-end P2P flow.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Key Ariba concepts and integration</h4>
+        <table>
+            <tr><th>Concept</th><th>Purpose</th></tr>
+            <tr><td>Requisition / PO</td><td>Request and order in Ariba; can replicate to S/4HANA</td></tr>
+            <tr><td>Ariba Network</td><td>Buyer–supplier connection for PO and invoice exchange</td></tr>
+            <tr><td>CIG / CPI</td><td>Replication of PO, invoice, catalog, vendor to/from S/4HANA</td></tr>
+            <tr><td>Contract / CRO</td><td>Contract release order creates PO against contract</td></tr>
+        </table>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: Ariba ↔ S/4HANA P2P flow</h4>
+        <p>Click to see how documents flow between Ariba and S/4HANA.</p>
+        <button type="button" id="ar-step1">1. Ariba: Req → PO</button>
+        <button type="button" id="ar-step2">2. Replicate to S/4HANA</button>
+        <button type="button" id="ar-step3">3. GR + Invoice → FI</button>
+        <div id="ar-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key concepts</h3>
+    <p><strong>P2P:</strong> Procure-to-pay = requisition → PO → receive → invoice → pay. <strong>Ariba Network:</strong> Suppliers connect once and receive POs from many buyers; send invoices electronically. <strong>Integration scenarios:</strong> Ariba-led (buy in Ariba, replicate PO to S/4HANA for GR/FI); S/4HANA-led (create PO in S/4HANA, send to Ariba for supplier); hybrid. <strong>CIG:</strong> Cloud Integration Gateway—prebuilt connectors for Ariba–S/4HANA. CPI can replace or extend CIG (Module 29).</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: Ariba covers:</h4>
+            <ul class="quiz-options">
+                <li>A) Only SD</li>
+                <li>B) Sourcing and procurement (P2P) in the cloud</li>
+                <li>C) Only PP</li>
+                <li>D) Only HCM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>Ariba = cloud sourcing, buying, Ariba Network, P2P.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: Ariba Network is used for:</h4>
+            <ul class="quiz-options">
+                <li>A) Only FI posting</li>
+                <li>B) Buyer–supplier collaboration, invoicing</li>
+                <li>C) Only QM</li>
+                <li>D) Only PM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Ariba Network connects buyers and suppliers for orders and invoices.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: Ariba integrates with S/4HANA via:</h4>
+            <ul class="quiz-options">
+                <li>A) Only SE16</li>
+                <li>B) CPI / CIG (Cloud Integration Gateway)</li>
+                <li>C) Only MM03</li>
+                <li>D) Only VA01</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>CPI and CIG connect Ariba to S/4HANA (PO, invoice replication).</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: In an Ariba-led P2P flow, where is the purchase order first created?</h4>
+            <ul class="quiz-options">
+                <li>A) Only in FI</li>
+                <li>B) In Ariba; then replicated to S/4HANA for GR and invoice</li>
+                <li>C) Only in SD</li>
+                <li>D) Only in PP</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>In Ariba-led flow, PO is created in Ariba and replicated to S/4HANA for receiving and payment.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'Requisition created and approved in Ariba. PO created and sent to supplier via Ariba Network. Catalog or free-text; cost center and plant from req.',
+            'CIG/CPI replicates PO to S/4HANA. Purchase order appears in MM (reference or full). S/4HANA can post GR against it.',
+            'Goods receipt in S/4HANA (MIGO). Supplier sends invoice via Ariba Network; invoice replicated to S/4HANA. MIRO: three-way match → FI document. Payment in S/4HANA.'
+        ];
+        var flowEl = document.getElementById('ar-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('ar-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

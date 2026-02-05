@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 27: Security & Authorization</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 27: Security & Authorization</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> SAP Security ensures <strong>who can do what</strong>. In ERP you create <strong>users</strong> (SU01) and assign <strong>roles</strong> (PFCG). Each role contains <strong>authorizations</strong>—e.g. “user can display documents in company code 1000” or “user can post in company code 2000.” When a user runs a transaction, the system checks these authorizations; if something is missing, the transaction fails and SU53 can show which authorization was required. This is <strong>control plane</strong>: the same tables and programs are protected by these checks. In cloud products, identity and permissions are managed in admin UIs and often IAS (Identity Authentication Service). Key terms: <strong>user</strong>, <strong>role</strong>, <strong>authorization object</strong>, <strong>PFCG</strong>, <strong>SU53</strong>.
+    </div>
+
+    <p>SAP Security covers user management, roles, and authorizations. It is part of the control plane; the data plane is protected by authorization checks at runtime.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>Security ensures <strong>least privilege</strong>: users see and do only what they need. Key areas: <strong>User master (SU01):</strong> User ID, logon data, roles (or composite roles), and locks. <strong>Role design (PFCG):</strong> Role = set of transactions/reports and authorizations. Authorization object (e.g. F_BKPF_BUK) has fields (company code, activity); role gets specific values (e.g. 1000, 01). <strong>Composite role:</strong> Groups single roles for easier assignment. <strong>SOD (segregation of duties):</strong> Conflict checks so one user does not have incompatible permissions (e.g. create vendor and post payment). <strong>Audit:</strong> Logs and reports for compliance. HCM can drive role assignment by position (position-based access).</p>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>User (SU01):</strong> Create user; assign one or more roles. Optional: validity, address, default logon client. Lock user for security (e.g. leave) or unlock.</li>
+        <li><strong>Role (PFCG):</strong> Create role; add menu (transactions, reports); generate authorizations from menu or maintain manually. Authorization object values (e.g. company code, plant) restrict scope. Save and transport role.</li>
+        <li><strong>Authorization object:</strong> Technical object (e.g. S_BUKRS for company code, F_BKPF_BUK for FI document) with fields. Program/transaction checks this object; user must have a role that grants the required value combination.</li>
+        <li><strong>SU53:</strong> After an authorization failure, user (or admin) runs SU53 to see which object and which field value caused the failure. Used to fix missing authorizations.</li>
+        <li><strong>Cloud (IAS, product admin):</strong> SuccessFactors, Ariba, etc. use their own admin for users and permissions (e.g. RBP in SuccessFactors). IAS provides central identity and SSO (Module 22).</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> Authorization checks read user’s roles and authorizations (USR02, AGR_*, AUTH tables) at runtime; they do not store business data. <strong>Control plane:</strong> User master, roles, and authorization values are configuration; they govern who can access what. See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> On‑premise: SU01, PFCG in each system. S/4HANA Cloud: user and role management in Fiori or admin. <strong>Integration:</strong> Identity can be federated (e.g. IAS, corporate IdP); roles can be derived from HCM position. GRC (Governance, Risk, Compliance) tools for SOD and access control.</p>
+
+    <div class="example-box">
+        <h4>Example: Role for FI accountant (display only, company code 1000)</h4>
+        <p>New accountant should see FI documents and G/L balances for company code 1000 only; no posting.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Create role (PFCG):</strong> Create role “Z_FI_ACCOUNTANT_DISPLAY.” Add menu: FB03 (display document), S_ALR_87012284 (G/L balance), and similar display transactions. Restrict to company code 1000 in authorization object S_BUKRS (and F_BKPF_BUK, etc.). Generate authorizations; maintain manually if needed (e.g. only display activity 03). Save.</li>
+            <li><strong>Assign to user (SU01):</strong> Open user; assign role Z_FI_ACCOUNTANT_DISPLAY. User logs on and has only these transactions with company code 1000. If user tries FB01 (post), authorization check fails.</li>
+            <li><strong>Troubleshooting (SU53):</strong> If user gets “Authorization failure” when opening a report, user runs SU53: system shows missing authorization (e.g. object F_BKPF_BUK, field BUKRS = 1000, ACTVT = 03). Admin adds this to the role or creates a new role and assigns it.</li>
+        </ol>
+        <p>Result: User has least privilege; audit trail of who can do what.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Key Security T-codes and concepts</h4>
+        <table>
+            <tr><th>T-code / Concept</th><th>Purpose</th></tr>
+            <tr><td>SU01</td><td>User master (create, change, assign roles, lock)</td></tr>
+            <tr><td>PFCG</td><td>Profile Generator—role design (menu + authorizations)</td></tr>
+            <tr><td>SU53</td><td>Display authorization check log (after failure)</td></tr>
+            <tr><td>Authorization object</td><td>Defines what is checked (e.g. company code, activity)</td></tr>
+        </table>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: From role to access</h4>
+        <p>Click to see how a role grants access.</p>
+        <button type="button" id="sec-step1">1. Define role (PFCG)</button>
+        <button type="button" id="sec-step2">2. Assign to user</button>
+        <button type="button" id="sec-step3">3. Authorization check</button>
+        <div id="sec-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key concepts</h3>
+    <p><strong>Authorization object:</strong> Technical object with fields (e.g. company code, activity). Transaction checks it; user must have a role granting the required values. <strong>Composite role:</strong> Bundle of single roles; assign once to user. <strong>SOD:</strong> Segregation of duties—prevent conflicting permissions (e.g. create vendor + approve payment). <strong>SU53:</strong> Use after “Authorization failure” to see which object/field failed and fix the role.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: PFCG is used for:</h4>
+            <ul class="quiz-options">
+                <li>A) Sales order</li>
+                <li>B) Role design (profile generator)</li>
+                <li>C) Only MM</li>
+                <li>D) Only FI posting</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>PFCG = Profile Generator for roles and authorizations.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: SU53 shows:</h4>
+            <ul class="quiz-options">
+                <li>A) Purchase order</li>
+                <li>B) Authorization check failures (why access was denied)</li>
+                <li>C) Only delivery</li>
+                <li>D) Only invoice</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>SU53 = display authorization check log (useful for troubleshooting).</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: Authorization object controls:</h4>
+            <ul class="quiz-options">
+                <li>A) Only material</li>
+                <li>B) What a user can do (e.g. which company code, which activity)</li>
+                <li>C) Only vendor</li>
+                <li>D) Only customer</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>Authorization objects define fine-grained access (e.g. company code, activity).</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: What is SOD in security?</h4>
+            <ul class="quiz-options">
+                <li>A) Only a table</li>
+                <li>B) Segregation of duties—preventing conflicting permissions (e.g. create vendor and post payment)</li>
+                <li>C) Only a report</li>
+                <li>D) Only a transaction</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>SOD = Segregation of Duties; reduces fraud and error risk.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'In PFCG: create role; add transactions and reports to menu; set authorization object values (e.g. company code 1000, activity display). Generate and save role.',
+            'In SU01: assign the role to the user. User now has the sum of all authorizations from all assigned roles.',
+            'When user runs a transaction, the program performs authorization checks. If user has required object/values, access is granted; otherwise error and SU53 shows what was missing.'
+        ];
+        var flowEl = document.getElementById('sec-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('sec-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

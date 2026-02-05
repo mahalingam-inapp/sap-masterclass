@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 3: Financial Accounting (FI)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .calculation-box { background: #f0f4ff; border: 1px solid #667eea; border-radius: 6px; padding: 16px; font-family: 'Consolas', 'Monaco', monospace; font-size: 0.9em; margin: 14px 0; overflow-x: auto; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-weight: 500; margin: 4px 8px 4px 0; }
+        button:hover { background: #5568d3; transform: translateY(-2px); }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; background: #e8f0ff; border-radius: 6px; border: 1px solid #667eea; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+    </style>
+</head>
+<body>
+    <h2>Module 3: Financial Accounting (FI)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> Financial Accounting (FI) is the part of SAP that keeps the “official” books—everything that must be reported to tax authorities, auditors, and shareholders. Whenever your company pays a vendor, sends an invoice to a customer, or records an asset, that flows into FI. FI is not the same as Controlling (CO): FI is <em>external</em> reporting (legal and statutory); CO is <em>internal</em> (cost centers, profitability, management reports). As a beginner, remember: FI = “what the outside world sees”; it is the backbone of finance and gets data automatically from other modules (Purchasing, Sales, etc.) so that every money-related event is reflected in the books.
+    </div>
+
+    <p>SAP Financial Accounting (FI) records and reports <strong>external</strong> financial transactions—those required by law and for group reporting. FI is the backbone of the finance function and receives automatic postings from many other modules (MM, SD, CO, etc.) so that every business event that has a financial impact is reflected in the books.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>FI ensures that all revenue, expenses, assets, and liabilities are captured in line with legal and group reporting requirements. It supports multiple <strong>company codes</strong> (each representing a legal entity, e.g. a subsidiary), <strong>charts of accounts</strong> (the list of G/L accounts your company uses), fiscal years, and currencies. Key <strong>subledgers</strong>—<strong>Accounts Payable (AP)</strong> (what you owe vendors), <strong>Accounts Receivable (AR)</strong> (what customers owe you), Asset Accounting (AA), and Bank—feed into the <strong>General Ledger (GL)</strong>. The GL is the single source of truth for financial statements (balance sheet, P&amp;L); the subledgers hold the detail (e.g. per-vendor or per-customer balances). FI also handles tax calculation and posting, periodic closing, and reconciliation with other modules (e.g. FI–CO reconciliation).</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> The General Ledger is like the main summary; subledgers (AP, AR, etc.) are the detailed lists. When you post a vendor invoice, one line goes to the vendor account in AP (subledger) and the corresponding lines go to expense/inventory and vendor in the GL. So the books stay balanced and you can both report to the tax office (from the GL) and manage payables (from AP).
+    </div>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>General Ledger (FI-GL):</strong> Every financial transaction is <strong>posted</strong> (recorded) to G/L accounts. A <strong>document</strong> in SAP has a header (who, when, which company code—stored in <code>BKPF</code>) and line items (which account, how much, debit or credit—stored in <code>BSEG</code>). Posting is real-time. In S/4HANA you can use parallel ledgers and reporting currencies for different accounting standards.</li>
+        <li><strong>Accounts Payable (FI-AP):</strong> Manages what you owe to <strong>vendors</strong>. You maintain vendor master data, enter or verify invoices (often coming from MM after goods receipt), run payment programs to pay vendors, and handle down payments. Each of these creates or updates postings to the G/L automatically.</li>
+        <li><strong>Accounts Receivable (FI-AR):</strong> Manages what <strong>customers</strong> owe you. Customer master data, customer invoices (often created automatically from SD billing), allocation of incoming payments to invoices, dunning (reminders for overdue amounts), and credit management.</li>
+        <li><strong>Asset Accounting (FI-AA):</strong> Tracks fixed assets (machinery, buildings, etc.): asset master, depreciation (automatic periodic and year-end), acquisitions and retirements. When you buy an asset via MM/AP, the system can create the asset and post to the GL.</li>
+        <li><strong>Bank Accounting:</strong> Bank master data, electronic bank statements, matching payments to open items (clearing), and reconciliation with the bank.</li>
+        <li><strong>Tax:</strong> Tax codes define rates and rules; the system calculates input/output tax and posts to the correct tax accounts.</li>
+        <li><strong>Closing:</strong> Period-end and year-end closing: recurring entries, accruals, and preparation of financial statements (balance sheet, income statement).</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> FI data lives in the database: document header (<code>BKPF</code>), document line items (<code>BSEG</code>), G/L line item display tables (<code>BSIS</code>, <code>BSAS</code> for G/L; <code>BSID</code>, <code>BSAD</code> for AR/AP), and master data (G/L accounts in <code>SKA1</code>/<code>SKAT</code>, vendor in <code>LFA1</code>/<code>LFB1</code>, customer in <code>KNA1</code>/<code>KNB1</code>, company code in <code>T001</code>). Processing happens in the application server when users or other modules post documents. <strong>Control plane:</strong> Configuration in SPRO: company code and chart of accounts, fiscal year and posting period variants, <strong>document types</strong> (e.g. SA for G/L, KR for vendor invoice, DZ for customer invoice) and number ranges, posting keys, and <strong>account determination</strong> (the rules that decide which G/L account is used when, for example, MM posts an invoice). Security (roles and authorizations) controls who can post, display, or change FI documents. See Module 1 for the general idea of data vs control plane.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> Account determination is configuration, not data. It answers: “When Materials Management posts an invoice for a certain type of material, which expense or inventory account should be debited?” Consultants set this once; afterwards every such posting uses the right account automatically.
+    </div>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> FI is part of core ERP and is available both on‑premise (S/4HANA or ECC) and in S/4HANA Cloud. There is no separate “FI cloud” product—FI is always part of the ERP system. <strong>Integration:</strong> FI receives automatic postings from MM (e.g. invoice verification creates an AP document and G/L posting), SD (billing creates AR and revenue posting), CO (cost postings, settlement), and other modules. Account determination (configuration in the control plane) defines which G/L accounts and cost elements are used. FI also integrates with external systems for bank statements, tax reporting, and consolidation; these are typically implemented via interfaces (IDocs, BAPIs, or middleware such as CPI).</p>
+
+    <div class="example-box">
+        <h4>Example: Vendor invoice posting (MM → FI)</h4>
+        <p>When procurement posts a vendor invoice in MM (transaction <strong>MIRO</strong>), the following happens from an FI perspective. This is a very common flow and worth understanding step by step:</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>User input:</strong> The user enters the invoice amount (e.g. 1,000 EUR), vendor number, vendor’s invoice number, and links the invoice to the purchase order and/or goods receipt. This way the system can check that the order, the receipt, and the invoice match (three-way match).</li>
+            <li><strong>Validation and account determination:</strong> MM checks the three-way match (PO, GR, invoice). Then the system uses <strong>account determination</strong> (rules set in the control plane) to decide: which G/L account to debit (e.g. expense or inventory account for the material), which vendor (AP) account to credit, and whether any price difference account is needed. The user does not type the G/L account numbers—the system derives them from the material, vendor, and company code.</li>
+            <li><strong>FI document creation:</strong> FI creates one accounting document: a header in <code>BKPF</code> (company code 1000, document type KR for vendor invoice, fiscal year, posting date) and line items in <code>BSEG</code>: one line Debit 1,000 to the expense/inventory account, one line Credit 1,000 to the vendor. Total debits = total credits; the document is balanced. The same document is visible in MM as “invoice document” and in FI as “accounting document”—one business event, one document, two views.</li>
+        </ol>
+        <p>The data plane in FI is BKPF/BSEG; the control plane (account determination, document type, number range) was configured in SPRO. As a beginner, the key idea is: one posting from MM automatically creates the correct FI document because of how the system is configured.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Sample FI document (simplified)</h4>
+        <p>Company code 1000, Document type SA (G/L document), Document number 1900000011:</p>
+        <table>
+            <tr><th>Account</th><th>Posting key</th><th>Amount (EUR)</th><th>Dr/Cr</th><th>Text</th></tr>
+            <tr><td>600000 (Cost of goods)</td><td>40</td><td>1,000.00</td><td>Debit</td><td>Vendor invoice 4711</td></tr>
+            <tr><td>200000 (Vendor)</td><td>50</td><td>1,000.00</td><td>Credit</td><td>Vendor invoice 4711</td></tr>
+        </table>
+        <p>Posting key 40 = Debit to G/L; 50 = Credit to vendor. The document is balanced (total Debit = total Credit).</p>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: Trace document flow into FI</h4>
+        <p>Click the button below to see how documents from other modules create FI postings. This illustrates the <strong>integration</strong> between FI and MM/SD/CO.</h4>
+        <button type="button" onclick="showFlow()">Show document flow (MM / SD → FI)</button>
+        <div id="flow-reveal" class="reveal-box"></div>
+    </div>
+
+    <h3>Key tables</h3>
+    <table>
+        <tr><th>Table</th><th>Purpose</th></tr>
+        <tr><td>BKPF</td><td>Document header (company code, document type, number, date, fiscal year, posting date)</td></tr>
+        <tr><td>BSEG</td><td>Document line items (account, amount, currency, cost center, etc.)</td></tr>
+        <tr><td>BSIS / BSAS</td><td>G/L line item display (open and cleared items)</td></tr>
+        <tr><td>BSID / BSAD</td><td>AR/AP line item display (open and cleared items)</td></tr>
+        <tr><td>SKA1, SKAT</td><td>G/L account master (chart of accounts)</td></tr>
+        <tr><td>LFA1, LFB1</td><td>Vendor master (general data, company code data)</td></tr>
+        <tr><td>KNA1, KNB1</td><td>Customer master (general data, company code data)</td></tr>
+        <tr><td>ANKA, ANLZ</td><td>Asset master (asset class, asset)</td></tr>
+        <tr><td>T001</td><td>Company code (legal entity)</td></tr>
+    </table>
+
+    <h3>Important T-codes and concepts</h3>
+    <p><strong>Posting:</strong> FB01 (post document), F-02 (G/L posting), F-32 (customer clearing), F-44 (vendor clearing). <strong>Display:</strong> FB03 (display document), S_ALR_87012284 (G/L account balance). <strong>Concepts:</strong> Company code, chart of accounts, fiscal year and posting periods, document type (e.g. SA for G/L, KR for vendor invoice, DZ for customer invoice), posting key (determines Debit/Credit and account type). Number ranges for documents are defined per company code and document type in the control plane (SPRO).</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Question 1: What is the main purpose of FI?</h4>
+            <ul class="quiz-options">
+                <li>A) Production planning</li>
+                <li>B) Legal and group financial reporting; recording external financial transactions</li>
+                <li>C) Quality inspection only</li>
+                <li>D) Warehouse management</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct Answer: B</strong><br>FI handles external accounting and reporting; CO handles internal (controlling).</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 2: Which table holds the document header in FI?</h4>
+            <ul class="quiz-options">
+                <li>A) MARA</li>
+                <li>B) BKPF</li>
+                <li>C) VBAK</li>
+                <li>D) COEP</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct Answer: B</strong><br>BKPF is the document header table; BSEG holds the line items.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 3: FI receives automatic postings from which modules?</h4>
+            <ul class="quiz-options">
+                <li>A) Only PP</li>
+                <li>B) MM (invoices), SD (customer invoices), CO (cost postings)</li>
+                <li>C) Only QM</li>
+                <li>D) Only PM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct Answer: B</strong><br>Document flow from MM, SD, and CO posts to FI via automatic account determination.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 4: What is account determination in FI?</h4>
+            <ul class="quiz-options">
+                <li>A) A report only</li>
+                <li>B) Configuration that defines which G/L accounts (and cost elements) are used when another module posts (e.g. MM invoice)</li>
+                <li>C) Only for SD</li>
+                <li>D) Only for PP</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct Answer: B</strong><br>Account determination is customizing (control plane) that drives which accounts are posted automatically.</div>
+        </div>
+    </div>
+    <script>
+        function showAnswer(n) {
+            document.getElementById('answer-' + n).classList.add('show');
+            var btn = document.getElementById('btn-' + n);
+            btn.disabled = true;
+            btn.textContent = 'Answer Revealed';
+        }
+        function showFlow() {
+            var box = document.getElementById('flow-reveal');
+            box.innerHTML = '<strong>Document flow into FI</strong><br><br>' +
+                '1. <strong>MM → FI:</strong> Goods receipt (MIGO) can post inventory; invoice receipt (MIRO) posts vendor invoice → AP document + G/L (expense/inventory Dr, vendor Cr).<br><br>' +
+                '2. <strong>SD → FI:</strong> Billing (VF01) creates customer invoice → AR document + G/L (customer Dr, revenue Cr).<br><br>' +
+                '3. <strong>CO → FI:</strong> Cost allocation, settlement, or direct postings create FI documents (e.g. cost center to cost center) so that FI and CO stay reconciled.';
+            box.classList.add('show');
+        }
+    </script>
+</body>
+</html>

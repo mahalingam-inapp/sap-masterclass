@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 7: Production Planning (PP)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 7: Production Planning (PP)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> Production Planning (PP) is the part of SAP that answers: “What do we need to make or buy, when, and how much?” It uses <strong>demand</strong> (e.g. sales orders or forecasts) and <strong>master data</strong>—<strong>BOM</strong> (Bill of Material: what components go into a product), <strong>routing</strong> (what steps to perform), and <strong>work center</strong> (where and with what capacity)—to create <strong>planned orders</strong> and then <strong>production orders</strong>. When you execute a production order, the system issues components from stock (MM), records labor and machine time, and receives the finished product into stock; costs flow to CO. Key terms: <strong>MRP</strong> (Material Requirements Planning: the run that calculates net requirements and creates planned orders), <strong>production order</strong>, and <strong>confirmation</strong> (posting actual time and quantity).
+    </div>
+
+    <p>SAP PP covers demand management, MRP, production execution, and capacity planning. It uses master data (BOM, work center, routing) and demand to generate planned orders and production orders, which then consume materials (MM) and post costs (CO).</p>
+
+    <h3>Purpose and scope</h3>
+    <p>PP ensures that production is planned and executed in sync with demand and capacity. Key sub-areas: Demand Management (sales forecasts, planned independent requirements); MRP (net requirement = demand − available stock − open supply; lot sizing; planned orders); BOM and routing (how to produce); work center (where and with what capacity); production orders (discrete manufacturing) or repetitive manufacturing; capacity planning and leveling. PP-DS extends planning with finite scheduling. Integration with SD (demand from orders), MM (procurement and stock), and CO (costing and settlement) is central.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> A <strong>BOM</strong> says “to make 1 unit of product X you need 2 units of A and 1 unit of B.” The <strong>routing</strong> says “operation 10 at work center WC01, 30 minutes; operation 20 at WC02, 15 minutes.” MRP looks at demand (e.g. 100 units of X needed) and current stock, then creates planned orders or purchase requisitions. Converting a planned order to a production order is the start of execution; the order then drives material issues and confirmations.
+    </div>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Bill of Material (BOM):</strong> List of components (materials and quantities) required to produce one unit of a finished or semi-finished product. Multiple BOMs per material (by plant, alternative). STPO (item), MAST (material–BOM link).</li>
+        <li><strong>Work center and routing:</strong> Work center = machine or labor center (capacity, cost). Routing = sequence of operations (work center, standard times). Used for capacity planning and costing.</li>
+        <li><strong>MRP:</strong> Net requirement = demand − available stock − open supply. MRP run creates planned orders (or purchase requisitions for externally procured materials). MD04 (stock/requirements list), MD02 (MRP run for one material).</li>
+        <li><strong>Production order (PP-PI-PRO):</strong> Convert planned order to production order (CO01/CO40). Order has operations (from routing), component requirements (from BOM). Release → print/confirm → goods issue (components) → confirmation (labor/machine) → goods receipt (finished product) → settle to CO.</li>
+        <li><strong>Repetitive manufacturing:</strong> Simplified flow: production version, backflush (components and product posted at period end or at confirmation).</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> Production order (AFKO header, AFPO operations, RESB component reservations), BOM (STPO, MAST), work center (CRHD, CRTX), planned orders, MRP results (reservations, requisitions). <strong>Control plane:</strong> Plant, MRP areas, MRP types and lot-sizing; work center and routing configuration; order type and settlement rules (SPRO). See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> On‑premise and S/4HANA Cloud. <strong>Integration:</strong> Demand from SD (sales orders) and demand management; procurement from MM (purchase requisition → PO); goods movement (MM); costing and settlement to CO/FI; IBP for advanced planning (Module 19).</p>
+
+    <div class="example-box">
+        <h4>Example: From sales order to production order and goods receipt</h4>
+        <p>Finished product FG-100 has a BOM: 2× RAW-A, 1× RAW-B. Sales order creates demand for 10 FG-100.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>MRP (MD02 or MD40):</strong> MRP runs for FG-100. Net requirement 10; no stock. System creates planned order for 10 FG-100 and (via BOM explosion) dependent requirements for 20 RAW-A and 10 RAW-B. If RAW-A/RAW-B are procured, MRP creates purchase requisitions.</li>
+            <li><strong>Convert to production order (CO01):</strong> Planned order is converted to production order 1000000123. Order has operations (from routing) and component list (from BOM). Order is released.</li>
+            <li><strong>Goods issue (MIGO or CO11N):</strong> Components 20 RAW-A and 10 RAW-B are issued to the order (stock decrease). <strong>Confirmation (CO11N):</strong> Labor and machine time confirmed. <strong>Goods receipt:</strong> 10 FG-100 received into stock. Order is settled to CO (and optionally capitalized to product cost).</li>
+        </ol>
+        <p>Result: FG-100 in stock to fulfill the sales order; component stock reduced; costs in CO.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Sample BOM and production order (simplified)</h4>
+        <p>Material FG-100, BOM usage 1:</p>
+        <table>
+            <tr><th>Item</th><th>Component</th><th>Quantity</th><th>Unit</th></tr>
+            <tr><td>10</td><td>RAW-A</td><td>2</td><td>PC</td></tr>
+            <tr><td>20</td><td>RAW-B</td><td>1</td><td>PC</td></tr>
+        </table>
+        <p>Production order 1000000123: 10 PC FG-100. Component requirement: 20 RAW-A, 10 RAW-B. After GR: stock FG-100 +10; RAW-A −20, RAW-B −10.</p>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: PP document flow</h4>
+        <p>Click to see the sequence from demand to production and stock.</p>
+        <button type="button" id="pp-step1">Demand (e.g. sales order)</button>
+        <button type="button" id="pp-step2">MRP → Planned order</button>
+        <button type="button" id="pp-step3">Production order → GR</button>
+        <div id="pp-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key tables</h3>
+    <table>
+        <tr><th>Table</th><th>Purpose</th></tr>
+        <tr><td>AFKO</td><td>Production order header</td></tr>
+        <tr><td>AFPO</td><td>Production order operations</td></tr>
+        <tr><td>AUFK</td><td>Order master (internal order / production order header)</td></tr>
+        <tr><td>RESB</td><td>Reservation/dependent requirement (component requirement)</td></tr>
+        <tr><td>STPO</td><td>BOM item</td></tr>
+        <tr><td>MAST</td><td>Material–BOM link</td></tr>
+        <tr><td>CRHD, CRTX</td><td>Work center</td></tr>
+        <tr><td>MARC</td><td>Material plant data (MRP views)</td></tr>
+    </table>
+
+    <h3>Important T-codes and concepts</h3>
+    <p><strong>MRP:</strong> MD04 (stock/requirements list), MD02 (single-item MRP), MD40 (multi-level). <strong>Production order:</strong> CO01 (create), CO02 (change), COR1 (create from planned order). <strong>Concepts:</strong> Planned order vs production order; BOM explosion; capacity planning; settlement of production order to CO (product cost, variance).</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: MRP in PP stands for:</h4>
+            <ul class="quiz-options">
+                <li>A) Material Requirements Planning</li>
+                <li>B) Master Record Planning</li>
+                <li>C) Only SD</li>
+                <li>D) Only FI</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: A</strong><br>MRP = Material Requirements Planning.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: BOM is:</h4>
+            <ul class="quiz-options">
+                <li>A) Bill of material</li>
+                <li>B) Bank order management</li>
+                <li>C) Only CO</li>
+                <li>D) Only MM document</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: A</strong><br>BOM = Bill of material (components for production).</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: Production order costs settle to:</h4>
+            <ul class="quiz-options">
+                <li>A) Only SD</li>
+                <li>B) CO (and FI via settlement)</li>
+                <li>C) Only MM</li>
+                <li>D) Only QM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>Production orders are costed in CO and can settle to CO/FI.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: What does the stock/requirements list (MD04) show?</h4>
+            <ul class="quiz-options">
+                <li>A) Only FI documents</li>
+                <li>B) Demand, receipts, stock, and planned orders for a material</li>
+                <li>C) Only SD billing</li>
+                <li>D) Only vendor master</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>MD04 shows all demand, supply, and stock for one material in one plant.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'Demand: e.g. sales order for 10 PC FG-100. This creates requirement in MRP.',
+            'MRP run: Net requirement 10. Planned order created for 10 FG-100; BOM explosion creates dependent requirements for components (e.g. RAW-A, RAW-B).',
+            'Production order created from planned order. After goods issue (components) and confirmation, goods receipt posts 10 FG-100 to stock. Order settled to CO.'
+        ];
+        var flowEl = document.getElementById('pp-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('pp-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

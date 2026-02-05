@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 10: Project System (PS)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 10: Project System (PS)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> Project System (PS) is the part of SAP that manages <strong>projects</strong>—internal projects (e.g. R&amp;D, marketing campaigns), capital projects (building a plant, installing machinery), or customer projects. You structure a project with a <strong>Work Breakdown Structure (WBS)</strong>: a hierarchy of phases and work packages. You can add <strong>networks</strong> (activities with sequence and duration) for scheduling. All costs that belong to the project—materials, external services, labor—are posted to WBS elements or network activities. At period-end, you <strong>settle</strong> the project: move those costs to the final receiver (e.g. cost center, or fixed asset for a capital project). Key terms: <strong>WBS</strong>, <strong>network</strong>, <strong>budget</strong>, and <strong>settlement</strong>.
+    </div>
+
+    <p>SAP PS supports project and investment management. It integrates with MM (material and service procurement), CO (cost and settlement), and FI (asset capitalization).</p>
+
+    <h3>Purpose and scope</h3>
+    <p>PS provides a hierarchical project structure (WBS elements), optional network activities (tasks with duration and dependencies), milestones for billing or status, and budgets. Costs are posted to WBS elements or network activities from MM (material, purchase order), internal orders, and direct postings. Period-end settlement moves project costs to the final receiver: cost center, internal order, or asset (capital project). Investment Management (IM) can use PS for appropriation requests and capital spending.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> A <strong>WBS element</strong> is like a cost bucket for one part of the project (e.g. “Phase 1 – Design”). When you buy materials or services for that phase and assign them to the WBS element, the cost is collected there. <strong>Settlement</strong> then “empties” those buckets into the right place: for example, a construction project might settle to a fixed asset so the building appears on the balance sheet.
+    </div>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Project definition (PROJ):</strong> Top-level project (e.g. “New Plant 2025”). Contains WBS elements and optionally networks.</li>
+        <li><strong>WBS (Work Breakdown Structure, PRPS):</strong> Hierarchical breakdown: project → phases → work packages. Each WBS element can receive budget and cost. Used for planning and reporting.</li>
+        <li><strong>Network (AFKO/AFPO):</strong> Activities with sequence (order of execution), duration, and links to materials and services. Used for scheduling and procurement. Milestones can trigger billing or status.</li>
+        <li><strong>Budgeting:</strong> Original budget and supplements at WBS level. Availability check prevents overrun (optional).</li>
+        <li><strong>Procurement:</strong> Material and external services can be assigned to WBS element or network activity. Purchase orders and goods movements post cost to the project.</li>
+        <li><strong>Settlement:</strong> Project costs are settled to cost center, internal order, or asset (e.g. capitalize construction project to fixed asset). Settlement rule defines source (WBS/network) and receiver.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> Project definition (PROJ), WBS elements (PRPS), networks (AFKO, AFPO), cost (COEP posted to WBS/network). <strong>Control plane:</strong> Project profile (controls WBS/network usage, settlement), settlement profile, budget profile (SPRO). See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> On‑premise and S/4HANA Cloud. <strong>Integration:</strong> Costs from MM (material, PO), internal orders, and direct postings; settlement to FI/CO (cost center, order, asset); Investment Management (IM) for capital projects.</p>
+
+    <div class="example-box">
+        <h4>Example: Capital project — construction of a new building</h4>
+        <p>Project “Building B-2025” with WBS: B-2025 (root), B-2025-01 (Design), B-2025-02 (Construction), B-2025-03 (Commissioning). Budget 2M EUR. Costs are to be capitalized to a fixed asset at project end.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Create project (CJ20N):</strong> Project definition B-2025, WBS elements as above. Assign budget to root or to each WBS. Set settlement rule: B-2025 → Asset (AUA) 300000 (Building).</li>
+            <li><strong>Post costs:</strong> External contractor invoice (MM/FI) assigned to WBS B-2025-02: 500,000 EUR. Material issues to WBS for construction. Labor from internal cost center assigned to WBS. All costs collect on WBS elements.</li>
+            <li><strong>Settlement (CJ88 or period-end):</strong> Run settlement for project B-2025. Costs from WBS elements are transferred to asset 300000. FI: asset value increases; CO: project cost cleared. Project can be closed.</li>
+        </ol>
+        <p>Result: All project costs capitalized to the building asset in FI.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Sample project structure and settlement (simplified)</h4>
+        <table>
+            <tr><th>WBS</th><th>Description</th><th>Budget</th><th>Actual</th><th>Settlement to</th></tr>
+            <tr><td>B-2025</td><td>Building B-2025</td><td>2,000,000</td><td>1,800,000</td><td>Asset 300000</td></tr>
+            <tr><td>B-2025-01</td><td>Design</td><td>200,000</td><td>180,000</td><td>↑</td></tr>
+            <tr><td>B-2025-02</td><td>Construction</td><td>1,500,000</td><td>1,400,000</td><td>↑</td></tr>
+            <tr><td>B-2025-03</td><td>Commissioning</td><td>300,000</td><td>220,000</td><td>↑</td></tr>
+        </table>
+        <p>Settlement rule: all WBS → Asset 300000. After settlement, asset value = 1,800,000; project cost = 0.</p>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: PS cost and settlement flow</h4>
+        <p>Click to see how costs flow into the project and then to the receiver.</p>
+        <button type="button" id="ps-step1">1. Costs post to WBS</button>
+        <button type="button" id="ps-step2">2. Settlement rule</button>
+        <button type="button" id="ps-step3">3. Settlement run</button>
+        <div id="ps-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key tables</h3>
+    <table>
+        <tr><th>Table</th><th>Purpose</th></tr>
+        <tr><td>PROJ</td><td>Project definition</td></tr>
+        <tr><td>PRPS</td><td>WBS element</td></tr>
+        <tr><td>AFKO, AFPO</td><td>Network header and activities</td></tr>
+        <tr><td>COEP</td><td>CO line items (cost posted to WBS/network)</td></tr>
+    </table>
+
+    <h3>Important T-codes and concepts</h3>
+    <p><strong>Project:</strong> CJ20N (project builder), CJ03 (display), CN41 (network). <strong>Settlement:</strong> CJ88 (run settlement). <strong>Concepts:</strong> WBS vs network; settlement rule (source WBS/activity → receiver cost center/order/asset); budget vs actual.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: WBS stands for:</h4>
+            <ul class="quiz-options">
+                <li>A) Work breakdown structure</li>
+                <li>B) Warehouse billing system</li>
+                <li>C) Only FI</li>
+                <li>D) Only SD</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: A</strong><br>WBS = Work breakdown structure for project hierarchy.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: PS settlement can go to:</h4>
+            <ul class="quiz-options">
+                <li>A) Only SD</li>
+                <li>B) Only MM</li>
+                <li>C) Only QM</li>
+                <li>D) Cost center, order, asset (FI)</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: D</strong><br>Project costs settle to cost center, order, or asset.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: PRPS holds:</h4>
+            <ul class="quiz-options">
+                <li>A) Sales order</li>
+                <li>B) WBS element</li>
+                <li>C) Purchase order</li>
+                <li>D) Material</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>PRPS = WBS element; PROJ = project definition.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: Where do project costs originate before settlement?</h4>
+            <ul class="quiz-options">
+                <li>A) Only from SD billing</li>
+                <li>B) From MM (material, PO), internal postings, and other modules posting to WBS/network</li>
+                <li>C) Only from QM</li>
+                <li>D) Only from PM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>Costs post to WBS/network from MM, internal orders, and direct postings; settlement moves them to the receiver.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'Costs post to WBS elements (or network activities): material issues, purchase orders, internal cost allocation. All appear in project reports (e.g. CJR2).',
+            'Settlement rule is defined: e.g. WBS B-2025 → Asset 300000. Rule determines where costs will go when settlement runs.',
+            'Settlement run (e.g. CJ88): system transfers costs from project (WBS/network) to receiver (cost center, order, or asset). Project cost is cleared; receiver shows the cost.'
+        ];
+        var flowEl = document.getElementById('ps-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('ps-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 12: Warehouse Management / EWM</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 12: Warehouse Management / EWM</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> Warehouse Management (WM) and <strong>Extended Warehouse Management (EWM)</strong> handle <strong>where</strong> stock sits inside the warehouse and <strong>how</strong> it is moved. When goods arrive (MM goods receipt), <strong>putaway</strong> moves them from the receiving area to a <strong>storage bin</strong> (a specific location). When a delivery is due (SD), <strong>picking</strong> moves the required quantity from the bin to the outbound area. These moves are done via <strong>transfer orders</strong> (or in EWM, warehouse tasks). WM is the classic solution; EWM adds waves (group many picks together), labor management, and yard management. In S/4HANA, <strong>embedded EWM</strong> runs in the same system as MM/SD. Key terms: <strong>storage type</strong>, <strong>storage bin</strong>, <strong>quant</strong> (quantity in a bin), <strong>transfer order</strong>.
+    </div>
+
+    <p>SAP WM and EWM cover warehouse operations: putaway, picking, transfer orders, and physical inventory. Both are triggered by MM (goods movements) and SD (deliveries).</p>
+
+    <h3>Purpose and scope</h3>
+    <p>WM/EWM ensures that stock is stored in the right location (storage type, bin) and that outbound processes (picking, packing) are executed correctly. Key concepts: <strong>Warehouse number</strong> (logical warehouse); <strong>storage type</strong> (e.g. fixed bin, bulk, picking zone); <strong>storage bin</strong> (LAGP in WM); <strong>quant</strong> (quantity of a material in a bin, LQUA); <strong>transfer order</strong> (move from bin A to bin B, or for putaway/picking). EWM adds: wave (grouping outbound deliveries for picking), labor management (tasks and productivity), yard management (inbound/outbound trucks), and integration with Transportation Management (TM).</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> In simple WM, you have a warehouse number, storage types (e.g. “fixed bin” vs “bulk”), and bins (e.g. A-01-01). A <strong>quant</strong> is “100 PC of material X in bin A-01-01.” A <strong>transfer order</strong> says “move 50 PC from A-01-01 to PICK-01”; when the warehouse worker confirms it, the system updates the bin quantities. EWM’s <strong>wave</strong> groups several outbound deliveries so that one picking run can fulfill many orders at once, which is more efficient.
+    </div>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Putaway:</strong> After goods receipt (MM), WM/EWM creates putaway task or transfer order: move from GR zone (or staging) to storage bin. Can be system-directed (best bin) or manual. Confirmation updates bin stock.</li>
+        <li><strong>Picking:</strong> Outbound delivery (SD) or production order (PP) creates pick request. WM/EWM creates transfer order: pick from bin to staging/packing. After confirmation, delivery can be processed (goods issue).</li>
+        <li><strong>Transfer order (WM):</strong> LT01 (create), LT0A (create for delivery). Document that moves quantity from source to destination bin. Confirmation (LT12 or mobile) updates LQUA.</li>
+        <li><strong>EWM wave:</strong> Group multiple outbound deliveries into a wave; create warehouse tasks (pick) for the wave. Optimizes picking routes and labor.</li>
+        <li><strong>Physical inventory:</strong> Count at storage bin level; compare with system stock; post differences (MM adjustment).</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> WM: LAGP (storage bin), LQUA (quant), transfer order tables; delivery (LIKP, LIPS) and material document (MSEG) link. EWM: /SCWM/* tables (product, warehouse order, task). <strong>Control plane:</strong> Warehouse number, storage type and section, bin structure; putaway/picking strategies; EWM customizing (SPRO). See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> On‑premise and S/4HANA. EWM can be <strong>embedded</strong> in S/4HANA (same system as MM/SD) or <strong>standalone</strong> (separate EWM system, integration via RFC/IDoc). <strong>Integration:</strong> Triggered by MM (goods receipt, transfer) and SD (outbound delivery); stock and quantity sync with MM. TM (Module 18) for freight when EWM and TM are used together.</p>
+
+    <div class="example-box">
+        <h4>Example: Goods receipt and putaway, then outbound pick</h4>
+        <p>Plant 1000 uses embedded EWM. Warehouse 001.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Goods receipt (MIGO):</strong> Post GR for 100 PC material M-001. MM updates stock (unrestricted). EWM receives the GR: creates putaway warehouse task (or transfer order in WM): move from GR zone to storage bin (e.g. 01-01-01-A1). Warehouse worker confirms putaway. Stock in bin 01-01-01-A1: 100 PC M-001.</li>
+            <li><strong>Outbound delivery (SD):</strong> Sales order created; delivery 8000000789 created (VL01N). Delivery requires 20 PC M-001. EWM creates pick task: pick 20 from 01-01-01-A1 to staging. Worker confirms pick. Staging has 20 PC for the delivery.</li>
+            <li><strong>Goods issue (SD):</strong> Post goods issue for delivery. MM reduces stock; delivery completed. Remaining bin stock: 80 PC M-001.</li>
+        </ol>
+        <p>Result: Stock always has a bin location; putaway and pick are documented and confirmed.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Sample storage and transfer (simplified)</h4>
+        <table>
+            <tr><th>Warehouse</th><th>Storage type</th><th>Bin</th><th>Material</th><th>Quantity</th></tr>
+            <tr><td>001</td><td>01 (fixed)</td><td>01-01-01-A1</td><td>M-001</td><td>100 → 80 after pick</td></tr>
+        </table>
+        <p>Transfer order: putaway 100 from GR to 01-01-01-A1; pick 20 from 01-01-01-A1 to staging. LQUA (quant) updated on confirmation.</p>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: WM/EWM flow (inbound and outbound)</h4>
+        <p>Click to see how warehouse is triggered and what it does.</p>
+        <button type="button" id="wm-step1">1. Inbound (GR → putaway)</button>
+        <button type="button" id="wm-step2">2. Storage (bin stock)</button>
+        <button type="button" id="wm-step3">3. Outbound (delivery → pick → GI)</button>
+        <div id="wm-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key tables</h3>
+    <table>
+        <tr><th>Table</th><th>Purpose</th></tr>
+        <tr><td>LAGP</td><td>Storage bin (WM)</td></tr>
+        <tr><td>LQUA</td><td>Quant (material quantity in bin)</td></tr>
+        <tr><td>LIKP, LIPS</td><td>Delivery header/item (SD link)</td></tr>
+        <tr><td>MSEG</td><td>Material document (MM link)</td></tr>
+        <tr><td>/SCWM/*</td><td>EWM tables (product, warehouse order, task)</td></tr>
+    </table>
+
+    <h3>Important T-codes and concepts</h3>
+    <p><strong>WM:</strong> LT01 (create transfer order), LT0A (TO for delivery), LT12 (confirm). <strong>EWM:</strong> /SCWM/… (Fiori apps and transactions for EWM). <strong>Concepts:</strong> Warehouse number; storage type and bin; transfer order; putaway vs picking strategy; embedded vs standalone EWM.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: EWM can be:</h4>
+            <ul class="quiz-options">
+                <li>A) Only on-premise classic</li>
+                <li>B) Only Ariba</li>
+                <li>C) Only Concur</li>
+                <li>D) Embedded in S/4HANA or standalone</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: D</strong><br>EWM runs embedded in S/4HANA or as standalone.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: Transfer order is used for:</h4>
+            <ul class="quiz-options">
+                <li>A) Sales order only</li>
+                <li>B) Putaway and picking in warehouse</li>
+                <li>C) Only FI posting</li>
+                <li>D) Only CO</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Transfer order moves stock within warehouse (putaway, picking).</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: WM/EWM is triggered by:</h4>
+            <ul class="quiz-options">
+                <li>A) Only FI</li>
+                <li>B) Only CO</li>
+                <li>C) MM (goods movement) and SD (delivery)</li>
+                <li>D) Only QM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: C</strong><br>MM movements and SD deliveries trigger warehouse activities.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: What does “quant” (LQUA) represent?</h4>
+            <ul class="quiz-options">
+                <li>A) A sales order</li>
+                <li>B) A quantity of a material in a storage bin</li>
+                <li>C) A purchase order</li>
+                <li>D) A G/L account</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>Quant = one batch/quantity of material in one bin; LQUA stores it in WM.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'Inbound: MM posts goods receipt. WM/EWM creates putaway task (or TO): move from GR zone to storage bin. Worker confirms → bin stock updated.',
+            'Storage: Stock is in bins (LQUA). Each quant = material + quantity + bin. System knows exact location for picking.',
+            'Outbound: SD delivery created. WM/EWM creates pick task: pick from bin to staging. Confirm pick → post goods issue in SD. Stock reduced.'
+        ];
+        var flowEl = document.getElementById('wm-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('wm-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

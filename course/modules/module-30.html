@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 30: SAP S/4HANA Overview</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 30: SAP S/4HANA Overview</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> <strong>S/4HANA</strong> is SAP’s current ERP suite. It runs on the <strong>SAP HANA</strong> database and includes FI, CO, MM, SD, PP, QM, PM, PS, and more in one system. It has a simplified data model (e.g. one table for FI/CO line items), real-time reporting, and Fiori as the main UI. S/4HANA is the “digital core”—the single source of truth for transactional data—and is designed to work with cloud products (SuccessFactors, Ariba, Concur) and BTP. You can run it <strong>on‑premise</strong> (your data center), as <strong>S/4HANA Cloud</strong> (SAP or partner hosts), or <strong>hybrid</strong>. Key terms: <strong>S/4HANA</strong>, <strong>HANA</strong>, <strong>digital core</strong>, <strong>Fiori-first</strong>.
+    </div>
+
+    <p>SAP S/4HANA combines core ERP modules in one system with a simplified data model, real-time analytics, and Fiori. Deployment: on‑premise, cloud, or hybrid.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>S/4HANA delivers: <strong>Simplified data model:</strong> Redundant tables and indices removed; e.g. <strong>ACDOCA</strong> (universal journal) holds FI and CO line items in one table. <strong>Real-time:</strong> No separate batch aggregation for many reports; HANA allows direct query on transactional data. <strong>Fiori-first:</strong> New and refreshed transactions as Fiori apps; SAP GUI still available. <strong>Cloud readiness:</strong> APIs (OData, BAPI), events, and extension on BTP. <strong>Embedded analytics:</strong> CDS views and embedded BW-style reporting. All modules (FI, CO, MM, SD, PP, etc.) are part of one S/4HANA system; no separate “ECC” for S/4HANA—it is the successor to ECC.</p>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Universal journal (ACDOCA):</strong> Single table for FI and CO posting line items (replacing multiple aggregate tables). Simplifies reporting and reconciliation.</li>
+        <li><strong>HANA database:</strong> In-memory; columnar storage; no need for many indexes and aggregates for reporting. Enables real-time analytics on live data.</li>
+        <li><strong>CDS (Core Data Services):</strong> Semantic data model; CDS views expose data for Fiori, analytics, and APIs. Replaces or complements classic views and extractors.</li>
+        <li><strong>Fiori and SAP GUI:</strong> Fiori is the strategic UX; SAP GUI (and Web GUI) remain for classic transactions. Transaction codes still work; Fiori apps often replace them for key tasks.</li>
+        <li><strong>S/4HANA Cloud:</strong> SAP (or partner) operates the system; subscription model; quarterly updates. Limited customizing (extensibility via BTP and key user tools). Same modules, different operations model.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> HANA database; tables such as ACDOCA, BKPF, BSEG, VBAK, MARA, etc. (simplified and new in S/4HANA where applicable). Application server runs ABAP and business logic. <strong>Control plane:</strong> Basis (client, transport, jobs), customizing (SPRO), security (users, roles), and integration (RFC, OData, events). BTP for extension (Module 22). See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> On‑premise (customer or partner hosts); S/4HANA Cloud public (SAP-operated, multi-tenant); S/4HANA Cloud private (dedicated). Hybrid: S/4HANA + BTP + cloud products. <strong>Integration:</strong> CPI, API Management, Event Mesh connect S/4HANA to SuccessFactors, Ariba, Concur, CX, IBP, and non-SAP. Fiori and OData for user and app access. Module 29.</p>
+
+    <div class="example-box">
+        <h4>Example: One posting, one table (ACDOCA)</h4>
+        <p>In S/4HANA, a vendor invoice posting creates one set of line items in the universal journal.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Posting (e.g. MIRO or FB01):</strong> User posts vendor invoice: 1,000 EUR to cost center 1000. In ECC, this would create entries in multiple tables (e.g. BSIS, BSAS, line item tables per ledger).</li>
+            <li><strong>S/4HANA (ACDOCA):</strong> One document; line items are written to ACDOCA (universal journal). Each line has company code, account, amount, cost center, fiscal year, period, etc. FI and CO reporting read from the same table. No separate reconciliation step for FI–CO.</li>
+            <li><strong>Reporting:</strong> Report or Fiori app queries ACDOCA (or CDS view on top) with filters. Real-time; no batch aggregation. G/L balance, cost center report, and P&amp;L use the same source.</li>
+        </ol>
+        <p>Result: Simplified model; one source of truth; real-time reporting.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>S/4HANA at a glance</h4>
+        <table>
+            <tr><th>Aspect</th><th>Detail</th></tr>
+            <tr><td>Database</td><td>SAP HANA only</td></tr>
+            <tr><td>Universal journal</td><td>ACDOCA for FI/CO line items</td></tr>
+            <tr><td>UX</td><td>Fiori-first; SAP GUI available</td></tr>
+            <tr><td>Deployment</td><td>On‑premise, Cloud (public/private), hybrid</td></tr>
+            <tr><td>Extension</td><td>BTP (clean core); key user tools in cloud</td></tr>
+        </table>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: S/4HANA in the landscape</h4>
+        <p>Click to see how S/4HANA fits with cloud and BTP.</p>
+        <button type="button" id="s4-step1">1. S/4HANA core</button>
+        <button type="button" id="s4-step2">2. Fiori &amp; APIs</button>
+        <button type="button" id="s4-step3">3. BTP &amp; cloud</button>
+        <div id="s4-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <div class="info-box"><strong>Evolution:</strong> ECC (ERP Central Component) on any database → S/4HANA on HANA with simplified model and Fiori. S/4HANA Cloud = same product, SAP-operated. All modules (FI, CO, MM, SD, PP, etc.) are in the same S/4HANA system.</div>
+
+    <h3>Key concepts</h3>
+    <p><strong>ACDOCA:</strong> Universal journal—single table for FI and CO postings in S/4HANA. <strong>HANA:</strong> In-memory, columnar database; required for S/4HANA. <strong>Fiori-first:</strong> New and refreshed UX as Fiori; classic transactions still available. <strong>Clean core:</strong> Minimize customizing in S/4HANA; extend on BTP. <strong>S/4HANA Cloud:</strong> SAP-operated; subscription; quarterly updates; key user extensibility and BTP for side-by-side.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: ACDOCA in S/4HANA is:</h4>
+            <ul class="quiz-options">
+                <li>A) Sales order table</li>
+                <li>B) Universal journal (unified posting table)</li>
+                <li>C) Only material</li>
+                <li>D) Only vendor</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>ACDOCA = universal journal for FI/CO postings.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: S/4HANA runs on:</h4>
+            <ul class="quiz-options">
+                <li>A) Any database</li>
+                <li>B) SAP HANA</li>
+                <li>C) Only Oracle</li>
+                <li>D) Only DB2</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>S/4HANA requires SAP HANA.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: S/4HANA Cloud is:</h4>
+            <ul class="quiz-options">
+                <li>A) On-premise only</li>
+                <li>B) ERP operated by SAP (public/private cloud)</li>
+                <li>C) Only BW</li>
+                <li>D) Only Basis</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>S/4HANA Cloud = SAP-operated ERP in the cloud.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: What is "clean core" in S/4HANA?</h4>
+            <ul class="quiz-options">
+                <li>A) Only using SAP GUI</li>
+                <li>B) Keeping core standard and extending on BTP (minimal customizing in S/4HANA)</li>
+                <li>C) Only using BW</li>
+                <li>D) Only using IDoc</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>Clean core = standard S/4HANA + extensions on BTP for easier upgrades and cloud.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'S/4HANA core: FI, CO, MM, SD, PP, QM, PM, PS, etc. in one system on HANA. Simplified data model (e.g. ACDOCA). Single source of truth for transactional data.',
+            'Fiori apps and OData/BAPI expose data and actions. Users work via Launchpad; external systems and BTP call APIs. Real-time reporting on live data.',
+            'BTP connects S/4HANA to cloud products (SuccessFactors, Ariba, Concur, etc.) via CPI. Extensions run on BTP (clean core). Hybrid landscape: S/4HANA + BTP + cloud.'
+        ];
+        var flowEl = document.getElementById('s4-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('s4-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 4: Controlling (CO)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        button:hover { background: #5568d3; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 4: Controlling (CO)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> Controlling (CO) is <strong>internal</strong> accounting—for management, not for the tax office. FI answers “what do we report to the outside world?”; CO answers “where did our money go?” and “which product, customer, or region is profitable?” CO uses the same company and many of the same numbers as FI, but organizes them by cost centers (departments), internal orders (projects), and profit centers (business units). As a beginner, think of CO as the place where costs are <em>allocated</em> (e.g. IT costs spread to other departments) and where profitability is analyzed.
+    </div>
+
+    <p>SAP Controlling (CO) supports internal cost and management accounting. CO receives primary cost postings from FI and other modules (e.g. MM, SD) and performs allocations, settlements, and internal reporting.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>CO covers: <strong>Cost element accounting</strong> (what types of costs—each cost is posted to a cost element, which often mirrors a G/L account); <strong>cost center accounting</strong> (where costs are incurred—e.g. IT, HR, Production); <strong>internal orders</strong> (for projects or campaigns; costs are collected there and then settled to cost centers or assets); <strong>profit center accounting</strong> (profit/loss by responsibility unit, e.g. division or region); <strong>product costing</strong> (cost of manufactured goods); and <strong>profitability analysis (CO-PA)</strong> (profitability by product, customer, channel, etc.). Period-end steps include allocation cycles (e.g. overhead from cost center A to B), settlement (e.g. internal order to cost center or asset), and reconciliation with FI so that CO and FI stay in sync.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> “Primary” costs are real money that came from FI (e.g. salary, rent). “Secondary” costs are internal transfers—e.g. when you allocate IT costs to Production, no extra money left the company; you are just reclassifying for reporting. Allocation and settlement in CO create these internal postings so that each cost center or order shows the right picture for management.
+    </div>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Cost Element Accounting (CO-OM-CEL):</strong> Primary cost elements (mirror G/L accounts) and secondary cost elements (internal allocations). Every cost in CO is posted to a cost element.</li>
+        <li><strong>Cost Center Accounting (CO-OM-CCA):</strong> Cost centers represent organizational units (e.g. IT, HR, Production). Costs are posted to cost centers; allocation cycles distribute shared costs (e.g. rent, IT) to other cost centers or to orders/profit centers.</li>
+        <li><strong>Internal Orders:</strong> Used for projects, campaigns, or overhead cost collection. Can be settled to cost centers, assets, or profitability segments.</li>
+        <li><strong>Profit Center Accounting (EC-PCA):</strong> Profit centers track profit/loss by responsibility. Revenue and costs are assigned to profit centers; useful for internal P&amp;L by division or region.</li>
+        <li><strong>Product Costing (CO-PC):</strong> Calculates cost of goods manufactured (material + labor + overhead). Costing runs create cost estimates; these can be used for valuation and profitability.</li>
+        <li><strong>Profitability Analysis (CO-PA):</strong> Profitability by dimension (product, customer, sales channel, etc.). Can be account-based (CO-PA) or costing-based; feeds management reporting.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> CO document line items are stored in <code>COEP</code> (line items) and <code>COBK</code> (header). Cost center master in <code>CSKS</code>/<code>CSKU</code>, internal order in <code>AUFK</code>/<code>AUKO</code>, profit center in master tables. Allocation and settlement write new CO documents. <strong>Control plane:</strong> Controlling area (often one per company code or group), cost center hierarchy, allocation cycles (e.g. KB11N, KO8G), settlement rules, and customizing in SPRO (cost element categories, account assignment). See Module 1 for data vs control plane.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> CO is part of core ERP; on‑premise and S/4HANA Cloud. <strong>Integration:</strong> FI posts primary costs to CO (via cost element and cost center); MM and SD post to cost centers/orders/profitability; PP posts production costs. CO settles to FI (e.g. capitalizing internal order to asset) and feeds reporting (BW, SAC).</p>
+
+    <div class="example-box">
+        <h4>Example: Cost center allocation (overhead distribution)</h4>
+        <p>Company has a shared “IT Services” cost center that incurs 50,000 EUR per month. Customizing defines an allocation cycle that sends 40% to “Production” cost center, 35% to “Sales,” and 25% to “Admin.” When the controller runs the allocation (e.g. transaction <strong>KO8G</strong> or Fiori “Run allocation”):</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li>The system reads the sender cost center (IT) and the allocation rule (percentages or fixed amounts).</li>
+            <li>It creates secondary cost element postings: credit to IT, debit to Production (20,000), Sales (17,500), Admin (12,500).</li>
+            <li>These postings are CO documents (COEP/COBK). Optionally, the cycle can also post to FI (reclassifying G/L) so that FI and CO stay aligned.</li>
+        </ol>
+        <p>Result: IT cost center shows 0 after allocation; receiving cost centers carry the allocated cost for internal reporting.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Sample cost center report (simplified)</h4>
+        <p>Cost center 1000 (IT Services) — before and after allocation:</p>
+        <table>
+            <tr><th>Cost element</th><th>Description</th><th>Before allocation</th><th>After allocation</th></tr>
+            <tr><td>400010</td><td>Salaries</td><td>45,000</td><td>0 (allocated out)</td></tr>
+            <tr><td>400020</td><td>External services</td><td>5,000</td><td>0 (allocated out)</td></tr>
+            <tr><td>Total</td><td></td><td>50,000</td><td>0</td></tr>
+        </table>
+        <p>Receiving cost centers (Production, Sales, Admin) show the allocated amounts as secondary cost element postings (sender = IT).</p>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: Cost flow (FI → CO allocation)</h4>
+        <p>Click the steps to see how cost moves from FI into CO and then through an allocation.</p>
+        <button type="button" id="co-step1">1. FI posts salary to cost center IT</button>
+        <button type="button" id="co-step2">2. Run allocation cycle</button>
+        <button type="button" id="co-step3">3. View result</button>
+        <div id="co-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key tables</h3>
+    <table>
+        <tr><th>Table</th><th>Purpose</th></tr>
+        <tr><td>COEP</td><td>CO line items (cost element, cost center, amount, period, document number)</td></tr>
+        <tr><td>COBK</td><td>CO document header</td></tr>
+        <tr><td>CSKS / CSKU</td><td>Cost center master (controlling area, name, hierarchy)</td></tr>
+        <tr><td>AUFK / AUKO</td><td>Internal order header and object dependencies</td></tr>
+        <tr><td>CE1xxx, CE2xxx</td><td>Cost element master (primary / secondary)</td></tr>
+        <tr><td>AUSP</td><td>Profitability segment (CO-PA)</td></tr>
+    </table>
+
+    <h3>Important T-codes and concepts</h3>
+    <p><strong>Posting and allocation:</strong> KB11N (enter cost center activity), KO8G (run allocation), KOB1 (display cost center actual). <strong>Internal orders:</strong> KO01 (create), KO8G (settlement). <strong>Concepts:</strong> Controlling area, cost center hierarchy, primary vs secondary cost elements, allocation cycle (sender/receiver), settlement rule (source → target). FI–CO reconciliation ensures that the sum of CO postings matches FI for the same cost elements.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Question 1: CO is used for:</h4>
+            <ul class="quiz-options">
+                <li>A) External legal reporting</li>
+                <li>B) Internal cost and management accounting</li>
+                <li>C) Sales orders only</li>
+                <li>D) Procurement only</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct Answer: B</strong><br>CO = internal controlling; FI = external accounting.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 2: What is a cost center?</h4>
+            <ul class="quiz-options">
+                <li>A) A vendor account</li>
+                <li>B) An organizational unit for cost allocation and planning</li>
+                <li>C) A material</li>
+                <li>D) A G/L account only</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct Answer: B</strong><br>Cost centers collect and allocate costs; profit centers track profitability.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 3: Which table holds CO actual postings?</h4>
+            <ul class="quiz-options">
+                <li>A) BKPF</li>
+                <li>B) COEP</li>
+                <li>C) VBAK</li>
+                <li>D) MARA</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct Answer: B</strong><br>COEP (and COBK) store controlling document line items.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 4: What does “settlement” in CO do?</h4>
+            <ul class="quiz-options">
+                <li>A) Pay vendor invoices</li>
+                <li>B) Transfer costs from a sender (e.g. internal order) to a receiver (cost center, asset, profitability)</li>
+                <li>C) Only FI closing</li>
+                <li>D) Only SD billing</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct Answer: B</strong><br>Settlement moves costs from orders (or cost centers) to final receivers (e.g. asset, profitability segment).</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'FI posts 50,000 EUR salary to cost center IT (primary cost element). This creates a CO document (COEP) and appears in cost center report.',
+            'Allocation cycle runs: 40% to Production, 35% to Sales, 25% to Admin. System creates secondary cost element postings: credit IT, debit receiving cost centers.',
+            'Result: IT cost center balance = 0. Production shows +20,000, Sales +17,500, Admin +12,500. All for internal reporting (CO).'
+        ];
+        var flowEl = document.getElementById('co-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('co-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

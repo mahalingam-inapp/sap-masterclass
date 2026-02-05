@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 19: SAP Integrated Business Planning (IBP)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 19: SAP Integrated Business Planning (IBP)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> IBP is SAP’s <strong>cloud planning</strong> suite for demand and supply. It answers questions like “how much will we sell?” (demand planning), “how much do we need to make or buy?” (supply planning), and “how do we balance demand and supply?” (Sales &amp; Operations Planning, S&amp;OP). IBP reads data from S/4HANA (and other sources)—demand, inventory, master data—and can write planned orders or forecasts back to S/4HANA. It is <strong>SaaS only</strong> and is used for collaborative, advanced planning across sales, supply chain, and finance. Key terms: <strong>demand planning</strong>, <strong>supply planning</strong>, <strong>S&amp;OP</strong>, <strong>IBP</strong>.
+    </div>
+
+    <p>SAP IBP covers demand planning, supply planning, inventory optimization, and S&amp;OP. It integrates with S/4HANA for data and write-back.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>IBP supports integrated planning: <strong>Demand:</strong> Forecast at product/location level; statistical forecasting and consensus demand. <strong>Supply:</strong> Supply planning and capacity; planned orders; allocation. <strong>Inventory:</strong> Safety stock and inventory optimization. <strong>Response:</strong> What-if and supply control. <strong>S&amp;OP:</strong> Demand vs supply reconciliation; financial impact; scenario comparison. Data is loaded from S/4HANA (and BW, files) via integration jobs; results can be written back to S/4HANA (e.g. planned independent requirements, planned orders) so that MRP in S/4HANA can consume IBP output.</p>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>IBP for demand:</strong> Demand planning with statistical models; baseline and consensus forecast; demand sensing (short-term). Key figures: demand, forecast, history.</li>
+        <li><strong>IBP for supply:</strong> Supply planning: match supply to demand; capacity constraints; planned order generation. Can push planned orders to S/4HANA.</li>
+        <li><strong>IBP for inventory:</strong> Safety stock and reorder point; inventory optimization by location and product.</li>
+        <li><strong>IBP for response and supply control:</strong> Short-term adjustments; allocation; what-if scenarios.</li>
+        <li><strong>S&amp;OP:</strong> Demand vs supply balance; financial view; scenario planning and approval workflows.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> Cloud planning models (key figures, dimensions: product, location, time). Data from S/4HANA (demand, supply, inventory, master) via integration. No customer DB in IBP; data lives in IBP cloud storage. <strong>Control plane:</strong> IBP admin (planning areas, key figures, integration jobs); CPI or IBP integration for S/4HANA. See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> SaaS only. <strong>Integration:</strong> S/4HANA: demand (sales orders, requirements), supply (stock, planned orders), inventory, master data (material, location). Data flows via CPI or IBP connectors. Results (e.g. forecast, planned orders) can be written to S/4HANA. SAC (Module 20) can consume IBP data for analytics; IBP has its own analytics and planning UIs.</p>
+
+    <div class="example-box">
+        <h4>Example: Demand plan in IBP feeding S/4HANA</h4>
+        <p>Planning team runs monthly demand planning in IBP; forecast is sent to S/4HANA for MRP.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Data load (IBP):</strong> Integration job pulls from S/4HANA: historical demand (e.g. sales order history, past consumption), current stock, open orders. Master data (material, plant) is also loaded. Data appears in IBP planning views.</li>
+            <li><strong>Demand planning (IBP):</strong> Planners run statistical forecast (e.g. by product and plant). They adjust in consensus meetings. Final demand plan is saved (e.g. next 12 months by product/plant).</li>
+            <li><strong>Write-back to S/4HANA:</strong> IBP sends planned independent requirements (PIR) or forecast to S/4HANA. S/4HANA MRP (MD02/MD40) uses this as demand. MRP creates planned orders and purchase requisitions. Execution (PO, production) stays in S/4HANA.</li>
+        </ol>
+        <p>Result: One demand plan in the cloud; S/4HANA executes supply.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>IBP and S/4HANA data flow</h4>
+        <table>
+            <tr><th>Direction</th><th>Data</th></tr>
+            <tr><td>S/4HANA → IBP</td><td>Demand history, supply, inventory, master data</td></tr>
+            <tr><td>IBP → S/4HANA</td><td>Planned independent requirements, planned orders (optional)</td></tr>
+        </table>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: IBP planning flow</h4>
+        <p>Click to see how IBP and S/4HANA work together.</p>
+        <button type="button" id="ibp-step1">1. Load from S/4HANA</button>
+        <button type="button" id="ibp-step2">2. Plan in IBP</button>
+        <button type="button" id="ibp-step3">3. Write-back to S/4HANA</button>
+        <div id="ibp-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key concepts</h3>
+    <p><strong>Planning area / key figures:</strong> IBP organizes data in planning areas with dimensions (product, location, time) and key figures (demand, forecast, supply). <strong>Integration jobs:</strong> Scheduled or on-demand jobs to read from S/4HANA (and others) and write back. <strong>IBP vs MRP:</strong> IBP = cloud, advanced planning, S&amp;OP; MRP in S/4HANA = execution-level material requirements. Many customers use IBP for tactical/strategic plan and S/4HANA MRP for execution.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: IBP is used for:</h4>
+            <ul class="quiz-options">
+                <li>A) Only SD billing</li>
+                <li>B) Demand and supply planning in the cloud</li>
+                <li>C) Only FI</li>
+                <li>D) Only PM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>IBP = Integrated Business Planning (demand, supply, S&amp;OP).</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: IBP gets data from:</h4>
+            <ul class="quiz-options">
+                <li>A) Only QM</li>
+                <li>B) S/4HANA (demand, supply, inventory, master data)</li>
+                <li>C) Only PS</li>
+                <li>D) Only Basis</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>IBP integrates with S/4HANA for planning data.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: IBP deployment is:</h4>
+            <ul class="quiz-options">
+                <li>A) On-premise only</li>
+                <li>B) SaaS only (cloud)</li>
+                <li>C) Only MM</li>
+                <li>D) Only SD</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>IBP is cloud/SaaS only.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: What can IBP send back to S/4HANA?</h4>
+            <ul class="quiz-options">
+                <li>A) Only sales orders</li>
+                <li>B) Planned independent requirements or planned orders for MRP</li>
+                <li>C) Only invoices</li>
+                <li>D) Only production orders</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>IBP can write forecast/PIR or planned orders to S/4HANA for MRP execution.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'Integration job loads from S/4HANA: demand history, stock, open orders, master data (material, plant). Data is in IBP planning model.',
+            'Planners run demand and/or supply planning in IBP. Forecast and planned orders are calculated. S&OP can align demand and supply.',
+            'IBP writes planned independent requirements (or planned orders) to S/4HANA. MRP in S/4HANA uses this demand and creates procurement/production.'
+        ];
+        var flowEl = document.getElementById('ibp-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('ibp-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

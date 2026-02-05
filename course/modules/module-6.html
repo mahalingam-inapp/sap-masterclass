@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 6: Sales and Distribution (SD)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        button:hover { background: #5568d3; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 6: Sales and Distribution (SD)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> Sales and Distribution (SD) is the part of SAP that handles <strong>selling</strong> and <strong>delivering</strong> to customers: from the sales order (“customer wants 50 units”) through delivery (goods leave the warehouse) to billing (we send the invoice and record revenue). SD is the core of <strong>order-to-cash</strong> (O2C). When you create a billing document (invoice), the system automatically posts to FI: Accounts Receivable (customer owes us) and Revenue (and tax). Stock is reduced in MM when you post goods issue for the delivery. Key terms: <strong>sales order</strong>, <strong>delivery</strong>, <strong>billing document</strong>, and <strong>document flow</strong> (order → delivery → billing → FI).
+    </div>
+
+    <p>SAP SD covers the order-to-cash process. It manages customer master data, pricing, availability, shipping, and invoicing, and posts revenue and receivables to FI. It consumes stock from MM and can trigger production in PP. SD is the sales side; together with MM and FI it forms the core of integrated ERP.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>SD ensures that customer demand is captured (sales order), fulfilled (delivery and picking), and billed (invoice); that pricing (discounts, taxes) is calculated correctly; and that revenue and accounts receivable are posted to FI. Key areas: Pre-sales (quotations, contracts), Sales (order management, scheduling), Shipping (delivery, picking, packing), Billing (invoice, credit memo), Pricing (condition technique: how prices and discounts are determined from master data or manual entry), Output (order confirmation, invoice print/EDI), Credit management. Revenue recognition and rebates can extend into more advanced scenarios.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> “Pricing” in SD is highly configurable: the system can determine the price from the customer, material, quantity, or contract (condition technique). You do not have to type the price every time—the system looks up the right conditions and calculates net value, discounts, and tax. The result is stored with the order and used again at billing.
+    </div>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Sales order (VA01, VA02, VA03):</strong> Header (sold-to party, ship-to, PO number, payment terms) and items (material, quantity, price, delivery block, etc.). Schedule line shows requested delivery date and quantity. Availability check (ATP) can be performed. Order type controls document flow and fields.</li>
+        <li><strong>Delivery (VL01N, VL02N):</strong> Create delivery from order (pick and pack). Picking list; goods issue posts stock reduction (MM) and can post cost of goods (CO). Delivery document (LIKP header, LIPS item) links to sales order and to billing.</li>
+        <li><strong>Billing (VF01, VF02):</strong> Create billing document (invoice or credit memo) from delivery or order. Pricing is determined (conditions from sales order or billing); output (e.g. PDF) can be sent. Billing posts to FI: Debit Accounts Receivable, Credit Revenue (and optionally Tax, Cost of goods).</li>
+        <li><strong>Pricing:</strong> Condition technique: condition types (price, discount, tax) with access sequences and condition tables. Determined from master data (customer, material) or manually. Stored in KONV.</li>
+        <li><strong>Customer master:</strong> KNA1 (general), KNVV (sales area), KNB1 (company code) for sold-to, ship-to, bill-to. Used for pricing, output, and payment.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> Sales order (VBAK header, VBAP item), delivery (LIKP, LIPS), billing (VBRK header, VBRP item), pricing (KONV). Document flow links order → delivery → billing. Processing on application server when users create or change documents. <strong>Control plane:</strong> Sales organization, distribution channel, division (sales area); document types (order type, delivery type, billing type); pricing and output configuration (condition types, output determination); credit control area. See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> On‑premise and S/4HANA Cloud. <strong>Integration:</strong> FI (AR and revenue from billing); CO (cost of sales, profitability); MM (goods issue reduces stock, valuation); PP (availability, make-to-order). CRM and SAP Customer Experience (CX) can integrate via APIs or middleware (Module 17, 29).</p>
+
+    <div class="example-box">
+        <h4>Example: Order-to-cash — from order to invoice</h4>
+        <p>Customer orders 50 units of finished product at 20 EUR/unit (1,000 EUR). Follow the flow step by step:</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Sales order (VA01):</strong> Create order: customer 1000, material FIN-001, 50 PC, 20 EUR. The system determines the price from pricing configuration (or you enter it). Order 10001234 is saved. At this point no stock has moved and no revenue has been recorded—we have only a commitment to deliver.</li>
+            <li><strong>Delivery (VL01N):</strong> Create a delivery for order 10001234 (pick from warehouse, ship to customer). When you confirm goods issue, stock is reduced by 50 in MM; cost of goods can post to CO for profitability. Delivery document 8000000123 is created and linked to the order.</li>
+            <li><strong>Billing (VF01):</strong> Create the customer invoice with reference to the delivery (or order). Net value 1,000 EUR; with 19% tax the customer owes 1,190 EUR. When you post, the system creates the FI document automatically: Debit Accounts Receivable (customer) 1,190, Credit Revenue 1,000, Credit Tax 190. Billing document 9000000456. The customer now appears in FI as a receivable; when they pay, you allocate the payment to this invoice.</li>
+        </ol>
+        <p>Result: Revenue and receivables are in FI; document flow is Order → Delivery → Billing. As a beginner, remember: the same flow (order, delivery, billing) applies to most standard sales; the system keeps the links so you can trace any invoice back to the original order.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Sample sales order and document flow (simplified)</h4>
+        <p>Order 10001234 — Sold-to: 1000, Material FIN-001, 50 PC @ 20 EUR = 1,000 EUR.</p>
+        <table>
+            <tr><th>Document</th><th>Number</th><th>Description</th></tr>
+            <tr><td>Sales order</td><td>10001234</td><td>VBAK/VBAP — header and item</td></tr>
+            <tr><td>Delivery</td><td>8000000123</td><td>LIKP/LIPS — linked to order; goods issue posted</td></tr>
+            <tr><td>Billing</td><td>9000000456</td><td>VBRK/VBRP — linked to delivery; FI document created</td></tr>
+        </table>
+        <p>In FI: one document with AR (customer) and revenue (and tax). In SD: full document flow visible in VA03 (order) or VL03N (delivery).</p>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: Order-to-cash document flow</h4>
+        <p>Click each step to see what is created and what posts to FI.</p>
+        <button type="button" id="sd-step1">1. Sales order</button>
+        <button type="button" id="sd-step2">2. Delivery</button>
+        <button type="button" id="sd-step3">3. Billing</button>
+        <div id="sd-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key tables</h3>
+    <table>
+        <tr><th>Table</th><th>Purpose</th></tr>
+        <tr><td>VBAK</td><td>Sales document header (order)</td></tr>
+        <tr><td>VBAP</td><td>Sales document item</td></tr>
+        <tr><td>LIKP</td><td>Delivery header</td></tr>
+        <tr><td>LIPS</td><td>Delivery item</td></tr>
+        <tr><td>VBRK</td><td>Billing document header</td></tr>
+        <tr><td>VBRP</td><td>Billing document item</td></tr>
+        <tr><td>KNA1</td><td>Customer master (general)</td></tr>
+        <tr><td>KNVV</td><td>Customer sales data (sales area)</td></tr>
+        <tr><td>KNB1</td><td>Customer company code data</td></tr>
+        <tr><td>KONV</td><td>Conditions (pricing) for document</td></tr>
+    </table>
+
+    <h3>Important T-codes and concepts</h3>
+    <p><strong>Sales:</strong> VA01 (create order), VA02 (change), VA03 (display), VA05 (list). <strong>Delivery:</strong> VL01N (create), VL02N (change), VL03N (display). <strong>Billing:</strong> VF01 (create), VF02 (change), VF03 (display). <strong>Concepts:</strong> Sales area (sales org + distribution channel + division); document flow (order → delivery → billing); billing block and delivery block; revenue recognition (can be at billing or over time).</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Question 1: SD document flow is:</h4>
+            <ul class="quiz-options">
+                <li>A) Sales order → delivery → billing</li>
+                <li>B) Only purchase order</li>
+                <li>C) Only FI</li>
+                <li>D) Only MM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct Answer: A</strong><br>Order to cash: order, then delivery, then billing; FI gets revenue and AR.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 2: VBAK holds:</h4>
+            <ul class="quiz-options">
+                <li>A) Material master</li>
+                <li>B) Sales order header</li>
+                <li>C) Purchase order</li>
+                <li>D) G/L account</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct Answer: B</strong><br>VBAK = sales document header; VBAP = sales document item.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 3: Billing in SD posts to FI as:</h4>
+            <ul class="quiz-options">
+                <li>A) Only cost center</li>
+                <li>B) Only material</li>
+                <li>C) Accounts receivable and revenue</li>
+                <li>D) Only asset</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct Answer: C</strong><br>Billing creates FI document: AR (customer) and revenue (G/L).</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 4: Which transaction creates a delivery from a sales order?</h4>
+            <ul class="quiz-options">
+                <li>A) VA01</li>
+                <li>B) VL01N</li>
+                <li>C) VF01</li>
+                <li>D) ME21N</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct Answer: B</strong><br>VL01N = create delivery; VA01 = sales order; VF01 = billing.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'Sales order 10001234 created. Customer, material, 50 PC @ 20 EUR. No stock or FI posting yet. Document in VBAK/VBAP.',
+            'Delivery 8000000123 created from order. Goods issue posted → stock -50 (MM). Cost of sales can post to CO. Document in LIKP/LIPS.',
+            'Billing 9000000456 created from delivery. FI document: Dr AR 1,190, Cr Revenue 1,000, Cr Tax 190. Revenue and receivables now in FI.'
+        ];
+        var flowEl = document.getElementById('sd-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('sd-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

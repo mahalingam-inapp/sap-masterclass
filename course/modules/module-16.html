@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 16: SAP Concur</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 16: SAP Concur</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> Concur is SAP’s <strong>travel and expense (T&amp;E)</strong> cloud app. Employees book business travel (flights, hotels, car) and submit expense reports (meals, mileage, etc.); managers approve; the company pays and can post costs to the right cost center and G/L in S/4HANA. Concur is <strong>SaaS only</strong>—you use the web or mobile app, no on-premise install. Integration: employee and approver data often comes from SuccessFactors; approved expenses are sent to S/4HANA (or another ERP) so that FI gets the correct posting. Corporate card data can be fed into Concur so card transactions appear in the employee’s expense report. Key terms: <strong>T&amp;E</strong>, <strong>expense report</strong>, <strong>approval workflow</strong>.
+    </div>
+
+    <p>SAP Concur covers travel booking and expense reporting in the cloud. It integrates with S/4HANA and SuccessFactors.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>Concur centralizes travel booking and expense management: <strong>Travel:</strong> Book air, hotel, car within policy; preferred vendors and negotiated rates. <strong>Expense:</strong> Create expense report (receipts, allocations to cost center/project); submit for approval; after approval, data can be sent to S/4HANA for posting (expense G/L, cost center, optional project). Reimbursement can be via payroll (employee reimbursement) or separate payment. <strong>Policy and audit:</strong> Policy rules (e.g. max meal amount, required receipt); audit trail and compliance reporting. Concur can also integrate with Fieldglass (expense for contingent workers) and with invoice (vendor invoices) in some deployments.</p>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Travel booking:</strong> Search and book flights, hotels, car rental; policy checks (e.g. economy only); preferred suppliers. Trip itinerary and e-receipts.</li>
+        <li><strong>Expense report:</strong> Employee creates report; adds expense entries (travel, meals, lodging, other) with receipt attachment. Allocates to cost center, project, or G/L. Submits for approval.</li>
+        <li><strong>Approval workflow:</strong> Manager (or delegate) approves report. Multi-level approval and delegation rules. After approval, report can be exported to S/4HANA or payroll.</li>
+        <li><strong>Integration to ERP:</strong> Concur connector (or CPI) sends approved expense data to S/4HANA: creates FI document (expense account, cost center, amount) and optionally clears against advance or triggers reimbursement. Employee master and approver can come from SuccessFactors or S/4HANA.</li>
+        <li><strong>Corporate card:</strong> Card transactions flow into Concur; employee assigns to expense report and allocates. Reduces manual entry.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> Tenant entities: User, Report, Expense (line items), Allocation (cost center, project). No customer DB; UIs and APIs. Posting data sent to S/4HANA (cost object, G/L). <strong>Control plane:</strong> Concur Admin (company settings, approval workflows, policy, integration); Concur Connector or CPI for S/4HANA. See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> SaaS only; tenant per company. <strong>Integration:</strong> S/4HANA/FI (expense posting, cost center, G/L); SuccessFactors (employee, approver hierarchy); payroll (reimbursement); corporate card providers; CPI (Module 29) for custom flows.</p>
+
+    <div class="example-box">
+        <h4>Example: Expense report from Concur to S/4HANA</h4>
+        <p>Employee travels for a project and submits an expense report.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Expense report (Concur):</strong> Employee creates report “Q1 Trip – Berlin.” Adds entries: Flight 400 EUR, Hotel 3 nights 450 EUR, Meals 120 EUR. Attaches receipts. Allocates to cost center 2000 and project WBS P-001. Submits. Manager approves.</li>
+            <li><strong>Export to S/4HANA:</strong> Concur Connector (or CPI) sends approved report: total 970 EUR, cost center 2000, WBS P-001. System creates FI document in S/4HANA: Debit expense account(s) 970, Credit employee advance or payable 970; cost center and WBS from allocation. Or triggers reimbursement via payroll.</li>
+            <li><strong>Result in S/4HANA:</strong> Expense is on the books; cost center and project show the cost. Audit trail in Concur; financial trail in FI/CO.</li>
+        </ol>
+        <p>Result: Policy-compliant expense; correct cost allocation in S/4HANA.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Key Concur entities and integration</h4>
+        <table>
+            <tr><th>Concept</th><th>Purpose</th></tr>
+            <tr><td>Report</td><td>Expense report (header); contains expense entries</td></tr>
+            <tr><td>Expense / Allocation</td><td>Line item (amount, type, cost center, project)</td></tr>
+            <tr><td>Approval workflow</td><td>Manager and multi-level approval; policy checks</td></tr>
+            <tr><td>Concur Connector / CPI</td><td>Send approved expense to S/4HANA (FI/CO)</td></tr>
+        </table>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: Concur → S/4HANA flow</h4>
+        <p>Click to see the expense flow from report to FI.</p>
+        <button type="button" id="concur-step1">1. Create &amp; submit report</button>
+        <button type="button" id="concur-step2">2. Approval</button>
+        <button type="button" id="concur-step3">3. Post to S/4HANA</button>
+        <div id="concur-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key concepts</h3>
+    <p><strong>Travel vs expense:</strong> Travel = booking; expense = report and reimbursement. Often combined in one product. <strong>Allocation:</strong> Cost center, project (WBS), G/L—determines where cost posts in S/4HANA. <strong>Policy:</strong> Rules (receipt required over X, max per diem) enforced in Concur before or at approval. <strong>Integration:</strong> SuccessFactors for employee/approver; S/4HANA for posting; payroll for reimbursement.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: Concur is used for:</h4>
+            <ul class="quiz-options">
+                <li>A) Only MM</li>
+                <li>B) Travel and expense management</li>
+                <li>C) Only SD</li>
+                <li>D) Only PP</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>Concur = travel booking and expense reports.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: Concur expense data can post to:</h4>
+            <ul class="quiz-options">
+                <li>A) Only QM</li>
+                <li>B) S/4HANA / FI (cost allocation, G/L)</li>
+                <li>C) Only PM</li>
+                <li>D) Only PS</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Expense reports post to FI for cost and G/L.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: Concur often integrates with:</h4>
+            <ul class="quiz-options">
+                <li>A) Only BW</li>
+                <li>B) SuccessFactors (employee, approver) and FI</li>
+                <li>C) Only MM</li>
+                <li>D) Only CO</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>SuccessFactors for employee/approver; FI for posting.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: What does “allocation” on an expense entry typically define?</h4>
+            <ul class="quiz-options">
+                <li>A) Only travel booking</li>
+                <li>B) Cost center, project, or G/L where the expense will post in S/4HANA</li>
+                <li>C) Only vendor</li>
+                <li>D) Only material</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>Allocation determines cost center, WBS, or G/L for posting to FI/CO.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'Employee creates expense report; adds entries (travel, meals, etc.) with receipts; allocates to cost center/project. Submits for approval.',
+            'Manager (or delegate) approves report. Policy rules are checked. Report status: Approved.',
+            'Concur Connector or CPI sends approved report to S/4HANA. FI document created: expense account(s), cost center, project. Reimbursement may go via payroll or AP.'
+        ];
+        var flowEl = document.getElementById('concur-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('concur-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

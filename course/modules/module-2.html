@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 2: SAP Overview & Navigation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.6; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 22px 0 10px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 14px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 12px; }
+        ul { padding-left: 22px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 15px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; }
+        .reveal-box.show { display: block; }
+        .reveal-box.correct { background: #d4edda; border-color: #28a745; }
+        .reveal-box.wrong { background: #f8d7da; border-color: #dc3545; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-left: 8px; }
+        select { padding: 8px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 1em; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .reference-scroll { overflow-x: auto; margin: 12px 0; border: 1px solid #e0e0e0; border-radius: 6px; background: white; }
+        .reference-table { margin: 0; min-width: 560px; }
+        .reference-table th { position: sticky; top: 0; }
+        .glossary-table { font-size: 0.9em; }
+        .glossary-table td:first-child { white-space: nowrap; width: 1%; font-family: 'Consolas', 'Monaco', monospace; }
+        .glossary-note { margin-top: 8px; font-size: 0.9em; color: #555; }
+    </style>
+</head>
+<body>
+    <h2>Module 2: SAP Overview & Navigation</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> This module is about how you actually <em>use</em> SAP day to day: how you log in, how you find transactions (the programs that do a specific task, like “create a purchase order” or “display a table”), and how the interface is organized. You will hear about <strong>SAP GUI</strong> (the classic Windows-style interface) and <strong>Fiori</strong> (the newer web-based apps). You do not need to memorize every transaction code—just understand that each business action has a code (e.g. <code>VA01</code> = create sales order) and that the same backend data is used whether you work in GUI or Fiori.
+    </div>
+
+    <p>This chapter introduces SAP as a platform and basic navigation. It builds on Module 1 (Foundation concepts) for data plane, control plane, deployment, and integration.</p>
+
+    <h3>What is SAP ERP / S/4HANA?</h3>
+    <p><strong>SAP ERP</strong> is an enterprise resource planning suite: one integrated system for finance, procurement, sales, production, and more. <strong>S/4HANA</strong> is the current generation of that suite, built on the SAP HANA database. It has a simplified data model, real-time analytics, and a modern user experience (Fiori). Deployment options: on‑premise (in your data center), S/4HANA Cloud (SAP or partner hosts it), and hybrid—see Module 1. As a beginner, think of S/4HANA as “the main SAP system” where most of the core business runs.</p>
+
+    <h3>Features</h3>
+    <ul>
+        <li><strong>Logon and clients:</strong> Users log on to a <strong>client</strong> (a three-digit number, e.g. 800 for sandbox or development, 100 for production). The client defines data isolation: data in client 800 is separate from client 100, so you can have development and production in the same system without mixing data.</li>
+        <li><strong>SAP GUI vs Fiori:</strong> <strong>SAP GUI</strong> is the classic interface: you run <strong>transactions</strong> (each has a code, e.g. <code>SE16</code> for browsing table data). <strong>Fiori</strong> is the newer interface: role-based apps (e.g. “Manage My Invoices”) that run in the browser or on mobile. Both talk to the same backend; Fiori often bundles several transactions into one app.</li>
+        <li><strong>Menu and favorites:</strong> The menu (e.g. Easy Access) shows transactions by area (Accounting, Logistics, etc.). You can also type a <strong>transaction code</strong> (T-code) in the command field and press Enter. Adding transactions to Favorites gives one-click access.</li>
+        <li><strong>Work centers:</strong> In Fiori, work centers group apps by role (e.g. “Financial Accountant”) so users see only what they need.</li>
+    </ul>
+
+    <h3>Data plane & control plane (recap)</h3>
+    <p>In ERP, the <strong>data plane</strong> is the database and application server (tables, business logic). The <strong>control plane</strong> is Basis (client, transport), customizing (SPRO), and security (users, roles). See Module 1 for full definitions.</p>
+
+    <h3>Interactions</h3>
+    <p>Two end-to-end processes you will see often: <strong>Order to cash</strong> (O2C)—Sales (SD): customer order → delivery → billing → money recorded in FI (Accounts Receivable and Revenue). <strong>Procure to pay</strong> (P2P)—Purchasing (MM): requisition → purchase order → goods receipt → vendor invoice → money recorded in FI (Accounts Payable and expense/inventory). Document flow links the steps: one sales order leads to one or more deliveries, then to billing, then to an FI document. Integration detail is in Module 29.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> “Document flow” means the system links related documents (e.g. this invoice was created from that delivery, which came from that order). So you can trace any invoice back to the original order and see the full story. This is why FI does not need to re-enter data—it gets it automatically from SD or MM.
+    </div>
+
+    <h3>Tables and navigation concepts</h3>
+    <p>Business data lives in <strong>transparent tables</strong> (Data Dictionary, transaction <strong>SE11</strong>). You browse table contents with <strong>SE16</strong> (Data Browser) and maintain config tables with <strong>SM30</strong>. The client (e.g. 800 = development/sandbox, 100 = production) isolates data and customizing so that multiple “tenants” can run on one system. Roles and authorizations (PFCG, SU53) control which transactions and data each user can access. Use SAP Help and SAP Learning Hub for deeper learning.</p>
+
+    <h3>Consolidated overview: Modules and platforms</h3>
+    <p>Use this table as a quick reference for where each topic in the course sits and how it is deployed. <strong>Platform</strong>: On‑premise (your data center), Cloud (SaaS or BTP), or Both.</p>
+    <div class="reference-scroll">
+    <table class="reference-table">
+        <thead>
+            <tr><th>#</th><th>Module / Product</th><th>Platform</th><th>Brief description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>1</td><td>Foundation concepts</td><td>—</td><td>Data plane, control plane, deployment, integration (reference for all modules)</td></tr>
+            <tr><td>2</td><td>SAP Overview &amp; Navigation</td><td>Both</td><td>Logon, clients, SAP GUI, Fiori, transaction codes, menu</td></tr>
+            <tr><td>3</td><td>Financial Accounting (FI)</td><td>Both</td><td>G/L, AP, AR, Asset Accounting, bank, tax, closing; legal reporting</td></tr>
+            <tr><td>4</td><td>Controlling (CO)</td><td>Both</td><td>Cost centers, internal orders, profit centers, product costing, CO-PA</td></tr>
+            <tr><td>5</td><td>Materials Management (MM)</td><td>Both</td><td>Purchasing, inventory, invoice verification, material/vendor master</td></tr>
+            <tr><td>6</td><td>Sales and Distribution (SD)</td><td>Both</td><td>Sales order, delivery, billing, pricing; order-to-cash</td></tr>
+            <tr><td>7</td><td>Production Planning (PP)</td><td>Both</td><td>MRP, BOM, routing, work center, production orders</td></tr>
+            <tr><td>8</td><td>Quality Management (QM)</td><td>Both</td><td>Inspection plans, inspection lots, usage decision</td></tr>
+            <tr><td>9</td><td>Plant Maintenance (PM)</td><td>Both</td><td>Functional location, equipment, maintenance plans, orders, notifications</td></tr>
+            <tr><td>10</td><td>Project System (PS)</td><td>Both</td><td>WBS, networks, budgeting, settlement</td></tr>
+            <tr><td>11</td><td>Human Capital Management (HCM)</td><td>Both</td><td>Personnel admin, org management, time, payroll (on‑prem HR)</td></tr>
+            <tr><td>12</td><td>Warehouse Management / EWM</td><td>Both</td><td>Putaway, picking, transfer orders, storage bins, waves</td></tr>
+            <tr><td>13</td><td>SAP SuccessFactors</td><td>Cloud</td><td>Cloud HCM: Recruiting, Employee Central, goals, performance, learning</td></tr>
+            <tr><td>14</td><td>SAP Fieldglass</td><td>Cloud</td><td>VMS: contingent workforce, SOW, time and expense</td></tr>
+            <tr><td>15</td><td>SAP Ariba</td><td>Cloud</td><td>Sourcing, procure-to-pay, Ariba Network</td></tr>
+            <tr><td>16</td><td>SAP Concur</td><td>Cloud</td><td>Travel and expense (T&amp;E)</td></tr>
+            <tr><td>17</td><td>SAP Customer Experience (CX)</td><td>Cloud</td><td>Sales, Service, Marketing, Commerce Cloud; CRM</td></tr>
+            <tr><td>18</td><td>SAP Transportation Management (TM)</td><td>Both</td><td>Freight orders, shipments, carrier, tendering, freight settlement</td></tr>
+            <tr><td>19</td><td>SAP Integrated Business Planning (IBP)</td><td>Cloud</td><td>Demand/supply planning, S&amp;OP</td></tr>
+            <tr><td>20</td><td>SAP Analytics Cloud (SAC)</td><td>Cloud</td><td>BI stories, planning, predictive analytics</td></tr>
+            <tr><td>21</td><td>SAP Datasphere</td><td>Cloud</td><td>Cloud data warehouse, semantic layer, spaces, perspectives (BTP)</td></tr>
+            <tr><td>22</td><td>SAP Business Technology Platform (BTP)</td><td>Cloud</td><td>Integration (CPI), API Management, Event Mesh, extension, Datasphere</td></tr>
+            <tr><td>23</td><td>SAP Signavio</td><td>Cloud</td><td>Process mining, process management</td></tr>
+            <tr><td>24</td><td>ABAP Basics</td><td>Both</td><td>Development language; reports, enhancements, APIs; BTP ABAP Cloud</td></tr>
+            <tr><td>25</td><td>Business Warehouse / BI (BW)</td><td>Both</td><td>ETL, DSO, InfoCube, BEx; BW/4HANA</td></tr>
+            <tr><td>26</td><td>SAP Basis</td><td>Both</td><td>Client, instance, transport (STMS), jobs, monitoring</td></tr>
+            <tr><td>27</td><td>Security &amp; Authorization</td><td>Both</td><td>Users (SU01), roles (PFCG), authorizations, SU53</td></tr>
+            <tr><td>28</td><td>Fiori &amp; User Experience</td><td>Both</td><td>Fiori Launchpad, tiles, apps, OData</td></tr>
+            <tr><td>29</td><td>Integration (PI/CPI)</td><td>Both</td><td>PI/PO (on‑prem), CPI (cloud); iFlows, IDoc, BAPI, OData, Event Mesh</td></tr>
+            <tr><td>30</td><td>SAP S/4HANA Overview</td><td>Both</td><td>Digital core, HANA, simplified model, Fiori-first</td></tr>
+            <tr><td>31</td><td>Cross-Module Integration &amp; Best Practices</td><td>—</td><td>End-to-end flows, document flow, best practices</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h3>Glossary of important terms and T-codes</h3>
+    <p>Definitions and transaction codes you will see throughout the course. <strong>T-code</strong> = transaction code (the program or app you run in SAP).</p>
+    <div class="reference-scroll">
+    <table class="reference-table glossary-table">
+        <thead>
+            <tr><th>Term / T-code</th><th>Definition</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>ABAP</strong></td><td>SAP’s primary programming language for reports, enhancements, and APIs.</td></tr>
+            <tr><td><strong>ACDOCA</strong></td><td>Universal journal in S/4HANA; single table for FI and CO line items.</td></tr>
+            <tr><td><strong>BAPI</strong></td><td>Business Application Programming Interface; standard API to call SAP from outside.</td></tr>
+            <tr><td><strong>BKPF</strong></td><td>FI document header (company code, document type, number, date).</td></tr>
+            <tr><td><strong>BOM</strong></td><td>Bill of Material; list of components and quantities to produce a product.</td></tr>
+            <tr><td><strong>BSEG</strong></td><td>FI document line items (account, amount, debit/credit).</td></tr>
+            <tr><td><strong>BTP</strong></td><td>SAP Business Technology Platform; cloud platform for integration, extension, Datasphere.</td></tr>
+            <tr><td><strong>Client</strong></td><td>Logical unit in SAP (e.g. 800 = dev, 100 = prod); isolates data and customizing.</td></tr>
+            <tr><td><strong>CO01</strong></td><td>Create production order.</td></tr>
+            <tr><td><strong>Control plane</strong></td><td>Where system is configured and governed (Basis, SPRO, roles, CPI).</td></tr>
+            <tr><td><strong>CPI</strong></td><td>Cloud Integration (BTP); design iFlows to connect S/4HANA and cloud products.</td></tr>
+            <tr><td><strong>Data plane</strong></td><td>Where business data is stored and processed (database, application server).</td></tr>
+            <tr><td><strong>ECC</strong></td><td>ERP Central Component; predecessor of S/4HANA.</td></tr>
+            <tr><td><strong>EKKO / EKPO</strong></td><td>Purchase order header and item tables.</td></tr>
+            <tr><td><strong>EWM</strong></td><td>Extended Warehouse Management; advanced warehouse solution.</td></tr>
+            <tr><td><strong>FB01</strong></td><td>Post document (FI).</td></tr>
+            <tr><td><strong>FB03</strong></td><td>Display document (FI).</td></tr>
+            <tr><td><strong>F-02</strong></td><td>Post G/L account document.</td></tr>
+            <tr><td><strong>Fiori</strong></td><td>SAP’s modern web-based UI; apps and Launchpad.</td></tr>
+            <tr><td><strong>GR/IR</strong></td><td>Goods Receipt/Invoice Receipt (clearing account).</td></tr>
+            <tr><td><strong>HANA</strong></td><td>SAP’s in-memory database; foundation for S/4HANA.</td></tr>
+            <tr><td><strong>iFlow</strong></td><td>Integration flow in CPI; connects sender and receiver with mapping.</td></tr>
+            <tr><td><strong>IDoc</strong></td><td>Intermediate Document; SAP format for A2A/B2B messages.</td></tr>
+            <tr><td><strong>IAS</strong></td><td>SAP Identity Authentication Service; SSO and identity for cloud.</td></tr>
+            <tr><td><strong>KO8G</strong></td><td>Run cost center allocation (CO).</td></tr>
+            <tr><td><strong>LIKP / LIPS</strong></td><td>Delivery header and item tables (SD).</td></tr>
+            <tr><td><strong>MARA</strong></td><td>Material master (general data).</td></tr>
+            <tr><td><strong>MD04</strong></td><td>Stock/requirements list (MRP).</td></tr>
+            <tr><td><strong>ME21N</strong></td><td>Create purchase order.</td></tr>
+            <tr><td><strong>MIGO</strong></td><td>Goods movement (goods receipt, goods issue).</td></tr>
+            <tr><td><strong>MIRO</strong></td><td>Invoice verification (vendor invoice); posts to FI.</td></tr>
+            <tr><td><strong>MRP</strong></td><td>Material Requirements Planning.</td></tr>
+            <tr><td><strong>O2C</strong></td><td>Order to cash (SD: order → delivery → billing → FI).</td></tr>
+            <tr><td><strong>OData</strong></td><td>REST-based API protocol; used by Fiori and many SAP APIs.</td></tr>
+            <tr><td><strong>P2P</strong></td><td>Procure to pay (MM: requisition → PO → GR → invoice → FI).</td></tr>
+            <tr><td><strong>PFCG</strong></td><td>Profile Generator; create and maintain roles (menu + authorizations).</td></tr>
+            <tr><td><strong>PO</strong></td><td>Purchase order (or process order in PP context).</td></tr>
+            <tr><td><strong>S/4HANA</strong></td><td>SAP’s current ERP suite; runs on HANA, simplified model, Fiori.</td></tr>
+            <tr><td><strong>SE11</strong></td><td>Data Dictionary; define tables, views, data elements.</td></tr>
+            <tr><td><strong>SE16</strong></td><td>Data Browser; display table contents.</td></tr>
+            <tr><td><strong>SM30</strong></td><td>Maintain table entries (customizing tables).</td></tr>
+            <tr><td><strong>SM59</strong></td><td>RFC destinations; configure connections to other systems.</td></tr>
+            <tr><td><strong>SPRO</strong></td><td>Customizing (Implementation Guide / IMG); configuration.</td></tr>
+            <tr><td><strong>STMS</strong></td><td>Transport Management System; move changes dev → test → prod.</td></tr>
+            <tr><td><strong>SU01</strong></td><td>User master; create users, assign roles.</td></tr>
+            <tr><td><strong>SU53</strong></td><td>Display authorization check log (after authorization failure).</td></tr>
+            <tr><td><strong>T-code</strong></td><td>Transaction code; shortcut to run a program or transaction in SAP.</td></tr>
+            <tr><td><strong>Transport</strong></td><td>Mechanism to move development and customizing between systems (STMS).</td></tr>
+            <tr><td><strong>VBAK / VBAP</strong></td><td>Sales order header and item tables.</td></tr>
+            <tr><td><strong>VBRK / VBRP</strong></td><td>Billing document header and item tables.</td></tr>
+            <tr><td><strong>VA01</strong></td><td>Create sales order.</td></tr>
+            <tr><td><strong>VF01</strong></td><td>Create billing document (invoice).</td></tr>
+            <tr><td><strong>VL01N</strong></td><td>Create outbound delivery.</td></tr>
+            <tr><td><strong>WBS</strong></td><td>Work Breakdown Structure; project hierarchy in PS.</td></tr>
+        </tbody>
+    </table>
+    </div>
+    <p class="glossary-note">You will encounter more T-codes and tables in each module. This glossary covers the most common ones; refer back to it when you see an unfamiliar code.</p>
+
+    <div class="example-box">
+        <h4>Example: From logon to running a transaction</h4>
+        <p>A typical path a user takes:</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Logon:</strong> SAP GUI or Fiori launchpad; user enters system, client (e.g. 800), user ID, and password.</li>
+            <li><strong>Menu:</strong> Easy Access menu shows role-based nodes (e.g. Accounting → Financial Accounting → General Ledger). User can also type a transaction code in the command field (e.g. <code>SE16</code>) and press Enter.</li>
+            <li><strong>Favorites:</strong> Users add frequently used transactions to Favorites (right-click → Add to Favorites) for one-click access.</li>
+            <li><strong>Work center (Fiori):</strong> In S/4HANA, Fiori apps are grouped by role (e.g. “Manage My Invoices,” “Display G/L Account Balance”). One app may replace several classic transactions.</li>
+        </ol>
+        <p>Same business function can be reached via SAP GUI (transaction code) or Fiori (app); the backend (data plane and control plane) is the same.</p>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: Match the T-code to the task</h4>
+        <p>Select the correct transaction code for each task. This reinforces how navigation works in SAP.</p>
+        <p><strong>Task:</strong> <span id="task-text">Browse table contents (e.g. view rows in a table)</span></p>
+        <select id="tc-select">
+            <option value="">-- Choose T-code --</option>
+            <option value="SE16">SE16</option>
+            <option value="SE11">SE11</option>
+            <option value="SM30">SM30</option>
+            <option value="VA01">VA01</option>
+            <option value="ME21N">ME21N</option>
+        </select>
+        <button type="button" id="check-tc">Check</button>
+        <div id="tc-feedback" class="reveal-box"></div>
+    </div>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Question 1: What does “client” mean in SAP?</h4>
+            <ul class="quiz-options">
+                <li>A) A customer in SD</li>
+                <li>B) A self-contained unit for data and configuration (e.g. 800)</li>
+                <li>C) Only S/4HANA Cloud</li>
+                <li>D) The control plane only</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct Answer: B</strong><br>The client is a logical unit that isolates data and customizing; users log on to a client.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 2: Where is business data processed in ERP?</h4>
+            <ul class="quiz-options">
+                <li>A) Only in the control plane</li>
+                <li>B) In the data plane (database and application server)</li>
+                <li>C) Only in Fiori</li>
+                <li>D) Only in Basis</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct Answer: B</strong><br>Data plane = where data is stored and processed (DB + app server).</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 3: Order to cash typically involves which modules?</h4>
+            <ul class="quiz-options">
+                <li>A) Only MM</li>
+                <li>B) SD (order, delivery, billing) and FI (revenue, AR)</li>
+                <li>C) Only CO</li>
+                <li>D) Only Basis</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct Answer: B</strong><br>SD handles sales order, delivery, billing; FI records revenue and receivables.</div>
+        </div>
+    </div>
+    <script>
+function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+(function() {
+    var tasks = [
+        { task: 'Browse table contents (e.g. view rows in a table)', correct: 'SE16' },
+        { task: 'Create a sales order', correct: 'VA01' },
+        { task: 'Create a purchase order', correct: 'ME21N' },
+        { task: 'Maintain table entries (customizing tables)', correct: 'SM30' },
+        { task: 'Display Data Dictionary (table structure)', correct: 'SE11' }
+    ];
+    var idx = 0;
+    var taskEl = document.getElementById('task-text');
+    var selectEl = document.getElementById('tc-select');
+    var feedbackEl = document.getElementById('tc-feedback');
+    var checkBtn = document.getElementById('check-tc');
+    function setTask() { if (taskEl && selectEl) { taskEl.textContent = tasks[idx].task; selectEl.value = ''; feedbackEl.className = 'reveal-box'; feedbackEl.classList.remove('show', 'correct', 'wrong'); feedbackEl.textContent = ''; } }
+    if (checkBtn && feedbackEl) {
+        checkBtn.addEventListener('click', function() {
+            var chosen = selectEl.value;
+            var correct = tasks[idx].correct;
+            feedbackEl.classList.add('show');
+            if (chosen === correct) {
+                feedbackEl.textContent = 'Correct! ' + correct + ' is right for this task.';
+                feedbackEl.classList.add('correct'); feedbackEl.classList.remove('wrong');
+                idx = (idx + 1) % tasks.length;
+                setTimeout(setTask, 1500);
+            } else {
+                feedbackEl.textContent = 'Not quite. For "' + tasks[idx].task + '" the correct T-code is ' + correct + '.';
+                feedbackEl.classList.add('wrong'); feedbackEl.classList.remove('correct');
+            }
+        });
+    }
+    setTask();
+})();
+</script>
+</body>
+</html>

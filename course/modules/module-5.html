@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 5: Materials Management (MM)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        button:hover { background: #5568d3; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 5: Materials Management (MM)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> Materials Management (MM) is the part of SAP that handles <strong>buying</strong> and <strong>storing</strong> materials—from creating a purchase order, to recording when goods arrive (goods receipt), to entering the vendor’s invoice and matching it to the order and receipt. MM is at the heart of <strong>procure-to-pay</strong> (P2P). When you post a vendor invoice in MM, the system automatically creates the accounting entries in FI (expense or inventory and vendor liability). MM also manages stock: when sales delivers to a customer or production consumes raw materials, those movements are done in MM (or triggered from SD/PP). Key terms: <strong>purchase order (PO)</strong>, <strong>goods receipt (GR)</strong>, <strong>invoice verification</strong>, and <strong>three-way match</strong> (PO, GR, and invoice must align).
+    </div>
+
+    <p>SAP MM covers procurement and inventory management. It posts to FI (inventory and vendor liability) and to CO (cost center, order), and integrates with SD (sales consuming stock) and PP (production consuming raw materials).</p>
+
+    <h3>Purpose and scope</h3>
+    <p>MM ensures that the right materials are procured at the right time, quantity, and price; that goods receipts and invoices are recorded and matched (<strong>three-way match</strong>: purchase order, goods receipt, and invoice must agree so you do not pay for more than you ordered or received); and that inventory is valued and tracked by plant and storage location. Key sub-areas: Purchasing (MM-PUR), Inventory Management (MM-IM), Invoice Verification (MM-IV), Material Master, Vendor Master. Batch management, valuation (moving average or standard price), and physical inventory are also part of MM.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> “Valuation” means how we put a value on stock (e.g. moving average: each new receipt recalculates the average cost; or standard price: a fixed price per material). “Account determination” in MM (control plane) decides which G/L accounts are used when you post a goods receipt or invoice—so the right expense or inventory account is debited automatically.
+    </div>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Purchasing (MM-PUR):</strong> Purchase requisition (internal demand or MRP), request for quotation (RFQ), purchase order (PO). Outline agreements (contracts, scheduling agreements) for recurring procurement. Source determination and automatic PO creation from requisition.</li>
+        <li><strong>Inventory Management (MM-IM):</strong> Goods receipt (against PO or for other movement types), goods issue (e.g. to cost center, production, or delivery), transfer postings, physical inventory. Each movement updates quantity and value (if relevant) and can post to FI/CO.</li>
+        <li><strong>Invoice Verification (MM-IV):</strong> Enter vendor invoice; match to PO and optionally to GR (three-way match). Price and quantity variances can be posted; then document is passed to FI for AP posting. Credit memos and subsequent debit/credit also handled.</li>
+        <li><strong>Material Master:</strong> Central data for each material (general, purchasing, sales, MRP, accounting, etc.) with views per organizational level (plant, storage location). MARA (general), MARC (plant), MARD (storage location), valuation data in MBEW.</li>
+        <li><strong>Vendor Master:</strong> General data (LFA1), company code (LFB1), purchasing org (LFM1). Used for ordering and payment.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> Material master (MARA, MARC, MARD, MBEW), purchase documents (EKKO header, EKPO item), goods movement (MKPF header, MSEG item), invoice data (linked to FI). Processing runs on the application server when users post POs, GRs, or invoices. <strong>Control plane:</strong> Plant, storage location, purchasing organization, company code assignment; account determination (which G/L and cost element for inventory, GR/IR, variance); movement types; number ranges for PO and material document. See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> On‑premise and S/4HANA Cloud. <strong>Integration:</strong> FI (inventory, GR/IR, vendor from invoice verification); CO (cost center, order from PO/GR); SD (delivery consumes stock); PP (production order consumes raw materials). SAP Ariba can be used for upstream sourcing and procurement; integration via CPI (Module 15, 29).</p>
+
+    <div class="example-box">
+        <h4>Example: Procure-to-pay — from PO to invoice</h4>
+        <p>Procurement of 100 units of raw material at 10 EUR/unit from vendor 1000. Follow the flow step by step:</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Purchase order (ME21N):</strong> Create PO 4500012345: vendor 1000, material, 100 PC, 10 EUR, plant 1000, storage location 0001. The PO is a commitment to buy—no money has moved and no stock has arrived yet. No accounting document is created at this step.</li>
+            <li><strong>Goods receipt (MIGO):</strong> When the goods arrive, you post a goods receipt for 100 PC against the PO. The system creates a material document (MKPF/MSEG) and updates stock. It may also create a provisional FI posting (e.g. Debit inventory or GR/IR, Credit GR/IR) so that the balance sheet reflects “goods received but not yet invoiced” if your company uses that. Stock quantity is now 100 higher.</li>
+            <li><strong>Invoice verification (MIRO):</strong> When the vendor sends an invoice for 1,000 EUR, you enter it in MIRO and reference the PO and (optionally) the material document. The system performs the three-way match: does the invoice quantity and price match the PO and what was received? If yes, you post. The system then creates the FI document: Debit expense or inventory 1,000, Credit vendor 1,000 (and clears GR/IR if it was used). The vendor now appears in Accounts Payable; you can run a payment run to pay them.</li>
+        </ol>
+        <p>Result: Inventory and vendor liability are correct; FI and MM are in sync. As a beginner, remember: PO → GR → Invoice is the standard sequence; each step has a transaction (ME21N, MIGO, MIRO) and the last step creates the FI posting automatically.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Sample purchase order (simplified)</h4>
+        <p>PO 4500012345 — Header: Vendor 1000, Company code 1000, Purchasing org 1000. Items:</p>
+        <table>
+            <tr><th>Item</th><th>Material</th><th>Quantity</th><th>Unit</th><th>Net price</th><th>Amount</th><th>Plant / SLoc</th></tr>
+            <tr><td>10</td><td>RAW-001</td><td>100</td><td>PC</td><td>10.00 EUR</td><td>1,000.00</td><td>1000 / 0001</td></tr>
+        </table>
+        <p>After GR: material document 5000000123 (movement type 101). After invoice: FI document (e.g. 1900000050) with vendor credit and inventory/expense debit.</p>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: Three-way match</h4>
+        <p>Click to see how PO, GR, and invoice are matched in invoice verification.</p>
+        <button type="button" id="mm-step1">Show PO data</button>
+        <button type="button" id="mm-step2">Show GR data</button>
+        <button type="button" id="mm-step3">Show invoice &amp; match</button>
+        <div id="mm-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key tables</h3>
+    <table>
+        <tr><th>Table</th><th>Purpose</th></tr>
+        <tr><td>MARA</td><td>Material master (general data)</td></tr>
+        <tr><td>MARC</td><td>Material master (plant level)</td></tr>
+        <tr><td>MARD</td><td>Material master (storage location)</td></tr>
+        <tr><td>EKKO</td><td>Purchase order header</td></tr>
+        <tr><td>EKPO</td><td>Purchase order item</td></tr>
+        <tr><td>MKPF</td><td>Material document header (goods movement)</td></tr>
+        <tr><td>MSEG</td><td>Material document item</td></tr>
+        <tr><td>LFA1</td><td>Vendor master (general)</td></tr>
+        <tr><td>T001W</td><td>Plants (linked to company code)</td></tr>
+        <tr><td>T024</td><td>Purchasing groups</td></tr>
+    </table>
+
+    <h3>Important T-codes and concepts</h3>
+    <p><strong>Purchasing:</strong> ME21N (create PO), ME22N (change), ME23N (display), ME2L (list by vendor). <strong>Goods movement:</strong> MIGO (goods movement: GR, issue, transfer). <strong>Invoice:</strong> MIRO (enter invoice). <strong>Material master:</strong> MM01 (create), MM02 (change), MM03 (display). <strong>Concepts:</strong> Three-way match (PO, GR, invoice); movement type (101 = GR for PO); GR/IR (goods receipt/invoice receipt) clearing account; account determination (automatic G/L from material, vendor, plant).</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Question 1: The three-way match in procure-to-pay is:</h4>
+            <ul class="quiz-options">
+                <li>A) Order, delivery, billing</li>
+                <li>B) Purchase order, goods receipt, invoice</li>
+                <li>C) Only FI and CO</li>
+                <li>D) Only SD</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct Answer: B</strong><br>PO, GR, and invoice are matched in MM (three-way match).</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 2: Which table is the material master (general data)?</h4>
+            <ul class="quiz-options">
+                <li>A) EKKO</li>
+                <li>B) MARA</li>
+                <li>C) BKPF</li>
+                <li>D) VBAK</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct Answer: B</strong><br>MARA = material master general data; MARC/MARD = plant/storage.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 3: MIGO is used for:</h4>
+            <ul class="quiz-options">
+                <li>A) Sales order</li>
+                <li>B) Goods movement (e.g. goods receipt)</li>
+                <li>C) Billing only</li>
+                <li>D) Cost center</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct Answer: B</strong><br>MIGO = goods movement (post goods receipt, etc.).</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 4: Where is the vendor invoice entered and matched to PO/GR?</h4>
+            <ul class="quiz-options">
+                <li>A) VA01</li>
+                <li>B) MIRO</li>
+                <li>C) FB01</li>
+                <li>D) MIGO</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct Answer: B</strong><br>MIRO = invoice verification; matches invoice to PO and GR, then posts to FI.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'PO 4500012345: Material RAW-001, 100 PC @ 10 EUR = 1,000 EUR. Vendor 1000, Plant 1000.',
+            'GR posted: 100 PC received. Material document 5000000123. Stock +100; GR/IR or inventory updated (provisional or final depending on config).',
+            'Invoice: 1,000 EUR from vendor. Match: PO 1,000 = GR 100 PC = Invoice 1,000 → OK. Post → FI document: Dr Expense/Inventory 1,000, Cr Vendor 1,000. AP and (if applicable) GR/IR cleared.'
+        ];
+        var flowEl = document.getElementById('mm-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('mm-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

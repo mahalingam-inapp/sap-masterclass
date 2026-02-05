@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 26: SAP Basis</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 26: SAP Basis</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> <strong>Basis</strong> is the technical layer that makes the SAP system run: client, application server, database, <strong>transport</strong> (moving changes from dev → test → prod), background jobs, monitoring, and upgrades. It is part of the <strong>control plane</strong>: Basis does not hold business data, but it defines which systems exist, how they are connected, and how customizing and code are promoted. In on‑premise S/4HANA, your team (or a partner) does Basis; in S/4HANA Cloud, SAP operates it. Key terms: <strong>client</strong>, <strong>instance</strong>, <strong>STMS</strong> (transport), <strong>application server</strong>.
+    </div>
+
+    <p>SAP Basis covers system administration for NetWeaver (S/4HANA, ECC, BW). The data plane runs on the infrastructure Basis configures and maintains.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>Basis ensures that the SAP system is installed, configured, and running: <strong>Client:</strong> Logical unit (e.g. 800 development, 100 production) that isolates data and customizing. <strong>Instance and application server:</strong> One or more app servers connect to one database; load balancing and profiles. <strong>Transport (STMS):</strong> Move development and customizing from dev → test → prod. <strong>Background jobs:</strong> Schedule reports and cleanup. <strong>Spool:</strong> Print and output management. <strong>Monitoring:</strong> System log (SM21), workload, locks (SM12), and CCMS. <strong>Patch and upgrade:</strong> Support packages and release upgrades. Basis works closely with Security (Module 27) for users and authorizations and with Integration (Module 29) for RFC and connectivity.</p>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Client:</strong> Mandatory at logon. Data and customizing are client-dependent (or client-independent for cross-client data). Client copy (SCC1) duplicates a client; client transport exports/imports client data.</li>
+        <li><strong>Transport Management (STMS):</strong> Transport domain links systems (dev, test, prod). Development objects and customizing are assigned to transport requests. Export from source, import into target. Transports are the only way to promote ABAP and customizing in a controlled manner.</li>
+        <li><strong>Background jobs (SM37):</strong> Schedule ABAP programs, reports, and external commands. Define job name, steps, and schedule (date/time or periodic). Monitor with SM37.</li>
+        <li><strong>RFC (SM59):</strong> Remote Function Call destinations for system-to-system communication. Used by CPI, PI/PO, and other SAP systems to call this system (or vice versa).</li>
+        <li><strong>Monitoring:</strong> SM21 (system log), SM50 (work processes), SM12 (locks), ST22 (ABAP dump). CCMS for centralized monitoring and alerts.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> The database (HANA or legacy) and application server run the business logic and store data. Basis does not own the business data—it ensures the DB and app server are available and configured. <strong>Control plane:</strong> Client config, instance profile, transport domain, RFC destinations, job scheduling, and monitoring config. See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> On‑premise and hosted: customer/partner installs and maintains. S/4HANA Cloud: SAP operates; customer has limited Basis tasks (e.g. transport for extension). <strong>Integration:</strong> STMS for transport between systems; SM59 for RFC (used by CPI, PI, other SAP systems). Link to Security (SU01, PFCG) and Integration (Module 29).</p>
+
+    <div class="example-box">
+        <h4>Example: Transport from development to production</h4>
+        <p>A custom report is developed and must go live in production.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Development (DEV):</strong> Developer creates report in DEV client 800; assigns to transport request N. Request is released. In STMS, the transport is exported (file on transport directory).</li>
+            <li><strong>Quality (QAS):</strong> Basis imports the transport into QAS. Test team validates. If OK, transport is released for production. (Some landscapes use a separate “release” step.)</li>
+            <li><strong>Production (PRD):</strong> Basis imports the transport into PRD during a maintenance window. Report is now in production. Security team assigns role/transaction so users can run it.</li>
+        </ol>
+        <p>Result: Controlled promotion; no manual code copy. STMS and transport requests are the only path for ABAP and customizing.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Key Basis T-codes</h4>
+        <table>
+            <tr><th>T-code</th><th>Purpose</th></tr>
+            <tr><td>STMS</td><td>Transport Management System</td></tr>
+            <tr><td>SE09</td><td>Transport requests (display, release)</td></tr>
+            <tr><td>SM37</td><td>Background job overview</td></tr>
+            <tr><td>SM59</td><td>RFC destinations</td></tr>
+            <tr><td>SM21</td><td>System log</td></tr>
+            <tr><td>SM50</td><td>Work processes</td></tr>
+        </table>
+    </div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: Transport flow</h4>
+        <p>Click to see how a transport moves across systems.</p>
+        <button type="button" id="basis-step1">1. Release in DEV</button>
+        <button type="button" id="basis-step2">2. Import in QAS</button>
+        <button type="button" id="basis-step3">3. Import in PRD</button>
+        <div id="basis-flow" class="reveal-box" style="margin-top:12px;"></div>
+    </div>
+
+    <h3>Key concepts</h3>
+    <p><strong>Client:</strong> Self-contained unit; logon always includes client. Typical: 800 dev, 100 prod. <strong>Transport request:</strong> Container for objects; released = ready to export/import. <strong>STMS:</strong> Defines transport domain and queues; import is done from STMS. <strong>S/4HANA Cloud:</strong> SAP runs Basis; customer uses “Maintain Transport” and similar for extension content; no direct access to OS or DB.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: Basis is primarily:</h4>
+            <ul class="quiz-options">
+                <li>A) Sales module</li>
+                <li>B) System administration and control plane (client, transport, jobs)</li>
+                <li>C) Procurement only</li>
+                <li>D) Production only</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>Basis = technical foundation and admin.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: STMS is used for:</h4>
+            <ul class="quiz-options">
+                <li>A) Billing</li>
+                <li>B) Transport management (import/export between systems)</li>
+                <li>C) Only MM</li>
+                <li>D) Only SD</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>STMS = Transport Management System.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: Client in Basis means:</h4>
+            <ul class="quiz-options">
+                <li>A) Customer in SD</li>
+                <li>B) Self-contained logical unit for data and customizing</li>
+                <li>C) Only vendor</li>
+                <li>D) Only material</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>Client = logical system boundary (e.g. 800 dev, 100 prod).</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: What is SM59 used for?</h4>
+            <ul class="quiz-options">
+                <li>A) Only sales order</li>
+                <li>B) RFC destinations (connectivity to other systems)</li>
+                <li>C) Only purchase order</li>
+                <li>D) Only material master</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>SM59 = maintain RFC and other connection destinations for system-to-system calls.</div>
+        </div>
+    </div>
+    <script>
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    (function() {
+        var steps = [
+            'Developer releases transport request in DEV. Export creates transport file. Request appears in import queue of QAS (and PRD).',
+            'Basis imports transport into QAS. Objects (report, DDIC, etc.) are now in QAS. Test team validates. Request can be marked for production import.',
+            'Basis imports transport into PRD (e.g. during maintenance). Objects are in production. Role/transaction assignment allows users to run the report.'
+        ];
+        var flowEl = document.getElementById('basis-flow');
+        [1,2,3].forEach(function(n) {
+            var btn = document.getElementById('basis-step' + n);
+            if (btn && flowEl) btn.addEventListener('click', function() {
+                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.classList.add('show');
+            });
+        });
+    })();
+    </script>
+</body>
+</html>
