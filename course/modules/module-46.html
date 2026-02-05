@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Module 46: How a Typical Enterprise Uses SAP for Daily Operations</title>
+    <title>Module 46: REST APIs for SAP — Building RESTful and Streaming APIs with ABAP</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
@@ -13,222 +13,230 @@
         p, ul { margin-bottom: 14px; }
         ul { padding-left: 24px; }
         .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
         .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
         .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
         .plain-terms strong { color: #764ba2; }
-        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
-        .flow-step { padding: 12px 16px; margin: 10px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
-        .flow-step .module-tag { display: inline-block; background: #667eea; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8em; margin-right: 8px; }
         table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
         th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
         td { padding: 10px 12px; border: 1px solid #e0e0e0; }
         tr:nth-child(even) { background: #f8f9fa; }
+        code { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+        .abap-code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.82em; line-height: 1.5; margin: 12px 0 0 0; padding: 14px 16px;
+            background: #1e1e2e; color: #d4d4d4; border-radius: 6px; overflow-x: auto;
+            border: 1px solid #333; text-align: left; white-space: pre;
+        }
+        .code-caption { font-size: 0.9em; color: #555; margin-top: 8px; margin-bottom: 4px; }
         .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
         .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
         .quiz-options { list-style: none; padding-left: 0; }
         .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
         .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
-        .show-answer-btn:hover { background: #218838; }
         .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
         .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
         .quiz-answer.show { display: block; }
-        .timeline { font-size: 0.9em; color: #555; margin-top: 6px; }
-        .data-plane { font-size: 0.85em; color: #444; margin-top: 8px; padding: 8px 10px; background: #f5f5f5; border-radius: 4px; border-left: 3px solid #888; }
-        .data-plane strong { color: #555; }
-        .grc-note { font-size: 0.85em; margin-top: 6px; padding: 8px 10px; background: #fff8e6; border-radius: 4px; border-left: 3px solid #c9a227; }
-        .grc-note strong { color: #8b6914; }
     </style>
 </head>
 <body>
-    <h2>Module 46: How a Typical Enterprise Uses SAP for Daily Operations</h2>
+    <h2>Module 46: REST APIs for SAP — Building RESTful and Streaming APIs with ABAP</h2>
 
     <div class="plain-terms">
-        <strong>For beginners:</strong> So far you have learned each SAP module on its own. In reality, <strong>one company runs one (or a few) SAP systems</strong>, and many people use them at once: sales creates orders, warehouse ships, finance records payments, production builds products. This chapter shows how a <strong>typical enterprise</strong> uses these modules together in <strong>daily operations</strong>—with concrete examples. You will follow one customer order from entry to cash, one purchase from requisition to payment, and see how production, warehouse, HR, and finance fit in. The goal is to see SAP as a single operating system for the business, not as separate “silos.”
+        <strong>For beginners:</strong> <strong>REST</strong> (Representational State Transfer) is a way to expose and consume APIs over HTTP: clients send <strong>GET</strong> (read), <strong>POST</strong> (create), <strong>PUT/PATCH</strong> (update), <strong>DELETE</strong> to URLs (resources). SAP exposes many REST-style APIs via <strong>OData</strong> (SAP Gateway). You can also build your own REST and <strong>streaming</strong> APIs in <strong>ABAP</strong>—either as OData services (Gateway) or as custom HTTP handlers. This chapter shows how REST fits into SAP and how to implement RESTful and streaming APIs with ABAP code. Key terms: <strong>REST</strong>, <strong>OData</strong>, <strong>SAP Gateway</strong>, <strong>ICF</strong>, <strong>streaming</strong>.
     </div>
 
-    <p>We use a single, consistent example company throughout: <strong>“Northgate Manufacturing”</strong>—a mid-size company that makes industrial equipment, sells to business customers, runs one plant and one distribution warehouse, and uses S/4HANA (with Fiori) for core ERP. They also use SAP SuccessFactors for HR, Concur for travel, and Ariba for some procurement. The examples are simplified but realistic; every step maps to modules you have studied.</p>
+    <p>REST APIs in SAP are the main way for Fiori, mobile apps, and external systems to read and write business data. OData (used by SAP Gateway) is REST-based; you can also build custom REST and streaming endpoints in ABAP.</p>
 
-    <h3>The typical enterprise: Northgate Manufacturing</h3>
-    <p><strong>Profile:</strong> Northgate has one company code (legal entity), one plant (production), one storage location at the warehouse, and about 500 employees. They sell finished goods (equipment and spare parts) to B2B customers. Production uses BOMs and work centers; purchasing buys raw materials and MRO (maintenance, repair, operations) supplies. Finance runs month-end close; HR uses SuccessFactors (employee data syncs to S/4HANA for cost center and payroll-related data where needed).</p>
+    <h3>REST APIs in SAP — overview</h3>
+    <p>SAP delivers and lets you build REST-style APIs in several ways:</p>
     <ul>
-        <li><strong>Core systems:</strong> S/4HANA (FI, CO, MM, SD, PP, PM, EWM at warehouse), SuccessFactors (HR), Concur (T&amp;E), Ariba (supplier catalogs and some POs).</li>
-        <li><strong>Key roles:</strong> Sales (order entry, pricing), Warehouse (picking, shipping), Production (orders, confirmations), Procurement (POs, invoices), Finance (AR, AP, G/L, close), HR (SuccessFactors + payroll interface).</li>
+        <li><strong>SAP Gateway / OData:</strong> Gateway exposes OData v2/v4 services. OData is RESTful: resources (entity sets) are accessed via URLs; HTTP methods map to read (GET), create (POST), update (PUT/PATCH), delete (DELETE). S/4HANA ships many prepackaged OData services (API Business Hub); you can create custom ones with SEGW (Service Builder) and implement the data provider in ABAP.</li>
+        <li><strong>S/4HANA released APIs:</strong> Hundreds of OData and REST APIs are released for cloud and on-premise (e.g. Sales Order API, Business Partner API). These are the preferred way for external and BTP apps to talk to S/4HANA (clean core).</li>
+        <li><strong>Custom REST in ABAP:</strong> Using <strong>ICF</strong> (Internet Communication Framework), you register a handler class that implements <code>IF_HTTP_EXTENSION</code>. The handler receives the HTTP request (method, path, body) and writes the response (status, headers, JSON body). This gives full control for custom REST or streaming responses.</li>
+        <li><strong>BTP / API Management:</strong> BTP can host APIs (e.g. ABAP Cloud) and API Management can expose and secure S/4HANA OData/REST. See Module 22 and Module 29.</li>
     </ul>
 
-    <h3>Example 1: One customer order from entry to cash</h3>
-    <p>We follow <strong>one order</strong> through the company. This is the classic <strong>order-to-cash (O2C)</strong> process; every step is done by a person (or automation) using SAP.</p>
+    <h3>Building RESTful APIs with ABAP</h3>
+    <p>Two main options: (1) <strong>OData via SAP Gateway (SEGW)</strong> — define entity sets and implement the Data Provider Extension (DPC_EXT); (2) <strong>Custom ICF handler</strong> — implement <code>IF_HTTP_EXTENSION~HANDLE_REQUEST</code>, parse path/method, and return JSON. Below are code examples for both.</p>
 
-    <div class="example-box">
-        <h4>Order 80001234 — “Customer Acme Corp, 10 units of product P-100, delivery in 5 days”</h4>
+    <h4>Option 1: OData service (Gateway) — GET entity set</h4>
+    <p>In SEGW you define an entity set (e.g. <code>BillingSet</code> with entity type from VBRK). The framework generates a DPC (Data Provider Class) and DPC_EXT. You implement <code>GET_ENTITYSET</code> in the DPC_EXT to read from tables and fill the response. OData then exposes it as a REST resource (e.g. <code>GET /sap/opu/odata/sap/ZBILLING_SRV/BillingSet</code>).</p>
+    <p class="code-caption">ABAP: Data Provider Extension — GET_ENTITYSET for billing documents (conceptual; method signature may vary by Gateway version):</p>
+    <pre class="abap-code">METHOD billingset_get_entityset.
+  DATA: lt_vbrk TYPE TABLE OF vbrk,
+        ls_entity TYPE zcl_xxx_mpc=>ts_billing,
+        lt_entity TYPE zcl_xxx_mpc=>tt_billing.
 
-        <div class="flow-step"><span class="module-tag">SD</span> <strong>Monday 09:00 — Sales creates the order.</strong> The sales rep enters the order in Fiori “Manage Sales Orders” (or VA01): customer Acme Corp, material P-100, quantity 10, requested delivery date in 5 days. System checks material availability (ATP), applies pricing (from condition records), and may run credit check (FSCM if active). Order 80001234 is saved. <span class="timeline">Modules: SD (order), optionally FSCM (credit).</span>
-        <div class="data-plane"><strong>Data plane (tables):</strong> VBAK (sales order header), VBAP (sales order item), KONV (pricing conditions). ATP checks stock tables (e.g. MARD, MARC).</div>
-        <div class="grc-note"><strong>GRC:</strong> User authorization checked (order creation); segregation of duties (SoD) between order entry and release; audit log records who created the order and when.</div></div>
+  " Read filter parameters from request (e.g. date range)
+  DATA(lo_filter) = io_tech_request_context->get_filter( ).
+  " ... evaluate filter, then SELECT
 
-        <div class="flow-step"><span class="module-tag">PP / MM</span> <strong>Monday 10:00 — Planning and production (if make-to-order or shortage).</strong> If P-100 is make-to-stock, warehouse may already have stock. If not, MRP (MD04 or planning run) creates a planned order or triggers production. Production orders (PP) are released; components are issued (MM), work is confirmed (PP), and finished goods are received into stock (MM). For this example, assume P-100 is in stock at the warehouse. <span class="timeline">Modules: PP, MM (goods movements, inventory).</span>
-        <div class="data-plane"><strong>Data plane (tables):</strong> AFPO/AFKO (production order), RESB (reservations), MSEG/MKPF (material document for issue/receipt), MARD (stock). CO postings: COEP (line items).</div>
-        <div class="grc-note"><strong>GRC:</strong> Release of production order may require approval workflow; goods movements are critical—SoD between person who orders and person who posts GR; change logs on orders support audit.</div></div>
+  SELECT vbeln, fkdat, kunag, netwr, waerk
+    FROM vbrk
+    INTO TABLE @lt_vbrk
+    UP TO 100 ROWS
+    WHERE fkdat >= @sy-datum - 30.
 
-        <div class="flow-step"><span class="module-tag">EWM / MM</span> <strong>Tuesday — Warehouse prepares delivery.</strong> Outbound delivery is created (from the order or by batch job). In EWM, a wave picks the 10 units from storage; warehouse worker confirms pick and pack. Goods issue is posted: inventory for P-100 decreases (MM), and the delivery document is updated. Shipment is handed to the carrier (TM may be used for freight order and tendering). <span class="timeline">Modules: SD (delivery), EWM (or WM), MM (goods issue), optionally TM.</span>
-        <div class="data-plane"><strong>Data plane (tables):</strong> LIKP (delivery header), LIPS (delivery item); MSEG/MKPF (goods issue material document); MARD (stock reduction). EWM: /SCWM/ tables for waves and tasks.</div>
-        <div class="grc-note"><strong>GRC:</strong> SoD between order entry and goods issue; delivery and stock changes are logged for inventory audits; export compliance (GTS) may block shipment if not cleared.</div></div>
+  LOOP AT lt_vbrk INTO DATA(ls_vbrk).
+    ls_entity-vbeln    = ls_vbrk-vbeln.
+    ls_entity-fkdat    = ls_vbrk-fkdat.
+    ls_entity-kunag    = ls_vbrk-kunag.
+    ls_entity-netwr    = ls_vbrk-netwr.
+    ls_entity-waerk    = ls_vbrk-waerk.
+    APPEND ls_entity TO lt_entity.
+  ENDLOOP.
 
-        <div class="flow-step"><span class="module-tag">SD + FI</span> <strong>Tuesday afternoon — Billing.</strong> Billing clerk runs billing (VF01 or Fiori “Manage Billing Documents”) for delivery 8000000567. System creates billing document 9000000789: invoice to Acme Corp for 10 × unit price + tax. At the same time, <strong>FI automatically receives a posting</strong>: Debit Accounts Receivable (customer), Credit Revenue (and tax). No double entry—one billing event, one FI document. Invoice is sent to the customer (e-mail or portal). <span class="timeline">Modules: SD (billing), FI (AR + revenue posting).</span>
-        <div class="data-plane"><strong>Data plane (tables):</strong> VBRK/VBRP (billing document); BKPF (FI doc header), BSEG (FI doc line items—AR, revenue, tax); ACDOCA (S/4HANA universal journal).</div>
-        <div class="grc-note"><strong>GRC:</strong> Billing is a critical control point—SoD between delivery and billing; revenue recognition controls (RAR if used); audit trail links SD billing to FI document for statutory and internal audit.</div></div>
+  copy_data_to_ref( EXPORTING is_data = lt_entity
+                    CHANGING  cr_data = er_entityset ).
+ENDMETHOD.</pre>
 
-        <div class="flow-step"><span class="module-tag">CO</span> <strong>Same moment — Cost of sales.</strong> When billing posts revenue, cost of sales can post to CO (from material valuation or CO-PA). Profitability analysis (CO-PA) shows revenue and cost for this order/customer. <span class="timeline">Modules: CO (cost of sales, CO-PA).</span>
-        <div class="data-plane"><strong>Data plane (tables):</strong> COEP (CO line items), ACDOCA (universal journal); CO-PA: CE1xxx/CE4xxx (profitability segments). Material valuation: MBEW, etc.</div>
-        <div class="grc-note"><strong>GRC:</strong> Cost and revenue in one place support management and statutory reporting; access to CO-PA often restricted for confidentiality; period lock prevents backdated changes.</div></div>
+    <h4>Option 2: Custom REST handler (ICF)</h4>
+    <p>Register an ICF service (SMICM → ICF) and assign a handler class. The class implements <code>IF_HTTP_EXTENSION</code>. In <code>HANDLE_REQUEST</code> you read the request (method, URI, body), run your logic (e.g. SELECT from VBRK), build JSON, and write it to the response. This is a full REST endpoint without OData.</p>
+    <p class="code-caption">ABAP: Custom REST handler class (complete example):</p>
+    <pre class="abap-code">CLASS zcl_rest_billing DEFINITION PUBLIC.
+  PUBLIC SECTION.
+    INTERFACES if_http_extension.
+ENDCLASS.
 
-        <div class="flow-step"><span class="module-tag">FI</span> <strong>Next week — Customer pays.</strong> Bank receives Acme’s payment (e.g. 15,000 EUR). Finance posts the incoming payment in FI (or via bank statement automation): allocate payment to invoice 9000000789. Accounts receivable line item is cleared; cash increases. Order is financially closed. <span class="timeline">Modules: FI (AR clearing, bank).</span>
-        <div class="data-plane"><strong>Data plane (tables):</strong> BKPF/BSEG (payment document); BSID/BSAD (AR line items—cleared); bank subledger tables; ACDOCA updated with clearing.</div>
-        <div class="grc-note"><strong>GRC:</strong> SoD between posting AR and releasing payments; payment run often requires dual control; bank reconciliation is a key control; audit trail for cash and AR.</div></div>
+CLASS zcl_rest_billing IMPLEMENTATION.
+  METHOD if_http_extension~handle_request.
+    DATA: lo_request  TYPE REF TO if_http_request,
+          lo_response TYPE REF TO if_http_response,
+          lt_vbrk     TYPE TABLE OF vbrk,
+          lv_json     TYPE string.
 
-        <p style="margin-top: 16px;"><strong>Summary:</strong> One order touched <strong>SD</strong> (order, delivery, billing), <strong>MM</strong> (inventory/stock), <strong>EWM</strong> (warehouse), <strong>FI</strong> (AR, revenue, payment), and <strong>CO</strong> (cost of sales, profitability). Nobody re-keyed the same data; each step used the same document flow and integration you saw in Module 31.</p>
-    </div>
+    lo_request  = server->request.
+    lo_response = server->response.
 
-    <h3>Example 2: From “we need material” to “vendor is paid”</h3>
-    <p>This is <strong>procure-to-pay (P2P)</strong>. We start from a shortage or a planned requirement and end when the vendor is paid.</p>
+    CASE lo_request->get_method( ).
+      WHEN 'GET'.
+        SELECT vbeln, fkdat, kunag, netwr, waerk
+          FROM vbrk
+          INTO TABLE @lt_vbrk
+          UP TO 100 ROWS
+          WHERE fkdat >= @sy-datum - 30.
 
-    <div class="example-box">
-        <h4>Purchase of raw material R-200 — “Production needs 500 kg for next week”</h4>
+        " Build JSON (use /ui2/cl_json or similar, or manual concatenation)
+        " Example: use CL_TREX_JSON_SERIALIZER or /UI2/CL_JSON
+        /ui2/cl_json=>serialize( EXPORTING data = lt_vbrk
+                                 CHANGING  r_json = lv_json ).
 
-        <div class="flow-step"><span class="module-tag">MM / PP</span> <strong>Requirement.</strong> MRP (or manual requisition) creates a purchase requisition: 500 kg of R-200, plant 1000, delivery by next Monday. Requisition is in MM; it can be converted to a purchase order or sourced via Ariba if the company uses it for this category. <span class="timeline">Modules: MM (requisition), optionally Ariba.</span>
-        <div class="data-plane"><strong>Data plane (tables):</strong> EBAN (purchase requisition), EKET (schedule lines). MRP writes planned orders (PLAF, etc.).</div>
-        <div class="grc-note"><strong>GRC:</strong> Requisition approval workflow; SoD between requester and buyer; access control by purchasing org/plant.</div></div>
+        lo_response->set_status( 200 ).
+        lo_response->set_header_field( i_name  = 'Content-Type'
+                                       i_value = 'application/json' ).
+        lo_response->set_cdata( lv_json ).
+      WHEN OTHERS.
+        lo_response->set_status( 405 ).
+        lo_response->set_cdata( '{"error":"Method not allowed"}' ).
+    ENDCASE.
+  ENDMETHOD.
+ENDCLASS.</pre>
 
-        <div class="flow-step"><span class="module-tag">MM</span> <strong>Purchase order.</strong> Buyer creates PO 4500012345: vendor “Steel Corp,” material R-200, 500 kg, price per kg, delivery address (plant/storage location). PO is sent to the vendor (e-mail, Ariba Network, or EDI). <span class="timeline">Modules: MM (PO).</span>
-        <div class="data-plane"><strong>Data plane (tables):</strong> EKKO (PO header), EKPO (PO item), EKET (schedule lines). Release strategy tables if used.</div>
-        <div class="grc-note"><strong>GRC:</strong> PO release strategy (value/authority); SoD between requisition, PO creation, and GR; GTS import compliance check before PO release.</div></div>
+    <p>After implementing the class, create an ICF node (e.g. path <code>/sap/z_rest_billing</code>) and assign the handler class. The endpoint is then <code>GET https://&lt;host&gt;/sap/z_rest_billing</code> returning JSON.</p>
 
-        <div class="flow-step"><span class="module-tag">MM</span> <strong>Goods receipt.</strong> On Monday, 500 kg of R-200 arrives. Warehouse (or receiving) posts goods receipt in MIGO (or Fiori): against PO 4500012345, 500 kg received. Inventory increases; GR/IR (goods receipt/invoice receipt) account is used until the invoice is posted. <span class="timeline">Modules: MM (goods receipt, inventory).</span>
-        <div class="data-plane"><strong>Data plane (tables):</strong> MKPF/MSEG (material document); MARD (stock); EKBE (PO history). GR/IR clearing in FI (BSIS/BSAS or ACDOCA).</div>
-        <div class="grc-note"><strong>GRC:</strong> SoD between person who ordered and person who posts GR; inventory controls and cycle count; audit trail for receipt.</div></div>
+    <h3>Streaming APIs with ABAP</h3>
+    <p><strong>Streaming</strong> means sending the response in chunks instead of building the whole payload in memory. Use cases: large result sets, server-sent events (SSE), or NDJSON (newline-delimited JSON) for real-time feeds. In ABAP you write to the HTTP response in chunks by flushing parts of the body as you generate them.</p>
+    <ul>
+        <li><strong>Chunked transfer:</strong> Set <code>Transfer-Encoding: chunked</code>. Write segments to the response; the framework sends each segment as a chunk. The client can process data as it arrives.</li>
+        <li><strong>NDJSON:</strong> Send one JSON object per line. Each line is a valid JSON object; the client reads line by line. Good for logs, events, or large lists.</li>
+    </ul>
 
-        <div class="flow-step"><span class="module-tag">MM + FI</span> <strong>Invoice verification.</strong> Vendor sends invoice for 500 kg × price. Accounts payable clerk enters it in MIRO (or Fiori “Manage Vendor Invoices”): references PO and GR. System performs three-way match (PO, GR, invoice). If OK, posting is done: Debit expense/inventory (and tax), Credit vendor (AP). FI document is created automatically; GR/IR is cleared. <span class="timeline">Modules: MM (invoice verification), FI (AP + G/L).</span>
-        <div class="data-plane"><strong>Data plane (tables):</strong> RSEG (invoice receipt); BKPF/BSEG (FI document); BSID/BSAD (AP line items); ACDOCA; EKBE updated.</div>
-        <div class="grc-note"><strong>GRC:</strong> Three-way match (PO, GR, invoice) is a key control; SoD between invoice entry and payment; duplicate invoice checks; audit trail for AP.</div></div>
+    <h4>Streaming response example (chunked NDJSON)</h4>
+    <p>Below, the handler opens the response for streaming, sets headers for JSON and chunked encoding, then loops over a large SELECT and writes one JSON line per row. Each <code>flush</code> (or writing to the stream) sends a chunk. This keeps memory usage low and allows the client to consume rows as they arrive.</p>
+    <p class="code-caption">ABAP: Streaming GET — write NDJSON chunks to response:</p>
+    <pre class="abap-code">METHOD if_http_extension~handle_request.
+  DATA: lo_request   TYPE REF TO if_http_request,
+        lo_response  TYPE REF TO if_http_response,
+        lo_stream    TYPE REF TO if_http_entity,
+        lv_json_line TYPE string,
+        lv_crlf      TYPE string VALUE cl_abap_char_utilities=>cr_lf.
 
-        <div class="flow-step"><span class="module-tag">FI</span> <strong>Payment.</strong> At payment run (e.g. weekly), finance runs the payment program: selects open items for vendors and payment method (e.g. bank transfer). System generates payment file; bank executes. FI posts: Debit vendor (AP), Credit bank. Vendor line item is cleared. <span class="timeline">Modules: FI (AP, bank).</span>
-        <div class="data-plane"><strong>Data plane (tables):</strong> BKPF/BSEG (payment doc); BSIK/BSAK (AP cleared); bank account tables; payment medium (e.g. PAYR).</div>
-        <div class="grc-note"><strong>GRC:</strong> Payment run approval; dual control for release; SoD between invoice verification and payment execution; bank reconciliation and fraud controls.</div></div>
+  lo_request  = server->request.
+  lo_response = server->response.
 
-        <p style="margin-top: 16px;"><strong>Summary:</strong> <strong>MM</strong> (requisition, PO, GR, invoice verification) and <strong>FI</strong> (AP, payment). CO gets the cost center from the PO for reporting. If Ariba is used, the PO may originate or be approved there and then sync to S/4HANA.</p>
-    </div>
+  IF lo_request->get_method( ) <> 'GET'.
+    lo_response->set_status( 405 ).
+    lo_response->set_cdata( '{"error":"Method not allowed"}' ).
+    RETURN.
+  ENDIF.
 
-    <h3>Example 3: Production and warehouse in the same day</h3>
-    <p>Northgate’s plant and warehouse work side by side: production consumes raw materials and produces finished goods; warehouse receives, stores, and ships.</p>
+  lo_response->set_status( 200 ).
+  lo_response->set_header_field( i_name  = 'Content-Type'
+                                 i_value = 'application/x-ndjson' ).
+  " Chunked transfer: do not set Content-Length; server sends chunked
+  lo_stream = lo_response->get_entity( ).
 
-    <div class="example-box">
-        <h4>A typical day at the plant and warehouse</h4>
-        <ul>
-            <li><strong>Production (PP + MM):</strong> Planner releases production orders for the week. Shop floor confirms operations (labor, machine time); components are issued to the order (MM goods issue—inventory decreases). When the order is completed, goods receipt for finished product is posted (MM—inventory increases). CO collects labor and machine costs (cost center, activity types) and settles to the order; product cost is updated. If a machine breaks, a notification is created in <strong>PM</strong> and a maintenance order is generated; after repair, order is completed and costs go to cost center or order.</li>
-            <li><strong>Warehouse (EWM + MM):</strong> Inbound: trucks arrive with raw materials or purchased parts. Receiving posts goods receipt (MM/EWM); putaway tasks move stock to bins. Outbound: as in Example 1, sales orders create outbound deliveries; waves and pick tasks are executed; goods issue is posted when the shipment leaves. Stock levels in MM and EWM stay in sync.</li>
-            <li><strong>Quality (QM):</strong> If an inspection is required (e.g. incoming inspection for R-200), an inspection lot is created at goods receipt. Quality inspects and records results; usage decision (accept/reject) drives whether stock is usable or blocked. Same idea for in-process or final inspection in production.</li>
-        </ul>
-        <p><strong>Summary:</strong> <strong>PP</strong> (orders, confirmations, settlement), <strong>MM</strong> (all movements), <strong>EWM</strong> (warehouse tasks), <strong>PM</strong> (maintenance when needed), <strong>QM</strong> (inspection and release), <strong>CO</strong> (costs and product costing).</p>
-        <div class="data-plane"><strong>Data plane (tables):</strong> PP: AFKO/AFPO, AUFK; MM: MKPF/MSEG, MARD; EWM: /SCWM/; PM: AUFK (orders), QM: QALS, QAVE (inspection/usage); CO: COEP, ACDOCA.</div>
-        <div class="grc-note"><strong>GRC:</strong> SoD between planning and execution; production and inventory changes logged; quality blocks enforce compliance; maintenance and cost postings support asset and cost controls.</div>
-    </div>
+  " Use open write stream (implementation may use response->get_entity( ) and write in chunks)
+  " Pseudocode: open stream, then in loop:
+  SELECT vbeln, fkdat, kunag, netwr
+    FROM vbrk
+    WHERE fkdat >= @sy-datum - 30
+    INTO @DATA(ls_vbrk).
+    /ui2/cl_json=>serialize( EXPORTING data = ls_vbrk
+                             CHANGING  r_json = lv_json_line ).
+    lo_stream->append_cdata( lv_json_line ).
+    lo_stream->append_cdata( lv_crlf ).
+    " Flush periodically if supported (e.g. every N rows) so client receives chunks
+  ENDSELECT.
+ENDMETHOD.</pre>
 
-    <h3>Example 4: Supporting operations — HR, travel, and month-end</h3>
-    <p>Daily operations are not only “order, produce, ship, pay.” People, travel, and period-end close are also part of how the enterprise uses SAP.</p>
+    <p>In practice, whether chunked flush is automatic or explicit depends on the ICF/Web Dispatcher version. For true streaming, ensure the response is not buffered entirely and that the client uses HTTP chunked encoding. ABAP 7.5+ and S/4HANA support writing to the response entity in a streaming fashion; check the documentation for <code>IF_HTTP_ENTITY</code> and chunked output in your release.</p>
 
-    <div class="example-box">
-        <h4>HR and travel</h4>
-        <p><strong>SuccessFactors:</strong> Hiring, onboarding, goals, performance, and learning are in the cloud. Employee master data (e.g. person number, cost center, org unit) can replicate to S/4HANA so that when time is recorded or costs are allocated, the right cost center is used. <strong>Concur:</strong> Employees book travel and submit expenses in Concur. Approved expense reports can create postings in S/4HANA (via CPI): debit expense account (and employee receivable if applicable), credit AP or bank. So “daily operations” for a sales rep include Concur for a trip and S/4HANA for the order they closed.</p>
-        <div class="data-plane"><strong>Data plane (tables):</strong> Replicated employee/cost center data in S/4HANA; FI: BKPF/BSEG, ACDOCA for expense postings; AP for travel vendor or employee clearing.</div>
-        <div class="grc-note"><strong>GRC:</strong> Expense approval workflow; SoD between requester and approver; policy compliance (travel, delegation); audit trail for T&amp;E and HR data.</div>
-        <h4>Month-end close (Finance)</h4>
-        <p>At period-end, finance runs the books. <strong>FI:</strong> Recurring entries, accruals, depreciation (FI-AA), bank reconciliation. Subledgers (AR, AP) are closed to the G/L; financial statements are generated. <strong>CO:</strong> Cost center allocations (KO8G or equivalent), internal order settlement, profit center reporting. If the company uses <strong>Central Finance</strong>, source systems replicate to central and group reporting runs there. If they use <strong>RAR</strong>, revenue recognition runs and posts contract assets/liabilities. <strong>Reporting:</strong> BW/4HANA or SAC may pull data from S/4HANA for management dashboards and statutory reports. <strong>GRC:</strong> Access recertification and control checks may run as part of the close or compliance cycle (SoD, process controls, audit readiness).</p>
-        <div class="data-plane"><strong>Data plane (tables):</strong> FI/CO close: BKPF/BSEG, ACDOCA, COEP; asset depreciation: ANEP; replications to Central Finance; GRC: AGR* (roles), audit logs, control run results.</div>
-        <div class="grc-note"><strong>GRC:</strong> Period lock prevents prior-period postings; access recertification (GRC AC) and SoD checks; process control monitoring (GRC PC); audit trail for close and reporting.</div>
-    </div>
-
-    <h3>Who uses which modules (roles)</h3>
-    <p>In practice, each role works mainly in a subset of transactions and Fiori apps. The table below maps typical roles to the modules they touch daily. One person may have more than one role (e.g. “procurement and AP”).</p>
+    <h3>Summary table</h3>
     <div class="step-box">
         <table>
-            <tr><th>Role</th><th>Typical daily use (modules)</th></tr>
-            <tr><td>Sales / Order entry</td><td>SD (orders, deliveries, pricing); FSCM if credit check; CX if using CRM</td></tr>
-            <tr><td>Warehouse / Logistics</td><td>EWM or WM (pick, pack, ship); MM (goods movements); TM if planning freight</td></tr>
-            <tr><td>Production planner / Shop floor</td><td>PP (orders, MRP, confirmations); MM (component issue, product receipt); PM (notifications)</td></tr>
-            <tr><td>Procurement / Buyer</td><td>MM (requisition, PO); Ariba if used; GTS if import/export</td></tr>
-            <tr><td>Accounts payable</td><td>MM (invoice verification), FI (AP, payment run, bank)</td></tr>
-            <tr><td>Accounts receivable / Collections</td><td>FI (AR, payment allocation, dunning); FSCM (collections, disputes) if used</td></tr>
-            <tr><td>Controller / Finance</td><td>FI (G/L, close, reporting), CO (allocations, profitability, internal orders)</td></tr>
-            <tr><td>HR (if on-prem)</td><td>HCM (personnel, time, payroll); if cloud: SuccessFactors, data sync to S/4HANA</td></tr>
-            <tr><td>Maintenance</td><td>PM (notifications, orders, completion); MM (spare parts, procurement)</td></tr>
-            <tr><td>Quality</td><td>QM (inspection lots, results, usage decision); PP/MM at goods receipt or production</td></tr>
-            <tr><td>GRC / Compliance / Internal audit</td><td>GRC (access recertification, SoD, process controls); GTS (trade compliance); audit logs and control monitoring</td></tr>
+            <tr><th>Approach</th><th>Tool / framework</th><th>Use case</th></tr>
+            <tr><td>OData (REST)</td><td>SAP Gateway, SEGW, DPC_EXT</td><td>Standard CRUD over entity sets; Fiori, external apps</td></tr>
+            <tr><td>Custom REST</td><td>ICF + IF_HTTP_EXTENSION</td><td>Custom URLs, full control over JSON and status codes</td></tr>
+            <tr><td>Streaming</td><td>ICF + chunked response, NDJSON</td><td>Large data, SSE, real-time feeds</td></tr>
+            <tr><td>Released APIs</td><td>S/4HANA API Business Hub</td><td>Consume prepackaged OData/REST; no custom code</td></tr>
         </table>
     </div>
 
-    <div class="plain-terms">
-        <strong>In plain terms:</strong> “Modules” are not separate buildings—they are different <em>areas of the same system</em>. When the warehouse posts “goods issue for delivery 8000000567,” that one action updates SD (delivery status), MM (inventory), and later FI (when billing posts revenue and cost). So the enterprise runs one integrated process; the course split it into modules so you could learn each part clearly.
-    </div>
+    <div class="info-box"><strong>Relationship to other modules:</strong> Module 24 (ABAP Basics) covers the language and transport; this module applies ABAP to REST and streaming. Module 29 (Integration) covers CPI and OData from an integration perspective. Module 22 (BTP) and Module 28 (Fiori) consume these APIs. For S/4HANA Cloud, prefer released APIs and extension on BTP (ABAP Cloud) where possible.</div>
 
-    <h3>Integration in practice: one action, many effects</h3>
-    <p>To reinforce how “one action” propagates:</p>
-    <ul>
-        <li><strong>Posting a vendor invoice (MIRO):</strong> One click can create an FI document (AP + expense/inventory), update the vendor balance, and (if cost center is on the PO) send cost to CO. GR/IR is cleared. No separate “FI entry” needed.</li>
-        <li><strong>Creating a billing document (VF01):</strong> One action creates the customer invoice (SD), posts AR and revenue (FI), and can post cost of sales (CO). Document flow links order → delivery → billing → FI document.</li>
-        <li><strong>Confirming a production order:</strong> Confirmation posts labor and machine time to CO (cost center); goods issue and goods receipt move inventory (MM) and update the order. When the order is settled, cost flows to the finished product or to a profit center.</li>
-    </ul>
-    <p>This is why master data and configuration matter: the right cost center, account, and material type ensure that automatic postings hit the correct place in FI and CO.</p>
-
-    <div class="info-box"><strong>Relationship to other modules:</strong> This chapter builds on Module 1 (foundation), Module 2 (navigation and overview), and Module 31 (cross-module integration). Every example references specific modules (3–45); use the sidebar to open any module for detail. Module 41 (Activate) describes how such an enterprise would have been implemented; Module 37 (ALM) describes how they run and monitor the system day to day.</div>
+    <h3>Key concepts</h3>
+    <p><strong>REST:</strong> Architectural style over HTTP — resources (URLs), methods (GET/POST/PUT/DELETE), stateless. <strong>OData:</strong> Protocol built on REST; SAP Gateway exposes OData. <strong>ICF:</strong> Internet Communication Framework — registers HTTP handlers in SAP. <strong>Streaming:</strong> Sending response in chunks (chunked transfer) so the client can process data incrementally; NDJSON is one format.</p>
 
     <div class="quiz-section">
-        <h3>📝 Module Quiz</h3>
+        <h3>Module Quiz</h3>
         <div class="quiz-question">
-            <h4>Q1: When the warehouse posts “goods issue” for an outbound delivery, what happens next in SAP?</h4>
+            <h4>Q1: In SAP, REST-style APIs are most commonly exposed via:</h4>
             <ul class="quiz-options">
-                <li>A) Only SD is updated</li>
-                <li>B) Inventory decreases (MM), delivery status updates (SD); later billing will post AR and revenue (FI) and cost of sales (CO)</li>
-                <li>C) Only FI is updated</li>
-                <li>D) Only PM is updated</li>
+                <li>A) IDoc only</li>
+                <li>B) OData (SAP Gateway) and custom ICF handlers</li>
+                <li>C) Only CPI</li>
+                <li>D) Only BAPI</li>
             </ul>
             <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
-            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>Goods issue is one event that updates MM and SD; the subsequent billing step creates the FI and CO postings.</div>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>OData via Gateway is the standard RESTful API in SAP; custom REST can be built with ICF and IF_HTTP_EXTENSION.</div>
         </div>
         <div class="quiz-question">
-            <h4>Q2: In procure-to-pay, who typically creates the FI document (AP + expense) when the vendor invoice is received?</h4>
+            <h4>Q2: For a custom REST endpoint in ABAP (no OData), you implement:</h4>
             <ul class="quiz-options">
-                <li>A) Only the vendor</li>
-                <li>B) The AP clerk (or automated process) when they post invoice verification (MIRO); the system creates the FI document automatically</li>
-                <li>C) Only SD</li>
-                <li>D) Only PP</li>
+                <li>A) Only SE38 report</li>
+                <li>B) A class implementing IF_HTTP_EXTENSION, registered in ICF</li>
+                <li>C) Only BAPI</li>
+                <li>D) Only IDoc</li>
             </ul>
             <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
-            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Invoice verification in MM triggers the FI posting; no separate manual FI entry is needed for standard P2P.</div>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>ICF handler class implementing IF_HTTP_EXTENSION~HANDLE_REQUEST processes the HTTP request and writes the response.</div>
         </div>
         <div class="quiz-question">
-            <h4>Q3: Why does a “typical enterprise” use several modules in one day?</h4>
+            <h4>Q3: Streaming APIs are useful when:</h4>
             <ul class="quiz-options">
-                <li>A) Each department has a separate SAP system</li>
-                <li>B) One SAP system supports many processes; sales, warehouse, production, and finance all use the same system but different transactions and apps (SD, MM, PP, FI, etc.)</li>
-                <li>C) Only one module is used per day</li>
-                <li>D) Modules are only for reporting</li>
+                <li>A) You only need one record</li>
+                <li>B) You need to send large or continuous data in chunks so the client can process incrementally</li>
+                <li>C) You only use GET</li>
+                <li>D) You do not use JSON</li>
             </ul>
             <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
-            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>The enterprise runs one integrated system; different roles use different parts (modules) of it.</div>
-        </div>
-        <div class="quiz-question">
-            <h4>Q4: In the order-to-cash example, which module is responsible for posting “Accounts Receivable” and “Revenue” when the customer is billed?</h4>
-            <ul class="quiz-options">
-                <li>A) Only SD</li>
-                <li>B) FI—the posting is triggered by SD billing (VF01); FI stores the AR and revenue and tax accounts</li>
-                <li>C) Only PP</li>
-                <li>D) Only MM</li>
-            </ul>
-            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
-            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>SD billing triggers the posting; the accounting document (AR, revenue) is created and stored in FI.</div>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>Streaming (chunked transfer, NDJSON) sends data in segments, reducing memory and enabling real-time or large payloads.</div>
         </div>
     </div>
     <script>
-        function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
     </script>
 </body>
 </html>

@@ -35,6 +35,18 @@
         .quiz-answer.show { display: block; }
         .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
         code { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+        .abap-code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.85em; line-height: 1.5; margin: 12px 0 0 0; padding: 14px 16px;
+            background: #1e1e2e; color: #d4d4d4; border-radius: 6px; overflow-x: auto;
+            border: 1px solid #333; text-align: left; white-space: pre;
+        }
+        .abap-code .k { color: #569cd6; }   /* keyword */
+        .abap-code .s { color: #ce9178; }   /* string */
+        .abap-code .c { color: #6a9955; }   /* comment */
+        .abap-code .n { color: #b5cea8; }   /* number/type */
+        .abap-code .t { color: #4ec9b0; }   /* built-in */
+        .code-caption { font-size: 0.9em; color: #555; margin-top: 8px; margin-bottom: 4px; }
     </style>
 </head>
 <body>
@@ -73,7 +85,21 @@
             <li><strong>Develop (SE38 or ADT):</strong> ABAP program: SELECT from relevant tables with filters (billing date, company code). Loop and output to ALV grid (CL_SALV_TABLE) or use CDS view + Fiori. Authorization checks (e.g. company code) via SU53 if user lacks access.</li>
             <li><strong>Transport:</strong> Save in package; create transport request (SE09). Release and export from dev; import in test and prod. Assign transaction code and role so users can run it.</li>
         </ol>
-        <p>Result: Report runs in S/4HANA; data from FI and SD; deployment via transport.</p>
+        <p class="code-caption">Typical Open SQL in the report (S/4HANA: inline declarations, <code>@</code> host variables):</p>
+        <pre class="abap-code">SELECT vbeln, fkdat, kunag, netwr
+  FROM vbrk
+  WHERE fkdat >= @sy-datum - 30
+  INTO TABLE @DATA(lt_billing).
+
+LOOP AT lt_billing INTO DATA(ls).
+  " Get FI line (e.g. ACDOCA) for cost center
+  SELECT SINGLE kostl FROM acdoca
+    WHERE rldnr = '0L' AND rbukrs = @ls-bukrs
+      AND docnr = @ls-vbeln
+    INTO @DATA(lv_kostl).
+  " Output: ls-vbeln, ls-netwr, lv_kostl ...
+ENDLOOP.</pre>
+        <p>Result: Report runs in S/4HANA; data from FI and SD; deployment via transport. Try the interactive steps below to see the full flow with more code.</p>
     </div>
 
     <div class="step-box">
@@ -91,7 +117,7 @@
 
     <div class="interactive-container">
         <h4>🎯 Interactive: From development to production</h4>
-        <p>Click to see how ABAP code moves through the landscape.</p>
+        <p>Click each step to see what happens and the ABAP code involved.</p>
         <button type="button" id="abap-step1">1. Develop in dev</button>
         <button type="button" id="abap-step2">2. Transport</button>
         <button type="button" id="abap-step3">3. Import in prod</button>
@@ -158,11 +184,24 @@
             'Transport request is released and exported (SE09, STMS). Request is in the transport queue for target systems (test, prod).',
             'Basis imports the transport into test (and after approval, into production). Object is now available in target system. Roles grant execution.'
         ];
+        var snippets = [
+            'REPORT z_report_billed_orders.\n\nDATA: lt_billing TYPE TABLE OF vbrk,\n      ls_billing TYPE vbrk.\n\nSELECT * FROM vbrk\n  INTO TABLE @lt_billing\n  WHERE fkdat >= @sy-datum - 30\n    AND vkorg = @sy-mandt.\n\nLOOP AT lt_billing INTO ls_billing.\n  WRITE: / ls_billing-vbeln, ls_billing-fkdat, ls_billing-kunag.\nENDLOOP.\n\n" Or: use CL_SALV_TABLE for ALV grid output',
+            '" In SE09: object is assigned to transport request\n" Example: Program Z_REPORT_BILLED_ORDERS → Request N2K912345\n\n" Release request (developer):\n" SE09 → Release (unlock; export from dev)\n\n" Transport queue (STMS):\n" Request appears in import queue of test/prod',
+            '" After import: same program exists in production\n" Transaction code (e.g. ZRPT) and role (PFCG) grant execution\n\n" User runs in prod:\n" SU01 / PFCG: user has auth. object S_VBRK (billing doc)\n" Program runs with prod data (VBRK, BSEG, etc.)'
+        ];
+        var captions = [
+            'Example: report reading billing docs (VBRK). SELECT, loop, output. In dev you test with dev data.',
+            'No ABAP execution here—SE09/STMS. Code is in the transport file; released and queued for import.',
+            'No code change—object is now in prod. Authorization (SU53 if missing) controls who can run the report.'
+        ];
         var flowEl = document.getElementById('abap-flow');
         [1,2,3].forEach(function(n) {
             var btn = document.getElementById('abap-step' + n);
             if (btn && flowEl) btn.addEventListener('click', function() {
-                flowEl.innerHTML = '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>';
+                flowEl.innerHTML =
+                    '<div class="flow-step"><strong>Step ' + n + ':</strong> ' + steps[n-1] + '</div>' +
+                    (captions[n-1] ? '<p class="code-caption">' + captions[n-1] + '</p>' : '') +
+                    '<pre class="abap-code">' + (snippets[n-1] || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</pre>';
                 flowEl.classList.add('show');
             });
         });
