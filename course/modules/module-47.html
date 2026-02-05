@@ -91,6 +91,10 @@
         .step-result strong { color: #4ecca3; }
         .modules-used { margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(78,204,163,0.3); }
         .module-pill { display: inline-block; background: rgba(102,126,234,0.4); color: #a5b4fc; padding: 3px 10px; border-radius: 6px; font-size: 0.8em; margin: 2px 4px 2px 0; }
+        .data-plane { font-size: 0.8em; color: #a0a0b8; margin-top: 8px; padding: 8px 10px; background: rgba(0,0,0,0.2); border-radius: 6px; border-left: 3px solid #6b7280; }
+        .data-plane strong { color: #c4c4d4; }
+        .grc-note { font-size: 0.8em; margin-top: 6px; padding: 8px 10px; background: rgba(201,162,39,0.12); border-radius: 6px; border-left: 3px solid #c9a227; color: #d4c9a0; }
+        .grc-note strong { color: #e6d9a0; }
         .mission-complete-box {
             display: none; text-align: center; padding: 24px; margin-top: 20px;
             background: linear-gradient(135deg, rgba(78,204,163,0.2), rgba(59,168,122,0.15));
@@ -154,6 +158,8 @@
                     <div class="step-result" id="m1s1-result">
                         <strong>Order 80007890</strong> created. Customer Acme Corp, 50 × P-X200, delivery 10 days. ATP checked; pricing applied automatically.<br>
                         <div class="modules-used"><strong>Modules:</strong> <span class="module-pill">SD</span> <span class="module-pill">Pricing</span></div>
+                        <div class="data-plane"><strong>Data plane (tables):</strong> VBAK, VBAP (order); KONV (pricing); MARD/MARC (ATP).</div>
+                        <div class="grc-note"><strong>GRC:</strong> Authorization (order creation); SoD order entry vs release; audit log.</div>
                     </div>
                 </div>
                 <div class="mission-step" id="m1s2">
@@ -163,6 +169,8 @@
                     <div class="step-result" id="m1s2-result">
                         <strong>Credit check passed</strong> (FSCM). Exposure within limit. <strong>Export check passed</strong> (GTS)—no license required for destination.<br>
                         <div class="modules-used"><strong>Modules:</strong> <span class="module-pill">FSCM</span> <span class="module-pill">GTS</span></div>
+                        <div class="data-plane"><strong>Data plane (tables):</strong> FSCM credit exposure; GTS compliance/license tables; order status updated (VBAK).</div>
+                        <div class="grc-note"><strong>GRC:</strong> Credit and trade compliance are control points; blocked orders go to workflow; audit trail for release.</div>
                     </div>
                 </div>
                 <div class="mission-step" id="m1s3">
@@ -172,6 +180,8 @@
                     <div class="step-result" id="m1s3-result">
                         <strong>Order released.</strong> Available for delivery and warehouse processing.<br>
                         <div class="modules-used"><strong>Modules:</strong> <span class="module-pill">SD</span></div>
+                        <div class="data-plane"><strong>Data plane (tables):</strong> VBAK (status); document flow tables; availability updated.</div>
+                        <div class="grc-note"><strong>GRC:</strong> Release may require approval; SoD between order entry and release; change log.</div>
                     </div>
                 </div>
                 <div class="mission-complete-box" id="m1-done">
@@ -196,6 +206,8 @@
                     <div class="step-result" id="m2s1-result">
                         <strong>Production order 1000001234</strong> released. BOM and routing loaded; components reserved.<br>
                         <div class="modules-used"><strong>Modules:</strong> <span class="module-pill">PP</span> <span class="module-pill">MM</span></div>
+                        <div class="data-plane"><strong>Data plane (tables):</strong> AFKO, AFPO, AUFK (order); RESB (reservations); STPO, MAST (BOM); PLKO, PLPO (routing).</div>
+                        <div class="grc-note"><strong>GRC:</strong> Order release approval; SoD planning vs execution; audit trail for orders.</div>
                     </div>
                 </div>
                 <div class="mission-step" id="m2s2">
@@ -205,6 +217,8 @@
                     <div class="step-result" id="m2s2-result">
                         <strong>Goods issue posted.</strong> Inventory reduced. Inspection lot created (QM); usage decision: accept.<br>
                         <div class="modules-used"><strong>Modules:</strong> <span class="module-pill">MM</span> <span class="module-pill">QM</span></div>
+                        <div class="data-plane"><strong>Data plane (tables):</strong> MKPF, MSEG (goods issue); MARD (stock); QALS, QAVE (inspection/usage decision).</div>
+                        <div class="grc-note"><strong>GRC:</strong> SoD issue vs receipt; quality block until usage decision; inventory controls; audit trail.</div>
                     </div>
                 </div>
                 <div class="mission-step" id="m2s3">
@@ -214,6 +228,8 @@
                     <div class="step-result" id="m2s3-result">
                         <strong>Order confirmed.</strong> Labor and machine time posted to CO. <strong>Goods receipt</strong> for P-X200 into stock. PM notification 100000056 created for follow-up.<br>
                         <div class="modules-used"><strong>Modules:</strong> <span class="module-pill">PP</span> <span class="module-pill">MM</span> <span class="module-pill">CO</span> <span class="module-pill">PM</span></div>
+                        <div class="data-plane"><strong>Data plane (tables):</strong> AFPO (confirmations); MKPF/MSEG (GR); MARD; COEP; AUFK (PM notification).</div>
+                        <div class="grc-note"><strong>GRC:</strong> Confirmation and GR are critical; SoD; cost and asset audit trail; PM for asset compliance.</div>
                     </div>
                 </div>
                 <div class="mission-complete-box" id="m2-done">
@@ -238,6 +254,8 @@
                     <div class="step-result" id="m3s1-result">
                         <strong>Delivery 8000000789</strong> created. Wave generated in EWM; pick tasks assigned to bins.<br>
                         <div class="modules-used"><strong>Modules:</strong> <span class="module-pill">SD</span> <span class="module-pill">EWM</span></div>
+                        <div class="data-plane"><strong>Data plane (tables):</strong> LIKP, LIPS (delivery); /SCWM/ wave and task tables; link to VBAK/VBAP.</div>
+                        <div class="grc-note"><strong>GRC:</strong> SoD order vs delivery; delivery creation logged; GTS export can block if not cleared.</div>
                     </div>
                 </div>
                 <div class="mission-step" id="m3s2">
@@ -247,6 +265,8 @@
                     <div class="step-result" id="m3s2-result">
                         <strong>Pick confirmed.</strong> Goods issue posted; stock reduced. Delivery document updated.<br>
                         <div class="modules-used"><strong>Modules:</strong> <span class="module-pill">EWM</span> <span class="module-pill">MM</span></div>
+                        <div class="data-plane"><strong>Data plane (tables):</strong> MKPF, MSEG (goods issue); MARD; LIKP/LIPS (delivery status); EWM task tables.</div>
+                        <div class="grc-note"><strong>GRC:</strong> SoD pick vs order entry; inventory and delivery audit trail; stock accuracy controls.</div>
                     </div>
                 </div>
                 <div class="mission-step" id="m3s3">
@@ -256,6 +276,8 @@
                     <div class="step-result" id="m3s3-result">
                         <strong>Freight order</strong> created (TM). Carrier assigned; shipment 500000123 created. GTS export declaration submitted.<br>
                         <div class="modules-used"><strong>Modules:</strong> <span class="module-pill">TM</span> <span class="module-pill">GTS</span></div>
+                        <div class="data-plane"><strong>Data plane (tables):</strong> TM shipment/freight order tables; GTS declaration and license tables; LIKP (shipment status).</div>
+                        <div class="grc-note"><strong>GRC:</strong> Trade compliance (GTS) mandatory for export; TM and GTS logs support customs and audit.</div>
                     </div>
                 </div>
                 <div class="mission-complete-box" id="m3-done">
@@ -280,6 +302,8 @@
                     <div class="step-result" id="m4s1-result">
                         <strong>Invoice 9000000456</strong> created. Debit AR, Credit Revenue + tax. Cost of sales posted to CO. RAR run (if applicable) updates contract balances.<br>
                         <div class="modules-used"><strong>Modules:</strong> <span class="module-pill">SD</span> <span class="module-pill">FI</span> <span class="module-pill">CO</span> <span class="module-pill">RAR</span></div>
+                        <div class="data-plane"><strong>Data plane (tables):</strong> VBRK, VBRP (billing); BKPF, BSEG, ACDOCA (FI); COEP; RAR contract/balance tables.</div>
+                        <div class="grc-note"><strong>GRC:</strong> Billing is key control; SoD delivery vs billing; revenue recognition (RAR); audit link SD–FI.</div>
                     </div>
                 </div>
                 <div class="mission-step" id="m4s2">
@@ -289,6 +313,8 @@
                     <div class="step-result" id="m4s2-result">
                         <strong>Payment received.</strong> Allocated to invoice 9000000456. AR cleared. FSCM exposure updated. Order-to-cash closed.<br>
                         <div class="modules-used"><strong>Modules:</strong> <span class="module-pill">FI</span> <span class="module-pill">FSCM</span></div>
+                        <div class="data-plane"><strong>Data plane (tables):</strong> BKPF, BSEG (payment); BSID/BSAD (AR cleared); ACDOCA; FSCM exposure tables.</div>
+                        <div class="grc-note"><strong>GRC:</strong> SoD AR posting vs payment release; dual control on payment run; bank reconciliation; audit trail cash/AR.</div>
                     </div>
                 </div>
                 <div class="mission-complete-box" id="m4-done">
@@ -313,6 +339,8 @@
                     <div class="step-result" id="m5s1-result">
                         <strong>PO 4500012345</strong> created. Vendor SteelWorld; 2,000 kg R-500. GTS import check passed. PO sent via Ariba Network.<br>
                         <div class="modules-used"><strong>Modules:</strong> <span class="module-pill">MM</span> <span class="module-pill">GTS</span> <span class="module-pill">Ariba</span></div>
+                        <div class="data-plane"><strong>Data plane (tables):</strong> EKKO, EKPO, EKET (PO); GTS import/compliance tables; Ariba sync tables.</div>
+                        <div class="grc-note"><strong>GRC:</strong> PO release strategy; SoD requisition vs PO; GTS import compliance; approval workflow.</div>
                     </div>
                 </div>
                 <div class="mission-step" id="m5s2">
@@ -322,6 +350,8 @@
                     <div class="step-result" id="m5s2-result">
                         <strong>Goods receipt</strong> posted. <strong>Invoice verification</strong> done. FI: Debit expense, Credit AP; GR/IR cleared. Cost hit cost center (CO).<br>
                         <div class="modules-used"><strong>Modules:</strong> <span class="module-pill">MM</span> <span class="module-pill">FI</span> <span class="module-pill">CO</span></div>
+                        <div class="data-plane"><strong>Data plane (tables):</strong> MKPF, MSEG (GR); RSEG, BKPF, BSEG (invoice); BSIK/BSAK, COEP, ACDOCA; EKBE.</div>
+                        <div class="grc-note"><strong>GRC:</strong> Three-way match (PO, GR, invoice); SoD GR vs invoice; duplicate check; AP audit trail.</div>
                     </div>
                 </div>
                 <div class="mission-step" id="m5s3">
@@ -331,6 +361,8 @@
                     <div class="step-result" id="m5s3-result">
                         <strong>Payment run</strong> completed. Vendor 10001234 cleared. Bank account debited. Procure-to-pay closed.<br>
                         <div class="modules-used"><strong>Modules:</strong> <span class="module-pill">FI</span></div>
+                        <div class="data-plane"><strong>Data plane (tables):</strong> BKPF, BSEG (payment); BSIK/BSAK (AP cleared); bank subledger; ACDOCA.</div>
+                        <div class="grc-note"><strong>GRC:</strong> Payment run approval; dual control; SoD invoice verification vs payment; bank reconciliation.</div>
                     </div>
                 </div>
                 <div class="mission-complete-box" id="m5-done">
@@ -355,6 +387,8 @@
                     <div class="step-result" id="m6s1-result">
                         <strong>Data collected.</strong> Scope 1/2 from FI/CO; Scope 3 from MM/Ariba. PFM recalculated for key products. Control Tower report ready.<br>
                         <div class="modules-used"><strong>Modules:</strong> <span class="module-pill">Sustainability</span> <span class="module-pill">FI/CO</span> <span class="module-pill">MM</span></div>
+                        <div class="data-plane"><strong>Data plane (tables):</strong> Sustainability Control Tower/PFM tables; source: ACDOCA, COEP, MSEG, EKKO/EKPO; product footprint.</div>
+                        <div class="grc-note"><strong>GRC:</strong> ESG reporting controls; data consistency and auditability for disclosure; alignment with reporting standards.</div>
                     </div>
                 </div>
                 <div class="mission-step" id="m6s2">
@@ -364,6 +398,8 @@
                     <div class="step-result" id="m6s2-result">
                         <strong>Close completed.</strong> G/L and subledgers reconciled. CO allocations and settlement done. Data replicated to Central Finance. SAC/BW reports updated.<br>
                         <div class="modules-used"><strong>Modules:</strong> <span class="module-pill">FI</span> <span class="module-pill">CO</span> <span class="module-pill">CeFIN</span> <span class="module-pill">SAC/BW</span></div>
+                        <div class="data-plane"><strong>Data plane (tables):</strong> BKPF, BSEG, ACDOCA, COEP; period lock; CeFIN replication tables; BW/ACDOCA extract.</div>
+                        <div class="grc-note"><strong>GRC:</strong> Period close lock; reconciliation controls; group reporting integrity; audit-ready close.</div>
                     </div>
                 </div>
                 <div class="mission-step" id="m6s3">
@@ -373,6 +409,8 @@
                     <div class="step-result" id="m6s3-result">
                         <strong>GRC run complete.</strong> Recertification tasks sent to managers. Process controls evaluated; one exception flagged for review. Audit trail updated.<br>
                         <div class="modules-used"><strong>Modules:</strong> <span class="module-pill">GRC</span></div>
+                        <div class="data-plane"><strong>Data plane (tables):</strong> GRC AC (roles, recertification); GRC PC (process controls, exceptions); audit log tables; AGR*, USR*.</div>
+                        <div class="grc-note"><strong>GRC:</strong> Access recertification (SoD, critical access); process control monitoring; exception handling; audit trail for compliance.</div>
                     </div>
                 </div>
                 <div class="mission-complete-box" id="m6-done">
@@ -397,9 +435,16 @@
         var missionProgress = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
         var completedMissions = 0;
 
+        function notifyParentResize() {
+            try { window.parent.postMessage({ type: 'resizeIframe' }, '*'); } catch (e) {}
+        }
+
         function toggleMission(num) {
             var body = document.getElementById('m' + num + '-body');
             body.classList.toggle('open');
+            if (body.classList.contains('open')) {
+                requestAnimationFrame(function() { requestAnimationFrame(notifyParentResize); });
+            }
         }
 
         function runStep(mission, step) {
@@ -414,6 +459,7 @@
             if (missionProgress[mission] >= missionSteps[mission]) {
                 completeMission(mission);
             }
+            requestAnimationFrame(function() { requestAnimationFrame(notifyParentResize); });
             return false;
         }
 
@@ -428,6 +474,7 @@
             document.getElementById('b' + mission).classList.add('unlocked');
             updateProgress();
             if (completedMissions === 6) document.getElementById('all-done-box').style.display = 'block';
+            requestAnimationFrame(function() { requestAnimationFrame(notifyParentResize); });
         }
 
         function updateProgress() {

@@ -33,6 +33,10 @@
         .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
         .quiz-answer.show { display: block; }
         .timeline { font-size: 0.9em; color: #555; margin-top: 6px; }
+        .data-plane { font-size: 0.85em; color: #444; margin-top: 8px; padding: 8px 10px; background: #f5f5f5; border-radius: 4px; border-left: 3px solid #888; }
+        .data-plane strong { color: #555; }
+        .grc-note { font-size: 0.85em; margin-top: 6px; padding: 8px 10px; background: #fff8e6; border-radius: 4px; border-left: 3px solid #c9a227; }
+        .grc-note strong { color: #8b6914; }
     </style>
 </head>
 <body>
@@ -57,17 +61,29 @@
     <div class="example-box">
         <h4>Order 80001234 — “Customer Acme Corp, 10 units of product P-100, delivery in 5 days”</h4>
 
-        <div class="flow-step"><span class="module-tag">SD</span> <strong>Monday 09:00 — Sales creates the order.</strong> The sales rep enters the order in Fiori “Manage Sales Orders” (or VA01): customer Acme Corp, material P-100, quantity 10, requested delivery date in 5 days. System checks material availability (ATP), applies pricing (from condition records), and may run credit check (FSCM if active). Order 80001234 is saved. <span class="timeline">Modules: SD (order), optionally FSCM (credit).</span></div>
+        <div class="flow-step"><span class="module-tag">SD</span> <strong>Monday 09:00 — Sales creates the order.</strong> The sales rep enters the order in Fiori “Manage Sales Orders” (or VA01): customer Acme Corp, material P-100, quantity 10, requested delivery date in 5 days. System checks material availability (ATP), applies pricing (from condition records), and may run credit check (FSCM if active). Order 80001234 is saved. <span class="timeline">Modules: SD (order), optionally FSCM (credit).</span>
+        <div class="data-plane"><strong>Data plane (tables):</strong> VBAK (sales order header), VBAP (sales order item), KONV (pricing conditions). ATP checks stock tables (e.g. MARD, MARC).</div>
+        <div class="grc-note"><strong>GRC:</strong> User authorization checked (order creation); segregation of duties (SoD) between order entry and release; audit log records who created the order and when.</div></div>
 
-        <div class="flow-step"><span class="module-tag">PP / MM</span> <strong>Monday 10:00 — Planning and production (if make-to-order or shortage).</strong> If P-100 is make-to-stock, warehouse may already have stock. If not, MRP (MD04 or planning run) creates a planned order or triggers production. Production orders (PP) are released; components are issued (MM), work is confirmed (PP), and finished goods are received into stock (MM). For this example, assume P-100 is in stock at the warehouse. <span class="timeline">Modules: PP, MM (goods movements, inventory).</span></div>
+        <div class="flow-step"><span class="module-tag">PP / MM</span> <strong>Monday 10:00 — Planning and production (if make-to-order or shortage).</strong> If P-100 is make-to-stock, warehouse may already have stock. If not, MRP (MD04 or planning run) creates a planned order or triggers production. Production orders (PP) are released; components are issued (MM), work is confirmed (PP), and finished goods are received into stock (MM). For this example, assume P-100 is in stock at the warehouse. <span class="timeline">Modules: PP, MM (goods movements, inventory).</span>
+        <div class="data-plane"><strong>Data plane (tables):</strong> AFPO/AFKO (production order), RESB (reservations), MSEG/MKPF (material document for issue/receipt), MARD (stock). CO postings: COEP (line items).</div>
+        <div class="grc-note"><strong>GRC:</strong> Release of production order may require approval workflow; goods movements are critical—SoD between person who orders and person who posts GR; change logs on orders support audit.</div></div>
 
-        <div class="flow-step"><span class="module-tag">EWM / MM</span> <strong>Tuesday — Warehouse prepares delivery.</strong> Outbound delivery is created (from the order or by batch job). In EWM, a wave picks the 10 units from storage; warehouse worker confirms pick and pack. Goods issue is posted: inventory for P-100 decreases (MM), and the delivery document is updated. Shipment is handed to the carrier (TM may be used for freight order and tendering). <span class="timeline">Modules: SD (delivery), EWM (or WM), MM (goods issue), optionally TM.</span></div>
+        <div class="flow-step"><span class="module-tag">EWM / MM</span> <strong>Tuesday — Warehouse prepares delivery.</strong> Outbound delivery is created (from the order or by batch job). In EWM, a wave picks the 10 units from storage; warehouse worker confirms pick and pack. Goods issue is posted: inventory for P-100 decreases (MM), and the delivery document is updated. Shipment is handed to the carrier (TM may be used for freight order and tendering). <span class="timeline">Modules: SD (delivery), EWM (or WM), MM (goods issue), optionally TM.</span>
+        <div class="data-plane"><strong>Data plane (tables):</strong> LIKP (delivery header), LIPS (delivery item); MSEG/MKPF (goods issue material document); MARD (stock reduction). EWM: /SCWM/ tables for waves and tasks.</div>
+        <div class="grc-note"><strong>GRC:</strong> SoD between order entry and goods issue; delivery and stock changes are logged for inventory audits; export compliance (GTS) may block shipment if not cleared.</div></div>
 
-        <div class="flow-step"><span class="module-tag">SD + FI</span> <strong>Tuesday afternoon — Billing.</strong> Billing clerk runs billing (VF01 or Fiori “Manage Billing Documents”) for delivery 8000000567. System creates billing document 9000000789: invoice to Acme Corp for 10 × unit price + tax. At the same time, <strong>FI automatically receives a posting</strong>: Debit Accounts Receivable (customer), Credit Revenue (and tax). No double entry—one billing event, one FI document. Invoice is sent to the customer (e-mail or portal). <span class="timeline">Modules: SD (billing), FI (AR + revenue posting).</span></div>
+        <div class="flow-step"><span class="module-tag">SD + FI</span> <strong>Tuesday afternoon — Billing.</strong> Billing clerk runs billing (VF01 or Fiori “Manage Billing Documents”) for delivery 8000000567. System creates billing document 9000000789: invoice to Acme Corp for 10 × unit price + tax. At the same time, <strong>FI automatically receives a posting</strong>: Debit Accounts Receivable (customer), Credit Revenue (and tax). No double entry—one billing event, one FI document. Invoice is sent to the customer (e-mail or portal). <span class="timeline">Modules: SD (billing), FI (AR + revenue posting).</span>
+        <div class="data-plane"><strong>Data plane (tables):</strong> VBRK/VBRP (billing document); BKPF (FI doc header), BSEG (FI doc line items—AR, revenue, tax); ACDOCA (S/4HANA universal journal).</div>
+        <div class="grc-note"><strong>GRC:</strong> Billing is a critical control point—SoD between delivery and billing; revenue recognition controls (RAR if used); audit trail links SD billing to FI document for statutory and internal audit.</div></div>
 
-        <div class="flow-step"><span class="module-tag">CO</span> <strong>Same moment — Cost of sales.</strong> When billing posts revenue, cost of sales can post to CO (from material valuation or CO-PA). Profitability analysis (CO-PA) shows revenue and cost for this order/customer. <span class="timeline">Modules: CO (cost of sales, CO-PA).</span></div>
+        <div class="flow-step"><span class="module-tag">CO</span> <strong>Same moment — Cost of sales.</strong> When billing posts revenue, cost of sales can post to CO (from material valuation or CO-PA). Profitability analysis (CO-PA) shows revenue and cost for this order/customer. <span class="timeline">Modules: CO (cost of sales, CO-PA).</span>
+        <div class="data-plane"><strong>Data plane (tables):</strong> COEP (CO line items), ACDOCA (universal journal); CO-PA: CE1xxx/CE4xxx (profitability segments). Material valuation: MBEW, etc.</div>
+        <div class="grc-note"><strong>GRC:</strong> Cost and revenue in one place support management and statutory reporting; access to CO-PA often restricted for confidentiality; period lock prevents backdated changes.</div></div>
 
-        <div class="flow-step"><span class="module-tag">FI</span> <strong>Next week — Customer pays.</strong> Bank receives Acme’s payment (e.g. 15,000 EUR). Finance posts the incoming payment in FI (or via bank statement automation): allocate payment to invoice 9000000789. Accounts receivable line item is cleared; cash increases. Order is financially closed. <span class="timeline">Modules: FI (AR clearing, bank).</span></div>
+        <div class="flow-step"><span class="module-tag">FI</span> <strong>Next week — Customer pays.</strong> Bank receives Acme’s payment (e.g. 15,000 EUR). Finance posts the incoming payment in FI (or via bank statement automation): allocate payment to invoice 9000000789. Accounts receivable line item is cleared; cash increases. Order is financially closed. <span class="timeline">Modules: FI (AR clearing, bank).</span>
+        <div class="data-plane"><strong>Data plane (tables):</strong> BKPF/BSEG (payment document); BSID/BSAD (AR line items—cleared); bank subledger tables; ACDOCA updated with clearing.</div>
+        <div class="grc-note"><strong>GRC:</strong> SoD between posting AR and releasing payments; payment run often requires dual control; bank reconciliation is a key control; audit trail for cash and AR.</div></div>
 
         <p style="margin-top: 16px;"><strong>Summary:</strong> One order touched <strong>SD</strong> (order, delivery, billing), <strong>MM</strong> (inventory/stock), <strong>EWM</strong> (warehouse), <strong>FI</strong> (AR, revenue, payment), and <strong>CO</strong> (cost of sales, profitability). Nobody re-keyed the same data; each step used the same document flow and integration you saw in Module 31.</p>
     </div>
@@ -78,15 +94,25 @@
     <div class="example-box">
         <h4>Purchase of raw material R-200 — “Production needs 500 kg for next week”</h4>
 
-        <div class="flow-step"><span class="module-tag">MM / PP</span> <strong>Requirement.</strong> MRP (or manual requisition) creates a purchase requisition: 500 kg of R-200, plant 1000, delivery by next Monday. Requisition is in MM; it can be converted to a purchase order or sourced via Ariba if the company uses it for this category. <span class="timeline">Modules: MM (requisition), optionally Ariba.</span></div>
+        <div class="flow-step"><span class="module-tag">MM / PP</span> <strong>Requirement.</strong> MRP (or manual requisition) creates a purchase requisition: 500 kg of R-200, plant 1000, delivery by next Monday. Requisition is in MM; it can be converted to a purchase order or sourced via Ariba if the company uses it for this category. <span class="timeline">Modules: MM (requisition), optionally Ariba.</span>
+        <div class="data-plane"><strong>Data plane (tables):</strong> EBAN (purchase requisition), EKET (schedule lines). MRP writes planned orders (PLAF, etc.).</div>
+        <div class="grc-note"><strong>GRC:</strong> Requisition approval workflow; SoD between requester and buyer; access control by purchasing org/plant.</div></div>
 
-        <div class="flow-step"><span class="module-tag">MM</span> <strong>Purchase order.</strong> Buyer creates PO 4500012345: vendor “Steel Corp,” material R-200, 500 kg, price per kg, delivery address (plant/storage location). PO is sent to the vendor (e-mail, Ariba Network, or EDI). <span class="timeline">Modules: MM (PO).</span></div>
+        <div class="flow-step"><span class="module-tag">MM</span> <strong>Purchase order.</strong> Buyer creates PO 4500012345: vendor “Steel Corp,” material R-200, 500 kg, price per kg, delivery address (plant/storage location). PO is sent to the vendor (e-mail, Ariba Network, or EDI). <span class="timeline">Modules: MM (PO).</span>
+        <div class="data-plane"><strong>Data plane (tables):</strong> EKKO (PO header), EKPO (PO item), EKET (schedule lines). Release strategy tables if used.</div>
+        <div class="grc-note"><strong>GRC:</strong> PO release strategy (value/authority); SoD between requisition, PO creation, and GR; GTS import compliance check before PO release.</div></div>
 
-        <div class="flow-step"><span class="module-tag">MM</span> <strong>Goods receipt.</strong> On Monday, 500 kg of R-200 arrives. Warehouse (or receiving) posts goods receipt in MIGO (or Fiori): against PO 4500012345, 500 kg received. Inventory increases; GR/IR (goods receipt/invoice receipt) account is used until the invoice is posted. <span class="timeline">Modules: MM (goods receipt, inventory).</span></div>
+        <div class="flow-step"><span class="module-tag">MM</span> <strong>Goods receipt.</strong> On Monday, 500 kg of R-200 arrives. Warehouse (or receiving) posts goods receipt in MIGO (or Fiori): against PO 4500012345, 500 kg received. Inventory increases; GR/IR (goods receipt/invoice receipt) account is used until the invoice is posted. <span class="timeline">Modules: MM (goods receipt, inventory).</span>
+        <div class="data-plane"><strong>Data plane (tables):</strong> MKPF/MSEG (material document); MARD (stock); EKBE (PO history). GR/IR clearing in FI (BSIS/BSAS or ACDOCA).</div>
+        <div class="grc-note"><strong>GRC:</strong> SoD between person who ordered and person who posts GR; inventory controls and cycle count; audit trail for receipt.</div></div>
 
-        <div class="flow-step"><span class="module-tag">MM + FI</span> <strong>Invoice verification.</strong> Vendor sends invoice for 500 kg × price. Accounts payable clerk enters it in MIRO (or Fiori “Manage Vendor Invoices”): references PO and GR. System performs three-way match (PO, GR, invoice). If OK, posting is done: Debit expense/inventory (and tax), Credit vendor (AP). FI document is created automatically; GR/IR is cleared. <span class="timeline">Modules: MM (invoice verification), FI (AP + G/L).</span></div>
+        <div class="flow-step"><span class="module-tag">MM + FI</span> <strong>Invoice verification.</strong> Vendor sends invoice for 500 kg × price. Accounts payable clerk enters it in MIRO (or Fiori “Manage Vendor Invoices”): references PO and GR. System performs three-way match (PO, GR, invoice). If OK, posting is done: Debit expense/inventory (and tax), Credit vendor (AP). FI document is created automatically; GR/IR is cleared. <span class="timeline">Modules: MM (invoice verification), FI (AP + G/L).</span>
+        <div class="data-plane"><strong>Data plane (tables):</strong> RSEG (invoice receipt); BKPF/BSEG (FI document); BSID/BSAD (AP line items); ACDOCA; EKBE updated.</div>
+        <div class="grc-note"><strong>GRC:</strong> Three-way match (PO, GR, invoice) is a key control; SoD between invoice entry and payment; duplicate invoice checks; audit trail for AP.</div></div>
 
-        <div class="flow-step"><span class="module-tag">FI</span> <strong>Payment.</strong> At payment run (e.g. weekly), finance runs the payment program: selects open items for vendors and payment method (e.g. bank transfer). System generates payment file; bank executes. FI posts: Debit vendor (AP), Credit bank. Vendor line item is cleared. <span class="timeline">Modules: FI (AP, bank).</span></div>
+        <div class="flow-step"><span class="module-tag">FI</span> <strong>Payment.</strong> At payment run (e.g. weekly), finance runs the payment program: selects open items for vendors and payment method (e.g. bank transfer). System generates payment file; bank executes. FI posts: Debit vendor (AP), Credit bank. Vendor line item is cleared. <span class="timeline">Modules: FI (AP, bank).</span>
+        <div class="data-plane"><strong>Data plane (tables):</strong> BKPF/BSEG (payment doc); BSIK/BSAK (AP cleared); bank account tables; payment medium (e.g. PAYR).</div>
+        <div class="grc-note"><strong>GRC:</strong> Payment run approval; dual control for release; SoD between invoice verification and payment execution; bank reconciliation and fraud controls.</div></div>
 
         <p style="margin-top: 16px;"><strong>Summary:</strong> <strong>MM</strong> (requisition, PO, GR, invoice verification) and <strong>FI</strong> (AP, payment). CO gets the cost center from the PO for reporting. If Ariba is used, the PO may originate or be approved there and then sync to S/4HANA.</p>
     </div>
@@ -102,6 +128,8 @@
             <li><strong>Quality (QM):</strong> If an inspection is required (e.g. incoming inspection for R-200), an inspection lot is created at goods receipt. Quality inspects and records results; usage decision (accept/reject) drives whether stock is usable or blocked. Same idea for in-process or final inspection in production.</li>
         </ul>
         <p><strong>Summary:</strong> <strong>PP</strong> (orders, confirmations, settlement), <strong>MM</strong> (all movements), <strong>EWM</strong> (warehouse tasks), <strong>PM</strong> (maintenance when needed), <strong>QM</strong> (inspection and release), <strong>CO</strong> (costs and product costing).</p>
+        <div class="data-plane"><strong>Data plane (tables):</strong> PP: AFKO/AFPO, AUFK; MM: MKPF/MSEG, MARD; EWM: /SCWM/; PM: AUFK (orders), QM: QALS, QAVE (inspection/usage); CO: COEP, ACDOCA.</div>
+        <div class="grc-note"><strong>GRC:</strong> SoD between planning and execution; production and inventory changes logged; quality blocks enforce compliance; maintenance and cost postings support asset and cost controls.</div>
     </div>
 
     <h3>Example 4: Supporting operations — HR, travel, and month-end</h3>
@@ -110,8 +138,12 @@
     <div class="example-box">
         <h4>HR and travel</h4>
         <p><strong>SuccessFactors:</strong> Hiring, onboarding, goals, performance, and learning are in the cloud. Employee master data (e.g. person number, cost center, org unit) can replicate to S/4HANA so that when time is recorded or costs are allocated, the right cost center is used. <strong>Concur:</strong> Employees book travel and submit expenses in Concur. Approved expense reports can create postings in S/4HANA (via CPI): debit expense account (and employee receivable if applicable), credit AP or bank. So “daily operations” for a sales rep include Concur for a trip and S/4HANA for the order they closed.</p>
+        <div class="data-plane"><strong>Data plane (tables):</strong> Replicated employee/cost center data in S/4HANA; FI: BKPF/BSEG, ACDOCA for expense postings; AP for travel vendor or employee clearing.</div>
+        <div class="grc-note"><strong>GRC:</strong> Expense approval workflow; SoD between requester and approver; policy compliance (travel, delegation); audit trail for T&amp;E and HR data.</div>
         <h4>Month-end close (Finance)</h4>
-        <p>At period-end, finance runs the books. <strong>FI:</strong> Recurring entries, accruals, depreciation (FI-AA), bank reconciliation. Subledgers (AR, AP) are closed to the G/L; financial statements are generated. <strong>CO:</strong> Cost center allocations (KO8G or equivalent), internal order settlement, profit center reporting. If the company uses <strong>Central Finance</strong>, source systems replicate to central and group reporting runs there. If they use <strong>RAR</strong>, revenue recognition runs and posts contract assets/liabilities. <strong>Reporting:</strong> BW/4HANA or SAC may pull data from S/4HANA for management dashboards and statutory reports. <strong>GRC:</strong> Access recertification and control checks may run as part of the close or compliance cycle.</p>
+        <p>At period-end, finance runs the books. <strong>FI:</strong> Recurring entries, accruals, depreciation (FI-AA), bank reconciliation. Subledgers (AR, AP) are closed to the G/L; financial statements are generated. <strong>CO:</strong> Cost center allocations (KO8G or equivalent), internal order settlement, profit center reporting. If the company uses <strong>Central Finance</strong>, source systems replicate to central and group reporting runs there. If they use <strong>RAR</strong>, revenue recognition runs and posts contract assets/liabilities. <strong>Reporting:</strong> BW/4HANA or SAC may pull data from S/4HANA for management dashboards and statutory reports. <strong>GRC:</strong> Access recertification and control checks may run as part of the close or compliance cycle (SoD, process controls, audit readiness).</p>
+        <div class="data-plane"><strong>Data plane (tables):</strong> FI/CO close: BKPF/BSEG, ACDOCA, COEP; asset depreciation: ANEP; replications to Central Finance; GRC: AGR* (roles), audit logs, control run results.</div>
+        <div class="grc-note"><strong>GRC:</strong> Period lock prevents prior-period postings; access recertification (GRC AC) and SoD checks; process control monitoring (GRC PC); audit trail for close and reporting.</div>
     </div>
 
     <h3>Who uses which modules (roles)</h3>
@@ -129,6 +161,7 @@
             <tr><td>HR (if on-prem)</td><td>HCM (personnel, time, payroll); if cloud: SuccessFactors, data sync to S/4HANA</td></tr>
             <tr><td>Maintenance</td><td>PM (notifications, orders, completion); MM (spare parts, procurement)</td></tr>
             <tr><td>Quality</td><td>QM (inspection lots, results, usage decision); PP/MM at goods receipt or production</td></tr>
+            <tr><td>GRC / Compliance / Internal audit</td><td>GRC (access recertification, SoD, process controls); GTS (trade compliance); audit logs and control monitoring</td></tr>
         </table>
     </div>
 

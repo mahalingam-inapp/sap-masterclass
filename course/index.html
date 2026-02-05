@@ -269,6 +269,9 @@
 
         window.addEventListener('message', function(event) {
             if (event.data && event.data.type === 'startCourse') startCourse();
+            if (event.data && event.data.type === 'resizeIframe' && iframes[currentModule]) {
+                setTimeout(function() { adjustIframeHeight(iframes[currentModule]); }, 150);
+            }
         });
 
         window.addEventListener('resize', function() {
