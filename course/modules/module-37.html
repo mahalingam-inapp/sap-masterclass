@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 37: SAP Solution Manager / Cloud ALM</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        button:hover { background: #5568d3; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:hover { background: #218838; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+    </style>
+</head>
+<body>
+    <h2>Module 37: SAP Solution Manager / Cloud ALM</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> <strong>ALM</strong> stands for <strong>Application Lifecycle Management</strong>: everything needed to run and evolve SAP systems—implementation, testing, change management, monitoring, incident handling, and upgrade. <strong>SAP Solution Manager</strong> (SolMan) is the traditional on‑premise ALM platform for ECC and S/4HANA on‑premise. <strong>SAP Cloud ALM</strong> is the cloud-native ALM service for SAP cloud and hybrid landscapes (S/4HANA Cloud, BTP, SuccessFactors, etc.). Both cover implementation (projects, templates), operations (monitoring, alerts), and services (incident, change, test management). Key terms: <strong>implementation project</strong>, <strong>monitoring</strong>, <strong>change request</strong>, <strong>Cloud ALM</strong>.
+    </div>
+
+    <p>SAP Solution Manager has been the central hub for implementing and operating SAP systems for many years. SAP Cloud ALM is the strategic direction for cloud-first customers: it runs in the cloud, requires no on‑premise installation, and is optimised for S/4HANA Cloud, BTP, and other SAP cloud products. Both support project methodology (e.g. SAP Activate), testing, and operations.</p>
+
+    <h3>Purpose and scope</h3>
+    <p><strong>Implementation:</strong> Manage implementation projects (phases, workstreams, tasks). Use and customise fit-to-standard templates (e.g. for S/4HANA Cloud). Track scope (process scope, country scope). Document business processes and link to configuration. <strong>Operations:</strong> Technical and business process monitoring. Alert when systems or key processes fail or degrade (e.g. failed jobs, interface errors, high error rates in order-to-cash). Dashboards for system health and business KPI. <strong>Service:</strong> Incident management (log, assign, resolve); change request management (change control, transport); test management (test plans, execution, sign-off). Integration with SAP Support (e.g. create support tickets, send diagnostics). <strong>Upgrade and maintenance:</strong> Maintenance planner, upgrade dependency checks, and documentation.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> When you go live with S/4HANA Cloud, you use <strong>Cloud ALM</strong> to run your implementation project (tasks, fit-to-standard), run tests, and after go-live to monitor the system and handle incidents and changes. You don’t install anything on your own servers—it’s all in the cloud. For on‑premise S/4HANA or ECC, <strong>Solution Manager</strong> is still used for monitoring, change management, and implementation tracking.
+    </div>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Implementation projects:</strong> Create a project for a new implementation or major release. Break down into workstreams (e.g. FI, SD, MM) and tasks. Assign owners and dates. Link to process documentation and configuration (e.g. in SAP Activate). Track progress and scope. In Cloud ALM, projects are native and linked to SAP’s best practices and fit-to-standard.</li>
+        <li><strong>Monitoring:</strong> Technical: system availability, performance, database, batch jobs, interfaces. Business process: monitor end-to-end processes (e.g. order-to-cash, procure-to-pay) with KPIs and exception alerts. Root cause analysis: drill from process to transaction to system. Cloud ALM gets data from cloud systems via built-in connectors; SolMan uses agents on-premise.</li>
+        <li><strong>Incident and change management:</strong> Log incidents (errors, user issues); assign to support or development; track resolution. Change requests: document change, get approval, link to transport or cloud release. Test management: define test cases, execute (manual or automated), record results. Integration with SAP Support for sending incidents and receiving patches.</li>
+        <li><strong>Fit-to-standard and best practices:</strong> In Cloud ALM, access to SAP’s process templates and scope items for S/4HANA Cloud. Compare your scope to recommended scope; use pre-configured content for testing and documentation. Reduces customisation and speeds implementation.</li>
+        <li><strong>Integration and API management:</strong> Monitor integration flows (e.g. CPI/BTP). See which systems connect to which; monitor message throughput and errors. Useful for hybrid landscapes (S/4HANA + BTP + Ariba, etc.).</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> SolMan stores project data, monitoring metrics, incidents, changes, and test results in its own database (on‑premise). Agents on managed systems send metrics and collect diagnostics. Cloud ALM stores data in SAP’s cloud; data is collected via cloud connectors and APIs from S/4HANA Cloud, BTP, and other SAP cloud apps. <strong>Control plane:</strong> Configuration of monitoring scenarios (which metrics, thresholds), alert rules, and assignment of incidents/changes to support teams. Project templates and process scope are configured in the implementation project. No SPRO in the traditional sense—Cloud ALM is configured via its own UI; SolMan has its own configuration (Solution Manager setup).</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> <strong>SAP Solution Manager</strong> runs <strong>on‑premise</strong> (typically one or more SolMan systems in the landscape, with agents on ECC/S/4HANA). <strong>SAP Cloud ALM</strong> is <strong>cloud-only</strong> (SAP-hosted); no customer installation. Cloud ALM is the recommended option for S/4HANA Cloud and hybrid cloud landscapes. <strong>Integration:</strong> SolMan connects to managed systems via agents (diagnostics, metrics). Cloud ALM connects to S/4HANA Cloud, BTP, SuccessFactors, Ariba, etc., via standard APIs and connectors. Both can integrate with third-party tools (e.g. Jira, ServiceNow) for incident/change.</p>
+
+    <div class="example-box">
+        <h4>Example: Implementing S/4HANA Cloud with Cloud ALM and handling an incident</h4>
+        <p><strong>Implementation:</strong> Company starts an S/4HANA Cloud implementation. In Cloud ALM they create an implementation project, select scope (e.g. FI, SD, MM, procurement). They use fit-to-standard to choose scope items (e.g. “Manage Customer Invoices,” “Manage Purchase Orders”). Tasks are generated (configure, test, train). Team runs test cases in Cloud ALM and records pass/fail. Go-live checklist is tracked in the same project. No SolMan installation is needed.</p>
+        <p><strong>Incident after go-live:</strong> User reports “payment run failed.” In Cloud ALM, support logs an incident, links it to the affected system (S/4HANA Cloud). Monitoring shows the payment run job failed with a specific error. Support assigns to basis/functional team. Team resolves (e.g. corrects bank configuration) and closes the incident. If it were a software defect, they could create an SAP support message and attach diagnostics from Cloud ALM.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Key ALM components and terms</h4>
+        <table>
+            <tr><th>Component / Term</th><th>Purpose</th></tr>
+            <tr><td>SAP Solution Manager (SolMan)</td><td>On‑premise ALM: implementation, monitoring, incident, change, test for ECC/S/4HANA on‑premise.</td></tr>
+            <tr><td>SAP Cloud ALM</td><td>Cloud ALM for S/4HANA Cloud, BTP, and SAP cloud apps; no on‑premise install.</td></tr>
+            <tr><td>Implementation project</td><td>Project structure (phases, workstreams, tasks) for go-live or release.</td></tr>
+            <tr><td>Fit-to-standard</td><td>Process and scope templates for S/4HANA Cloud; compare and adopt best practices.</td></tr>
+            <tr><td>Business process monitoring</td><td>Monitor end-to-end processes (e.g. O2C, P2P) with KPIs and alerts.</td></tr>
+        </table>
+    </div>
+
+    <div class="info-box"><strong>Relationship to other modules:</strong> SAP Activate (Module 41) is the methodology; Cloud ALM and SolMan are the tools that host implementation projects and fit-to-standard. Basis (Module 26) and Integration (Module 29) are monitored and managed via ALM. Security (Module 27) and GRC (Module 32) can be part of operations and change control in ALM.</div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: When to use which ALM</h4>
+        <p>Select a scenario to see which ALM option fits.</p>
+        <div style="margin: 16px 0;">
+            <button type="button" onclick="showAlm('cloud')">S/4HANA Cloud and BTP only</button>
+            <button type="button" onclick="showAlm('onprem')">ECC and S/4HANA on‑premise</button>
+            <button type="button" onclick="showAlm('hybrid')">Mix of cloud and on‑premise</button>
+        </div>
+        <div id="alm-reveal" class="reveal-box"></div>
+    </div>
+
+    <h3>Key concepts</h3>
+    <p>Cloud ALM is included with SAP cloud product subscriptions (e.g. S/4HANA Cloud); no separate licence in many cases. SolMan 7.2 is the current major version for on‑premise; SAP is focusing innovation on Cloud ALM. For hybrid landscapes, both can coexist: SolMan for on‑premise, Cloud ALM for cloud. Migration from SolMan to Cloud ALM for cloud systems is the typical path. Monitoring can be extended with custom metrics and dashboards.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: What is SAP Cloud ALM used for?</h4>
+            <ul class="quiz-options">
+                <li>A) Only development</li>
+                <li>B) Application lifecycle management for SAP cloud systems: implementation projects, monitoring, incident, change, test</li>
+                <li>C) Only finance</li>
+                <li>D) Only HR</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>Cloud ALM covers the full lifecycle for cloud SAP systems.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: When would you use SAP Solution Manager instead of Cloud ALM?</h4>
+            <ul class="quiz-options">
+                <li>A) Only for Concur</li>
+                <li>B) For ECC or S/4HANA on‑premise; SolMan runs on your own infrastructure with agents on managed systems</li>
+                <li>C) Only for Ariba</li>
+                <li>D) Never</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>SolMan is the on‑premise ALM platform; Cloud ALM is for cloud.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: What is “fit-to-standard” in the context of ALM?</h4>
+            <ul class="quiz-options">
+                <li>A) A programming language</li>
+                <li>B) Process and scope templates for S/4HANA Cloud; compare your requirements to SAP best practices and adopt standard scope</li>
+                <li>C) Only for PM</li>
+                <li>D) Only for QM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>Fit-to-standard helps you implement with minimal customisation using SAP’s templates.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: Which ALM capabilities apply to both SolMan and Cloud ALM?</h4>
+            <ul class="quiz-options">
+                <li>A) Only development</li>
+                <li>B) Implementation projects, monitoring, incident/change management, and testing</li>
+                <li>C) Only financial close</li>
+                <li>D) Only SD</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>Both support implementation, operations (monitoring), and service (incident, change, test); deployment model differs.</div>
+        </div>
+    </div>
+    <script>
+        function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+        function showAlm(x) {
+            var box = document.getElementById('alm-reveal');
+            if (x === 'cloud') box.innerHTML = '<strong>Cloud ALM.</strong> For S/4HANA Cloud, BTP, SuccessFactors, etc., Cloud ALM is the standard—no on‑premise installation, native integration.';
+            else if (x === 'onprem') box.innerHTML = '<strong>Solution Manager.</strong> For ECC and S/4HANA on‑premise, SolMan with agents is used for monitoring, change, and implementation.';
+            else if (x === 'hybrid') box.innerHTML = '<strong>Both.</strong> Use Cloud ALM for cloud systems and SolMan for on‑premise; they can coexist. SAP is moving innovation to Cloud ALM for cloud-first customers.';
+            box.classList.add('show');
+        }
+    </script>
+</body>
+</html>

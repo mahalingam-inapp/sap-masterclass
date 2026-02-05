@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 39: SAP Central Finance (CeFIN)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        button:hover { background: #5568d3; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:hover { background: #218838; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+    </style>
+</head>
+<body>
+    <h2>Module 39: SAP Central Finance (CeFIN)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> In a group with many subsidiaries, each may run its own ERP (e.g. different company codes in one system, or separate ECC/S/4HANA systems). Finance often wants a <strong>single central system</strong> for group reporting, closing, and compliance—without forcing every subsidiary to switch to that system for their day-to-day transactions. <strong>SAP Central Finance (CeFIN)</strong> does this: it <strong>replicates</strong> financial documents from source systems (ECC, S/4HANA, or non-SAP) into one central S/4HANA system. The central system becomes the “single source of truth” for group finance; source systems remain for local execution. Key terms: <strong>replication</strong>, <strong>central system</strong>, <strong>source system</strong>, <strong>mapping</strong>, <strong>reconciliation</strong>.
+    </div>
+
+    <p>Central Finance is a deployment pattern and product capability: a central S/4HANA system (the “Central Finance” system) receives replicated FI (and optionally CO, MM, SD) documents from one or more source systems. In the central system, data is mapped (e.g. source company code → central company code, source G/L account → central G/L account) so that group reporting, consolidation, and central processes (e.g. central payments, central close) can run in one place.</p>
+
+    <h3>Purpose and scope</h3>
+    <p><strong>Central reporting and close:</strong> All group financial data in one system. Run group P&amp;L, balance sheet, cash flow, and consolidation in the central system. Central period-end close (e.g. central closing cockpit) with data from all sources. <strong>Central processes (optional):</strong> Central payment processing (payments executed from the central system using replicated open items); central receivables management; central bank communication. <strong>Compliance and audit:</strong> One place for group audit, reconciliation, and compliance (e.g. GRC can run on central system). <strong>Path to S/4HANA:</strong> Companies can introduce the central S/4HANA system first and replicate from existing ECC/subsidiary systems; later, migrate source systems to S/4HANA or retire them. This is a common “landscape transformation” approach.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> Company A has three ERPs: ECC in Germany, ECC in the US, and a subsidiary on another ERP. They install one S/4HANA system as “Central Finance.” Every FI document (invoice, payment, G/L posting) from the three source systems is <strong>replicated</strong> into the central system with mapping (e.g. German company code 1000 → central 2000, US 2000 → central 2100). Group reporting and month-end close run in the central system. Local systems still do local accounting and reporting; the central system is for group view and central finance processes.
+    </div>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Replication:</strong> FI documents (and optionally CO, MM, SD for full picture) are sent from source to central. Replication can be real-time (e.g. via SLT or API) or batch. Each document is mapped: company code, G/L account, cost centre, profit centre, etc. Central system creates a “replicated” document that mirrors the source but uses central chart of accounts and structure. Document reference (source system + document number) is kept for reconciliation.</li>
+        <li><strong>Mapping:</strong> Master data and organisational units differ between source and central. Mapping tables define: source company code → central company code (or central “source company code” for reporting); source G/L account → central G/L account; source cost centre → central cost centre; etc. Mapping ensures that replicated postings fit the central chart of accounts and reporting structure. Adjustments (e.g. reclassifications) can be posted in central only.</li>
+        <li><strong>Reconciliation:</strong> Compare source system totals (e.g. G/L balance by account and company code) with central replicated totals. Discrepancies can be due to timing, mapping errors, or central-only postings. Reconciliation reports and tools (e.g. Central Finance reconciliation apps) help ensure consistency. Critical for month-end and audit.</li>
+        <li><strong>Central payment run and other central processes:</strong> In “central payment” scenario, open items (AP) are replicated to central. Payment run is executed in the central system (using central bank accounts and approval). Payment file is sent to banks; status and clearing are replicated back to source (or source is updated). Similarly, central receivables, central dunning, or central dispute management can run in the central system on replicated data.</li>
+        <li><strong>Group reporting and consolidation:</strong> Central system can feed SAP Group Reporting (S/4HANA) or BW/4HANA for consolidation and group statements. Eliminations and consolidation entries are posted in central. One data model for group P&amp;L, balance sheet, and cash flow.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> Source systems hold original documents (BKPF/BSEG, ACDOCA in S/4HANA). Replicated documents are created in the central system (with reference to source). Central system has its own chart of accounts, company codes (or “source company code” for reporting), and master data. Replication flow: source → (SLT, CPI, or other middleware) → central; optionally back-flow (e.g. payment status) from central to source. <strong>Control plane:</strong> Mapping configuration (company code, G/L, cost centre, profit centre, etc.). Replication settings (which document types, real-time vs batch). Central payment and central process configuration (bank accounts, payment methods). See Module 1 and 3 for FI/CO structure; CeFIN adds the replication and mapping layer.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> Central Finance runs on <strong>S/4HANA</strong> (the central system). Source systems can be <strong>ECC</strong>, <strong>S/4HANA</strong>, or (with adapters) <strong>non-SAP</strong> systems. Replication typically uses <strong>SAP Landscape Transformation (SLT)</strong> or <strong>SAP Integration Suite (CPI)</strong> or equivalent. Central system can be on‑premise or S/4HANA Cloud (CeFIN is supported in cloud with specific scope). <strong>Integration:</strong> Tight with FI (Module 3) and CO (Module 4) in both source and central. Group Reporting (if used) runs in central. GRC (Module 32) can be applied to the central system. FSCM (Module 33) central processes (e.g. central collections) can run in central.</p>
+
+    <div class="example-box">
+        <h4>Example: Replication and central close</h4>
+        <p><strong>Replication:</strong> Source system ECC (company code 1000, Germany) posts a vendor invoice: 10,000 EUR to G/L 600000 (expense), cost centre 1000. Replication sends this to Central Finance. Mapping: company code 1000 → central “source company code” 1000 (or central company code 2000 for group structure); G/L 600000 → central 600100 (group chart of accounts); cost centre 1000 → central 1000. Central system creates a document: 10,000 EUR, central company code, central G/L 600100, cost centre 1000, with reference “Source: ECC_1000, Doc 1900000123.”</p>
+        <p><strong>Central close:</strong> At month-end, all source systems have closed their local periods. Replication has brought all documents into central. Central finance runs closing steps in the central system: reclassifications, allocations, group reporting adjustments. Group P&amp;L and balance sheet are produced from the central system. Reconciliation report shows source 1000 total expenses = X; central replicated total for 1000 = X (match). Any mismatch is investigated (timing, mapping, or central-only posting).</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Key Central Finance components and terms</h4>
+        <table>
+            <tr><th>Component / Term</th><th>Purpose</th></tr>
+            <tr><td>Central system</td><td>S/4HANA system that receives replicated FI/CO (and optionally other) data; single place for group finance.</td></tr>
+            <tr><td>Source system</td><td>ECC, S/4HANA, or non-SAP system that originates transactions; documents are replicated to central.</td></tr>
+            <tr><td>Replication</td><td>Copying documents from source to central with mapping (company code, G/L, etc.).</td></tr>
+            <tr><td>Mapping</td><td>Rules to convert source organisational units and accounts to central structure.</td></tr>
+            <tr><td>Central payment</td><td>Payment run executed in central system using replicated open items; optional central process.</td></tr>
+        </table>
+    </div>
+
+    <div class="info-box"><strong>Relationship to other modules:</strong> FI (Module 3) and CO (Module 4) are the core: replication is of FI/CO documents. Central Finance is a deployment pattern on top of FI/CO. FSCM (Module 33) can run centrally using replicated AR/AP. GRC (Module 32) can be applied to the central system. Group Reporting and consolidation (often part of S/4HANA or BW) consume central data. Migration (Module 40) and Activate (Module 41) are relevant when using CeFIN as a step toward full S/4HANA rollout.</div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: Data flow in Central Finance</h4>
+        <p>Select a step to see what happens.</p>
+        <div style="margin: 16px 0;">
+            <button type="button" onclick="showCefin('post')">Vendor invoice posted in source ECC</button>
+            <button type="button" onclick="showCefin('replicate')">Replication to central S/4HANA</button>
+            <button type="button" onclick="showCefin('close')">Month-end close in central</button>
+        </div>
+        <div id="cefin-reveal" class="reveal-box"></div>
+    </div>
+
+    <h3>Key concepts</h3>
+    <p>Central Finance is often a first step in “landscape consolidation”: introduce one S/4HANA as central, replicate from existing systems, then over time migrate or retire source systems. Replication is typically one-way (source → central); back-flow is used for specific processes (e.g. payment status). Consistency between source and central is maintained by mapping and reconciliation; central-only postings (e.g. group reclassifications) exist only in central. Licensing: central system and replication components have their own licensing; consult SAP.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: What is the main purpose of SAP Central Finance?</h4>
+            <ul class="quiz-options">
+                <li>A) Replace all source systems immediately</li>
+                <li>B) Replicate FI/CO (and optionally other) data from source systems into one central S/4HANA for group reporting, close, and optional central processes</li>
+                <li>C) Only for SD</li>
+                <li>D) Only for MM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>Central Finance creates a central layer for group finance while source systems continue to operate.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: Why is “mapping” needed in Central Finance?</h4>
+            <ul class="quiz-options">
+                <li>A) Only for PM</li>
+                <li>B) Source and central have different company codes, G/L accounts, cost centres; mapping converts source values to central structure</li>
+                <li>C) Only for QM</li>
+                <li>D) Only for HR</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Mapping ensures replicated documents use the central chart of accounts and organisational structure.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: What can run in the Central Finance (central) system?</h4>
+            <ul class="quiz-options">
+                <li>A) Only development</li>
+                <li>B) Group reporting, period-end close, reconciliation; optionally central payment run, central receivables, consolidation</li>
+                <li>C) Only production planning</li>
+                <li>D) Only warehouse</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>The central system is the place for group-level finance processes and reporting.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: How is Central Finance often used in S/4HANA adoption?</h4>
+            <ul class="quiz-options">
+                <li>A) Only to replace SD</li>
+                <li>B) As a first step: introduce central S/4HANA, replicate from ECC/subsidiary systems; later migrate or retire source systems</li>
+                <li>C) Only for Concur</li>
+                <li>D) Only for Ariba</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>CeFIN is a common “landscape transformation” path to S/4HANA without big-bang migration.</div>
+        </div>
+    </div>
+    <script>
+        function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+        function showCefin(x) {
+            var box = document.getElementById('cefin-reveal');
+            if (x === 'post') box.innerHTML = '<strong>Source.</strong> Invoice is posted in the source system (e.g. ECC company code 1000). Document exists in source FI; no change in central yet.';
+            else if (x === 'replicate') box.innerHTML = '<strong>Replication.</strong> Document is sent to central (e.g. via SLT). Central system creates a replicated document with mapping: source company code and G/L are mapped to central. Central now has a copy for group reporting.';
+            else if (x === 'close') box.innerHTML = '<strong>Central close.</strong> All replicated data is in central. Finance runs period-end steps in central: reclassifications, allocations, group reporting. Group P&amp;L and balance sheet are produced from central; reconciliation ensures central matches source totals.';
+            box.classList.add('show');
+        }
+    </script>
+</body>
+</html>

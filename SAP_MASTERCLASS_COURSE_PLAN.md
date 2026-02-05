@@ -1,17 +1,17 @@
 # SAP Masterclass — Course Plan
 
-**Version:** 1.2 (Draft for review)  
+**Version:** 2.0  
 **Target audience:** Beginners and intermediate users  
-**Scope:** All major SAP modules and cloud products, one chapter per module  
+**Scope:** All major SAP modules and cloud products, plus extended ERP, implementation, capstone, and gamified simulator  
 
 ---
 
 ## Course overview
 
 - **Title:** SAP Masterclass — From Navigation to Modules & Cloud Products  
-- **Description:** A structured course that introduces SAP ERP, S/4HANA, and major SAP cloud products (SuccessFactors, Ariba, Concur, CX, IBP, SAC, BTP, Signavio, and more). Each chapter covers one module or product with its purpose, features, key interactions, important tables (where applicable), and practical context. Includes quizzes to reinforce learning.
+- **Description:** A structured course that introduces SAP ERP, S/4HANA, and major SAP cloud products (SuccessFactors, Ariba, Concur, CX, IBP, SAC, BTP, Signavio, and more), plus extended topics (GRC, FSCM, GTS, MDG, Sustainability, RAR, Central Finance, Migration, Activate, SAP Build, HANA, Industry Solutions, RE-FX/PLM/EHS). Each chapter covers one module or product with its purpose, features, data plane/control plane, deployment/integration, examples, and (where applicable) a short quiz. Includes a capstone chapter on how a typical enterprise uses SAP for daily operations and an ungraded gamified simulator (Atlas Global Inc.).
 - **Prerequisites:** None for early chapters; later technical chapters assume basic familiarity from earlier modules.
-- **Format:** Welcome page + 31 modules (Foundation concepts + 30 chapter modules). Each chapter includes purpose, features, data plane/control plane and deployment/integration (where applicable), interactions, tables/product concepts, and a short quiz.
+- **Format:** Welcome page + **47 modules** in **6 sections**. Each standard chapter includes "For beginners" and "In plain terms" callouts, purpose, features, data plane/control plane, deployment/integration, examples, key concepts table, relationship to other modules, and a short quiz. Module 46 (Daily Operations) is example-based with no quiz; Module 47 (Atlas Global Operations Simulator) is gamified and ungraded (no quiz).
 
 ---
 
@@ -146,7 +146,7 @@ ABAP is SAP’s primary language for application and report development. It runs
 | 11 | Human Capital Management | HCM |
 | 12 | Warehouse Management / EWM | WM / EWM |
 
-### SAP Cloud & Other Products (13–23)
+### SAP Cloud & Products (13–23)
 
 | # | Chapter title | Product |
 |---|----------------|---------|
@@ -162,7 +162,7 @@ ABAP is SAP’s primary language for application and report development. It runs
 | 22 | SAP Business Technology Platform | BTP |
 | 23 | SAP Signavio | Signavio |
 
-### Technical & Modern ERP (24–31)
+### Technical & Development (24–29)
 
 | # | Chapter title | Module code |
 |---|----------------|-------------|
@@ -172,11 +172,42 @@ ABAP is SAP’s primary language for application and report development. It runs
 | 27 | Security & Authorization | Security |
 | 28 | Fiori & User Experience | Fiori |
 | 29 | Integration (PI/CPI) | PI / CPI |
+
+### S/4HANA & Extended Core (30–35)
+
+| # | Chapter title | Module code |
+|---|----------------|-------------|
 | 30 | SAP S/4HANA Overview | S/4HANA |
 | 31 | Cross-Module Integration & Best Practices | — |
+| 32 | Governance, Risk & Compliance (GRC) | GRC |
+| 33 | Financial Supply Chain Management (FSCM) | FSCM |
+| 34 | Global Trade Services (GTS) | GTS |
+| 35 | Master Data Governance (MDG) | MDG |
 
-**Total:** 1 welcome + 31 modules = **32 content pages** (welcome + 31 chapters).  
-Quizzes are at the end of each of the 31 modules.
+### Extended ERP & Implementation (36–45)
+
+| # | Chapter title | Module code |
+|---|----------------|-------------|
+| 36 | SAP Sustainability / ESG | Sustainability |
+| 37 | SAP Solution Manager / Cloud ALM | ALM |
+| 38 | SAP Revenue Accounting and Reporting (RAR) | RAR |
+| 39 | SAP Central Finance (CeFIN) | CeFIN |
+| 40 | SAP S/4HANA Migration | Migration |
+| 41 | SAP Activate Methodology | Activate |
+| 42 | SAP Build (low-code) | Build |
+| 43 | SAP HANA (Platform) | HANA |
+| 44 | SAP Industry Solutions (Overview) | Industry |
+| 45 | Extended ERP — Real Estate (RE-FX), PLM, EHS | RE-FX, PLM, EHS |
+
+### Capstone & Simulator (46–47)
+
+| # | Chapter title | Type |
+|---|----------------|------|
+| 46 | How a Typical Enterprise Uses SAP (Daily Operations) | Capstone (example-based; no quiz) |
+| 47 | Atlas Global — Operations Simulator (Ungraded) | Gamified (missions, badges; no quiz) |
+
+**Total:** 1 welcome + **47 modules** = **48 content pages**.  
+Quizzes at the end of modules 1–45; Module 46 and Module 47 have no quiz (capstone and gamified simulator).
 
 ---
 
@@ -697,43 +728,43 @@ Below is the content outline per chapter.
 
 ## Quizzes
 
-- **Placement:** One quiz at the end of each of the 31 modules (after the main content).
+- **Placement:** One quiz at the end of each of **modules 1–45** (after the main content). **Module 46** (Daily Operations) and **Module 47** (Atlas Global Simulator) have no quiz (capstone and gamified, ungraded).
 - **Format:** Per boilerplate — `.quiz-section` with multiple `.quiz-question` blocks. Each question has:
   - Question text
   - Options (A, B, C, D as needed)
   - “Show Answer” button
   - Revealed answer with correct option and short explanation
-- **Scope:** 3–5 questions per module, covering purpose, features, data plane/control plane and deployment/integration (where applicable), interactions, tables/concepts, and T-codes (where applicable) as introduced in that chapter.
+- **Scope:** 3–5 questions per module (typically 4), covering purpose, features, data plane/control plane and deployment/integration (where applicable), interactions, tables/concepts, and T-codes (where applicable) as introduced in that chapter.
 
 ---
 
 ## Technical implementation (for build phase)
 
-- **Total modules (chapters):** 31  
-- **Sidebar:** 1 welcome + 31 tabs, grouped into sections: **Foundation & Core ERP** (1–12), **SAP Cloud & Products** (13–23), **Technical & Modern ERP** (24–31).  
+- **Total modules (chapters):** **47**  
+- **Sidebar:** 1 welcome + 47 tabs, grouped into **6 sections:** **Foundation & Core ERP** (1–12), **SAP Cloud & Products** (13–23), **Technical & Development** (24–29), **S/4HANA & Extended Core** (30–35), **Extended ERP & Implementation** (36–45), **Capstone & Simulator** (46–47).  
 - **Files:**  
   - `course/index.html`  
   - `course/modules/welcome.html`  
-  - `course/modules/module-1.html` … `course/modules/module-31.html`  
-- **`totalModules` in JS:** 31  
-- **Iframe pattern:** `modules/module-${i}.html` for i = 1..31.
-- **Module 1: Foundation concepts** is a dedicated chapter containing the full “Data plane, control plane, deployment & integration” content from this plan. **Start Learning** CTA on the welcome page should show **Module 1 (Foundation concepts)** first so learners get the shared vocabulary before SAP Overview (Module 2) and all other modules.
-- **Each chapter (2–31):** Include a short **Data plane & control plane**, **Deployment**, and **Integration** callout (1–2 sentences) consistent with the structure in this plan; reference Module 1 where helpful.
+  - `course/modules/module-1.html` … `course/modules/module-47.html`  
+- **`totalModules` in JS:** 47  
+- **Iframe pattern:** `modules/module-${i}.html` for i = 1..47.
+- **Welcome:** Stats show **47 Modules** and **6 Sections**; section cards align with the six sidebar groups.
+- **Module 1: Foundation concepts** is the shared “Data plane, control plane, deployment & integration” content from this plan. **Start Learning** shows Module 1 first.
+- **Each chapter (2–45):** Include "For beginners" and "In plain terms" callouts (`.plain-terms`), **Data plane & control plane**, **Deployment**, **Integration**, examples, key concepts table, and "Relationship to other modules" (`.info-box`); reference Module 1 where helpful. **Module 2** includes a consolidated modules table (all 47) and glossary; update when adding modules.
+- **Module 46 (Daily Operations):** Example-based capstone; no quiz.
+- **Module 47 (Atlas Global Simulator):** Gamified, ungraded; missions, progress, badges; no quiz.
 - **Module 22 (BTP)** and **Module 29 (Integration):** Reinforce control plane and integration patterns.
 - **Module 31 (Cross-Module):** Recap deployment and integration across the landscape.
-- **Section: ABAP:** Full text from “Section: ABAP” in this plan should appear in **Module 24** (ABAP Basics)—e.g. as a dedicated subsection “ABAP in the landscape” before or after the hands-on ABAP basics. Ensure Module 24 covers data plane, control plane, deployment, and integration for ABAP as in the outline above.
+- **Section: ABAP:** Content from “Section: ABAP” in this plan appears in **Module 24** (ABAP Basics).
+---
+
+## Next steps (maintenance and extension)
+
+1. **Adding modules:** Update `index.html` (sidebar button + `totalModules`), `welcome.html` (stats and section cards), and Module 2 (consolidated table and glossary). Add cross-references from related modules.
+2. **Recategorizing:** Update sidebar `.sidebar-subheading` and tab order in `index.html`; update section cards and "Sections" stat in `welcome.html`.
+3. **Content:** Each new or updated module follows the recommended anatomy (For beginners, In plain terms, purpose, features, data/control plane, deployment, integration, examples, key concepts table, relationship to other modules, quiz for graded modules).
+4. **Test:** Run through welcome, all 47 modules, keyboard navigation, and quizzes; verify iframe height and mobile menu.
 
 ---
 
-## Next steps (after plan is finalized)
-
-1. **You confirm:** Scope (all 31 chapters), order, and any add/remove/rename.  
-2. **Build:** Create folder structure, `index.html`, `welcome.html`, and all 31 module HTML files from this plan (module-1 = Foundation concepts through module-31 = Cross-Module).  
-3. **Content:** Populate each module with full text, tables/concepts, and quiz questions based on the outlines above.  
-4. **Review:** You review content and suggest edits.  
-5. **Test:** Run through welcome, all modules, and quizzes; fix layout and links.  
-6. **Optional:** Theming (e.g. SAP-style colors), extra interactivity, or PDF export.
-
----
-
-*End of course plan. Please review and confirm or adjust before we proceed to implementation.*
+*Course plan reflects the current 47-module, 6-section structure as implemented. Module list and technical implementation section are the single source of truth for scope and file layout.*

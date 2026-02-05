@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 42: SAP Build</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:hover { background: #218838; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+    </style>
+</head>
+<body>
+    <h2>Module 42: SAP Build</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> <strong>SAP Build</strong> is SAP’s low-code and process automation offering. It lets business users and citizen developers create apps, workflows, and automations with little or no traditional coding—using visual designers, drag-and-drop, and pre-built connectors to SAP and other systems. SAP Build is part of the <strong>SAP Business Technology Platform (BTP)</strong> and includes: <strong>SAP Build Apps</strong> (build UIs and logic for custom apps), <strong>SAP Build Process Automation</strong> (workflows, RPA, business rules), and <strong>SAP Build Work Zone</strong> (build work sites and launch pads that combine SAP and non-SAP apps). Key terms: <strong>low-code</strong>, <strong>workflow</strong>, <strong>RPA</strong>, <strong>process automation</strong>, <strong>BTP</strong>.
+    </div>
+
+    <p>SAP Build addresses the need for faster delivery of custom solutions and process improvements without large development teams. It runs on BTP (Module 22) and integrates with S/4HANA, SuccessFactors, Ariba, and third-party systems via APIs and pre-built connectors. Solutions are deployed in the cloud and can be extended by professional developers when needed.</p>
+
+    <h3>Purpose and scope</h3>
+    <p><strong>SAP Build Apps:</strong> Create custom web and mobile apps with visual design. Use data from S/4HANA, BTP services, or REST APIs. Include forms, lists, and business logic (formulas, actions). Deploy as standalone apps or embed in SAP Fiori / Work Zone. <strong>SAP Build Process Automation:</strong> Design workflows (e.g. approval for purchase requisition, onboarding checklist), automate tasks with RPA (robotic process automation—bots that mimic user actions in UIs), and define business rules (e.g. routing rules, validation). Integrate with SAP and non-SAP systems. <strong>SAP Build Work Zone:</strong> Build role-based “work sites” (pages) that aggregate SAP Fiori apps, SAP Build apps, and external links. One entry point for users. <strong>Together:</strong> You can build an approval app with Build Apps, trigger a workflow in Process Automation that runs an RPA bot to copy data from a legacy system, and expose everything in Work Zone.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> <strong>Low-code</strong> means you build by configuring and connecting building blocks (screens, buttons, data sources, “if-then” rules) instead of writing code line by line. <strong>RPA</strong> (robotic process automation) is a “software robot” that logs into an application and performs steps (e.g. copy data from a spreadsheet into a web form) so humans don’t have to do repetitive work.
+    </div>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Build Apps (formerly SAP AppGyver):</strong> Visual canvas: drag components (inputs, lists, buttons, charts). Bind to data (OData from S/4HANA, REST, BTP destinations). Add logic with formulas and flow (e.g. “on button click, call API and show result”). Responsive layout for web and mobile. No ABAP or JavaScript required for basic apps; optional custom code for advanced cases. Apps run on BTP and can use SAP identity (SSO).</li>
+        <li><strong>Process Automation — Workflow:</strong> Model processes with a BPMN-like editor: start event, tasks (user task, service task), gateways (decisions), end event. User tasks create work items in inbox (e.g. “Approve travel request”). Service tasks call APIs (e.g. create document in S/4HANA). Connectors for S/4HANA, SuccessFactors, Ariba, email, etc. Forms for user input. Deploy and monitor running instances.</li>
+        <li><strong>Process Automation — RPA:</strong> Record or script “desktop” or “web” automations. Bot opens an application (e.g. browser, Excel), performs steps (click, type, read), and passes data to workflow or system. Use when no API exists or to bridge legacy systems. Bot runs in a managed environment (attended or unattended).</li>
+        <li><strong>Process Automation — Business Rules:</strong> Define rules (e.g. “if amount &gt; 10,000 and department = X, then approver = Y”). Call from workflow or from S/4HANA (via integration). Keeps logic out of hard code and easy to change.</li>
+        <li><strong>Work Zone:</strong> Create sites and pages. Add tiles that link to Fiori apps, Build apps, external URLs, or widgets. Assign to roles. Users get one place to start their work. Can include process visibility (workflow tasks) and embedded content.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> Build Apps and Process Automation typically don’t store business data long-term; they read and write via APIs to S/4HANA, Datasphere, or other systems. Workflow instance data (process variables, task state) is stored in BTP. RPA may read/write files or UIs. Work Zone stores page layout and assignments. <strong>Control plane:</strong> Configuration is in BTP: subaccount, entitlements (Build Apps, Process Automation, Work Zone), destinations to S/4HANA and other backends. Build Apps and Process Automation have their own design-time UIs (no SPRO). Roles and permissions for who can build vs run are managed in BTP and identity provider.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> SAP Build runs on <strong>SAP BTP</strong> (cloud). Subscribing to Build Apps, Process Automation, and/or Work Zone gives access to the design and runtime environments. No on‑premise installation of “Build” itself; it connects to on‑premise S/4HANA via Cloud Connector if needed. <strong>Integration:</strong> Connectors to S/4HANA (OData, API), SuccessFactors, Ariba, Concur, and generic REST/SOAP. Process Automation can trigger and be triggered by S/4HANA (e.g. workflow started from Fiori app). Work Zone embeds Fiori and Build apps. See Module 22 (BTP) and Module 29 (Integration).</p>
+
+    <div class="example-box">
+        <h4>Example: Approval workflow with Build Process Automation and an app in Work Zone</h4>
+        <p><strong>Scenario:</strong> Purchase requisitions above 5,000 EUR must be approved by a manager. Requisition is created in S/4HANA; workflow is triggered (e.g. via event or API from S/4HANA).</p>
+        <p><strong>Process Automation:</strong> Workflow “PR Approval” has: (1) Start when PR created (integration from S/4HANA). (2) User task “Approve PR” — assigned to manager of requester (business rule looks up manager from SuccessFactors or S/4HANA). (3) Form: Approve / Reject, comment. (4) If approved, service task calls S/4HANA API to release PR. (5) If rejected, service task updates PR with rejection reason. (6) End. Email notification to requester. Manager sees the task in Work Zone or Fiori inbox.</p>
+        <p><strong>Work Zone:</strong> Manager’s work site has tiles: “My Inbox” (workflow tasks), “Purchase Requisitions,” “Reports.” One click to open approval task. Build Apps could be used to build a custom “Approval Dashboard” app and add it as a tile.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Key SAP Build components</h4>
+        <table>
+            <tr><th>Component</th><th>Purpose</th></tr>
+            <tr><td>SAP Build Apps</td><td>Low-code app development: UIs and logic for custom web/mobile apps; connect to S/4HANA and APIs.</td></tr>
+            <tr><td>SAP Build Process Automation</td><td>Workflows, RPA (bots), business rules; automate processes across SAP and non-SAP.</td></tr>
+            <tr><td>SAP Build Work Zone</td><td>Build work sites and launch pads; aggregate Fiori, Build apps, and external links.</td></tr>
+            <tr><td>RPA</td><td>Software robot that automates UI-based tasks (e.g. copy data from legacy app).</td></tr>
+        </table>
+    </div>
+
+    <div class="info-box"><strong>Relationship to other modules:</strong> BTP (Module 22) is the platform; Build runs on BTP. Integration (Module 29) is used for connectors to S/4HANA and other systems. Fiori (Module 28) apps can be combined with Build apps in Work Zone. S/4HANA (Module 30) is a main data and process source. Activate (Module 41) may use Build for extensions during Realize.</div>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: What is SAP Build primarily used for?</h4>
+            <ul class="quiz-options">
+                <li>A) Only database administration</li>
+                <li>B) Low-code app development, process automation (workflows, RPA, rules), and work sites (Work Zone)</li>
+                <li>C) Only FI configuration</li>
+                <li>D) Only MM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>SAP Build is the low-code and automation suite on BTP.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: Where does SAP Build run?</h4>
+            <ul class="quiz-options">
+                <li>A) Only on-premise ECC</li>
+                <li>B) On SAP Business Technology Platform (BTP), cloud</li>
+                <li>C) Only in Excel</li>
+                <li>D) Only in BW</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Build is a BTP capability and runs in the cloud.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: What is RPA in the context of SAP Build Process Automation?</h4>
+            <ul class="quiz-options">
+                <li>A) A report</li>
+                <li>B) Robotic process automation: software bots that perform UI-based tasks (e.g. data entry in legacy systems)</li>
+                <li>C) A database</li>
+                <li>D) Only for PM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>RPA automates repetitive tasks in applications that may not have APIs.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: What is SAP Build Work Zone used for?</h4>
+            <ul class="quiz-options">
+                <li>A) Only development</li>
+                <li>B) Building work sites and launch pads that combine SAP Fiori apps, Build apps, and external links in one entry point</li>
+                <li>C) Only backup</li>
+                <li>D) Only SD</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>Work Zone is the place to aggregate apps and content for users.</div>
+        </div>
+    </div>
+    <script>
+        function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    </script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 45: Extended ERP — Real Estate (RE-FX), PLM, EHS</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:hover { background: #218838; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+    </style>
+</head>
+<body>
+    <h2>Module 45: Extended ERP — Real Estate (RE-FX), PLM, EHS</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> This module covers three extended ERP areas in one place. <strong>Real Estate (RE-FX)</strong> manages property: leases (tenant contracts), rents, maintenance, and valuation—for companies that own or lease many properties. <strong>PLM</strong> (Product Lifecycle Management) covers the lifecycle of products from idea and design through engineering, manufacturing, and service—often integrated with PP and SD. <strong>EHS</strong> (Environment, Health &amp; Safety) covers environmental compliance (emissions, waste, permits), occupational health and safety (incidents, risk assessments), and product safety (e.g. dangerous goods, safety data sheets). Key terms: <strong>lease</strong>, <strong>product lifecycle</strong>, <strong>EHS</strong>, <strong>safety data sheet (SDS)</strong>, <strong>dangerous goods</strong>.
+    </div>
+
+    <p>RE-FX, PLM, and EHS are optional add-ons or integrated components that extend S/4HANA or ECC for specific business needs. They share data with core modules (FI, CO, MM, SD, PM) and have their own configuration and transactions.</p>
+
+    <h3>1. Real Estate (RE-FX)</h3>
+    <h4>Purpose and scope</h4>
+    <p>RE-FX manages real estate objects (buildings, land, rental units) and <strong>contracts</strong> (leases). You can track lease terms (start/end, rent, escalation), tenants, and post rent receivables and revenue to FI. You can manage maintenance (link to PM), valuations (for balance sheet or internal reporting), and space (occupancy, move-in/move-out). Used by companies with significant property portfolios (real estate companies, retailers with many stores, corporations with offices and warehouses).</p>
+    <h4>Key concepts</h4>
+    <ul>
+        <li><strong>Real estate object:</strong> Building or land; can have subunits (rental units). Linked to cost centre or profit centre for accounting.</li>
+        <li><strong>Contract (lease):</strong> Contract type (e.g. lease-out, lease-in). Main terms: partner (tenant/landlord), object, period, payment terms. Conditions: rent (fixed, index-linked), escalation, service charges.</li>
+        <li><strong>Rent posting:</strong> Periodic (e.g. monthly) rent is calculated and posted to FI (receivable and revenue for lease-out; expense and payable for lease-in). Can use recurring entries or RE-FX posting runs.</li>
+        <li><strong>Valuation:</strong> Revaluation of property for balance sheet (e.g. fair value or cost); depreciation can be managed in RE-FX or integrated with FI-AA.</li>
+    </ul>
+    <div class="example-box">
+        <h4>Example: Lease-out and rent posting (RE-FX)</h4>
+        <p>Company owns a building (real estate object BUILD-01) with 10 units. Tenant T1 has a lease contract: 5-year term, monthly rent 10,000 EUR, payable in advance. RE-FX contract stores object, tenant, start/end, and condition (10,000 EUR/month). At month-end, a posting run is executed: system creates FI document—debit receivables 10,000, credit rent revenue 10,000—and updates contract history. If rent is index-linked, condition is updated periodically and next posting uses new amount. Move-out at end of contract closes the contract; no further postings.</p>
+    </div>
+
+    <h3>2. Product Lifecycle Management (PLM)</h3>
+    <h4>Purpose and scope</h4>
+    <p>PLM in SAP covers the product from idea to end-of-life. It includes: <strong>Product design and engineering:</strong> Bill of materials (BOM), recipes, work breakdown structures; engineering change management (ECM). <strong>Project-based product development:</strong> Link to PS (Module 10) for development projects; milestones, costs, and resources. <strong>Collaboration:</strong> With suppliers and manufacturing (design for manufacturing). <strong>Integration with PP and SD:</strong> BOM and routing feed production (PP); product data feeds sales (SD). In S/4HANA, much of this is in the core (e.g. BOM in MM/PP, engineering change in PLM or integrated). SAP also offers SAP PLM (standalone or cloud) for advanced product innovation and collaboration. Here we focus on the ERP-embedded PLM scope: BOM, change management, and link to PP/SD.</p>
+    <h4>Key concepts</h4>
+    <ul>
+        <li><strong>Bill of materials (BOM):</strong> List of components and quantities for a product; used in production (PP), costing (CO), and product footprint (sustainability). Multi-level BOMs support hierarchy.</li>
+        <li><strong>Engineering change management (ECM):</strong> Change requests and change masters to control when a new BOM or recipe goes into effect (e.g. valid-from date, revision). Ensures traceability.</li>
+        <li><strong>Recipe:</strong> In process industries (PP-PI), recipe defines materials and steps; similar role to BOM + routing in discrete.</li>
+        <li><strong>Product lifecycle phases:</strong> From concept, development, production, to discontinuation. PLM can track status and approvals per phase.</li>
+    </ul>
+    <div class="example-box">
+        <h4>Example: BOM change with validity (PLM)</h4>
+        <p>Product P-100 has BOM with components A and B. Engineering creates a change: replace B with B-new (better performance). Change master is created with validity from 01.03.2026. Until then, production uses old BOM (A + B); from 01.03.2026, production and costing use new BOM (A + B-new). Purchasing and production planning are updated for B-new. ECM ensures only one valid BOM per product at a time (per validity).</p>
+    </div>
+
+    <h3>3. Environment, Health &amp; Safety (EHS)</h3>
+    <h4>Purpose and scope</h4>
+    <p>EHS supports compliance and risk management in three areas. <strong>Environmental:</strong> Emissions (air, water, waste); waste management (disposal, recycling); environmental permits and reporting. Can feed sustainability reporting (Module 36). <strong>Health &amp; safety:</strong> Occupational health (medical exams, exposure); safety (incidents, risk assessments, corrective actions); dangerous goods handling. <strong>Product safety:</strong> Safety data sheets (SDS) for substances and products; dangerous goods classification for storage and transport (links to MM, TM, GTS). Compliance with regulations (e.g. REACH, GHS, local OSHA-style rules).</p>
+    <h4>Key concepts</h4>
+    <ul>
+        <li><strong>Safety data sheet (SDS):</strong> Document that describes hazards, composition, handling, and disposal of a substance or product. Required for dangerous goods. EHS can generate and manage SDS and link to materials.</li>
+        <li><strong>Dangerous goods:</strong> Classification (e.g. UN number, hazard class). Used in storage (MM), transportation (TM), and customs (GTS). EHS maintains dangerous goods master data and checks (e.g. incompatible storage).</li>
+        <li><strong>EHS incident:</strong> Record of an accident or near-miss; link to corrective action, cost, and reporting. Used for safety KPIs and regulatory reporting.</li>
+        <li><strong>Waste management:</strong> Waste types, disposal partners, quantities; post to FI/CO and environmental reporting.</li>
+    </ul>
+    <div class="example-box">
+        <h4>Example: Dangerous goods and SDS (EHS)</h4>
+        <p>Material M-CHEM is a chemical. In EHS, it is classified as dangerous goods (e.g. UN 1234, class 3, flammable). An SDS is created and maintained; it is sent to customers and used internally. In MM, storage type for M-CHEM must allow dangerous goods; in TM, when creating a shipment with M-CHEM, system checks transport compatibility and may require special handling. In GTS, export/import may trigger dangerous goods checks. EHS is the single place for substance and dangerous goods data; other modules consume it.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Summary: RE-FX, PLM, EHS</h4>
+        <table>
+            <tr><th>Area</th><th>Main purpose</th><th>Key integration</th></tr>
+            <tr><td>RE-FX</td><td>Real estate and lease management; rent posting, valuation</td><td>FI, CO, PM (maintenance)</td></tr>
+            <tr><td>PLM</td><td>Product lifecycle: BOM, change management, link to production</td><td>PP, MM, SD, CO, Sustainability (PCF)</td></tr>
+            <tr><td>EHS</td><td>Environmental, health &amp; safety, product safety (SDS, dangerous goods)</td><td>MM, TM, GTS, Sustainability, FI/CO (costs)</td></tr>
+        </table>
+    </div>
+
+    <div class="info-box"><strong>Relationship to other modules:</strong> RE-FX uses FI for postings and optionally FI-AA for depreciation. PLM feeds PP (BOM, routing), CO (costing), and Sustainability (product footprint). EHS feeds MM (storage), TM (transport), GTS (customs), and Sustainability (environmental data). See Module 36 (Sustainability) for ESG and Module 34 (GTS) for customs.</div>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: What does RE-FX primarily manage?</h4>
+            <ul class="quiz-options">
+                <li>A) Only SD orders</li>
+                <li>B) Real estate objects and contracts (leases); rent posting, valuation, optional link to PM</li>
+                <li>C) Only MM</li>
+                <li>D) Only FI</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>RE-FX is for real estate and lease management.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: In PLM, what is the main purpose of Engineering Change Management (ECM)?</h4>
+            <ul class="quiz-options">
+                <li>A) Only post invoices</li>
+                <li>B) Control when BOM or recipe changes take effect (validity, revision); ensure traceability</li>
+                <li>C) Only for PM</li>
+                <li>D) Only for QM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>ECM manages the timing and approval of product changes.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: What does EHS cover?</h4>
+            <ul class="quiz-options">
+                <li>A) Only finance</li>
+                <li>B) Environmental (emissions, waste), health &amp; safety (incidents, risk), product safety (SDS, dangerous goods)</li>
+                <li>C) Only SD</li>
+                <li>D) Only PP</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>EHS covers environmental, health &amp; safety, and product safety.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: Where is dangerous goods data from EHS used?</h4>
+            <ul class="quiz-options">
+                <li>A) Only in FI</li>
+                <li>B) In MM (storage), TM (transport), and GTS (customs) for compatibility and compliance checks</li>
+                <li>C) Only in SD</li>
+                <li>D) Only in CO</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>Dangerous goods classification is consumed by MM, TM, and GTS.</div>
+        </div>
+    </div>
+    <script>
+        function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    </script>
+</body>
+</html>

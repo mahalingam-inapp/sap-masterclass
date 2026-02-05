@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 44: SAP Industry Solutions (Overview)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:hover { background: #218838; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+    </style>
+</head>
+<body>
+    <h2>Module 44: SAP Industry Solutions (Overview)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> Beyond the “generic” ERP modules (FI, CO, MM, SD, PP, etc.), SAP offers <strong>industry-specific</strong> solutions. These add processes, data models, and compliance features for sectors such as retail, oil &amp; gas, utilities, banking, insurance, healthcare, manufacturing (discrete and process), and public sector. Industry solutions are built on top of core SAP (S/4HANA or ECC) and may include cloud products (e.g. SAP for Retail, SAP for Utilities). This module gives an <strong>overview</strong> of how industry solutions work and lists major industries; it does not replace deep training in any one industry. Key terms: <strong>industry cloud</strong>, <strong>industry-specific process</strong>, <strong>IS‑solution</strong>, <strong>vertical</strong>.
+    </div>
+
+    <p>Industry solutions help companies meet regulatory requirements, use best practices for their sector, and integrate specialised processes (e.g. meter-to-cash in utilities, claims in insurance) with core ERP. They are sold as add-ons or industry editions (e.g. S/4HANA for oil &amp; gas, S/4HANA for utilities) and as industry cloud products.</p>
+
+    <h3>Purpose and scope</h3>
+    <p><strong>Vertical focus:</strong> Each industry has unique processes. Examples: <strong>Retail:</strong> Merchandising, assortment, allocation, point-of-sale (POS) integration, loyalty, omnichannel. <strong>Oil &amp; Gas:</strong> Joint venture accounting, hydrocarbon management, royalties, upstream/downstream. <strong>Utilities:</strong> Meter-to-cash, device management, deregulation, energy data management. <strong>Banking:</strong> Core banking, loans, deposits, regulatory reporting (e.g. Basel). <strong>Insurance:</strong> Policy administration, claims, reinsurance. <strong>Healthcare:</strong> Patient management, clinical and administrative, billing. <strong>Discrete manufacturing:</strong> Engineer-to-order (ETO), project-based manufacturing (already in PS/PP). <strong>Process manufacturing:</strong> Batch management, recipe, process orders (PP-PI). <strong>Public sector:</strong> Budgeting, grants, fund accounting, tax. <strong>Consumer products:</strong> Trade promotion, demand management. <strong>Mining:</strong> Extraction, processing, sales. These are implemented as industry add-ons (IS‑solutions) or industry cloud apps that connect to S/4HANA.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> A <strong>vertical</strong> is an industry (e.g. utilities). “Industry solution” means SAP has pre-built processes and data structures for that vertical so you don’t have to build everything from generic FI/MM/SD. For example, in utilities you get meter reading, billing cycles, and device management; in oil &amp; gas you get joint venture accounting and production sharing.</p>
+    </div>
+
+    <h3>How industry solutions work</h3>
+    <ul>
+        <li><strong>Foundation:</strong> Industry solutions sit on top of core S/4HANA or ECC. They use and extend standard modules (FI, CO, MM, SD, etc.) with industry-specific configuration, custom objects (e.g. industry tables, BAdIs), and additional apps. You still have company code, G/L, materials, orders—plus industry objects (e.g. utility contract, insurance policy).</li>
+        <li><strong>Deployment:</strong> On‑premise: industry add-ons or industry-specific S/4HANA editions. Cloud: SAP Industry Cloud products (e.g. SAP Industry Cloud for Retail, for Utilities) that run on BTP and integrate with S/4HANA Cloud or other backends. Scope varies by product and release.</li>
+        <li><strong>Configuration and scope:</strong> Industry solutions are activated and configured (SPRO or cloud config). Scope items in SAP Activate often include industry-specific flows. Implementation follows the same methodology (Discover, Prepare, Explore, Realize, Deploy, Run) with industry content.</li>
+        <li><strong>Compliance and regulation:</strong> Many industry solutions include compliance features: e.g. utilities (regulated tariffs, reporting), banking (capital adequacy, liquidity), healthcare (HIPAA, billing rules), public sector (fund accounting, grants).</li>
+    </ul>
+
+    <h3>Selected industries (summary)</h3>
+    <p>The following table gives a short summary of focus areas. Details and product names change; refer to SAP’s current portfolio for your industry.</p>
+    <div class="step-box">
+        <table>
+            <tr><th>Industry</th><th>Typical focus areas</th></tr>
+            <tr><td>Retail</td><td>Merchandising, POS, omnichannel, allocation, loyalty, size/grade.</td></tr>
+            <tr><td>Oil &amp; Gas</td><td>Joint venture accounting, hydrocarbon tracking, royalties, upstream/downstream.</td></tr>
+            <tr><td>Utilities</td><td>Meter-to-cash, device management, deregulation, energy data, billing cycles.</td></tr>
+            <tr><td>Banking</td><td>Core banking, loans, deposits, regulatory reporting (e.g. Basel, IFRS 9).</td></tr>
+            <tr><td>Insurance</td><td>Policy, claims, reinsurance, actuarial.</td></tr>
+            <tr><td>Healthcare</td><td>Patient admin, clinical, billing, regulatory.</td></tr>
+            <tr><td>Public sector</td><td>Budget, grants, fund accounting, tax, procurement.</td></tr>
+            <tr><td>Process manufacturing</td><td>Batch, recipe, process orders (PP-PI), quality.</td></tr>
+        </table>
+    </div>
+
+    <h3>Data and integration</h3>
+    <p>Industry solutions use the same core data (company code, cost centre, material, business partner) and add industry-specific master and transactional data (e.g. utility contract, meter, policy). Reporting and analytics often use BW/4HANA, SAC, or Datasphere with industry data models. Integration with external systems (meters, POS, core banking, clinical systems) is via CPI, APIs, or industry connectors.</p>
+
+    <div class="example-box">
+        <h4>Example: Utilities meter-to-cash</h4>
+        <p>An electricity utility uses SAP for utilities (or industry cloud for utilities). <strong>Device management:</strong> Meters and meter reading devices are maintained; readings are collected (from head-end systems or manual). <strong>Billing:</strong> Consumption (kWh) is calculated per contract and period; tariffs (e.g. time-of-use, flat) are applied. Invoices are generated and sent. <strong>Cash:</strong> Payments are received and allocated; dunning for overdue. <strong>Regulation:</strong> Reports for regulator (e.g. consumption by segment, revenue). All of this uses core FI/AR and SD plus industry-specific contract, meter, and tariff objects. S/4HANA (or ECC) + utilities add-on or industry cloud provides the end-to-end process.</p>
+    </div>
+
+    <div class="info-box"><strong>Relationship to other modules:</strong> Every industry solution builds on core ERP: FI (Module 3), CO (Module 4), MM (Module 5), SD (Module 6), and others. Industry solutions add vertical processes and data. For deeper treatment of extended ERP areas that overlap with industries, see Module 45 (Real Estate, PLM, EHS). For implementation, see Module 41 (Activate) and Module 37 (ALM).</div>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: What are SAP industry solutions?</h4>
+            <ul class="quiz-options">
+                <li>A) Only generic ERP</li>
+                <li>B) Industry-specific processes, data models, and compliance built on core SAP (S/4HANA/ECC) for verticals like retail, utilities, banking, healthcare</li>
+                <li>C) Only FI</li>
+                <li>D) Only SD</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>Industry solutions add vertical capability on top of core ERP.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: Do industry solutions replace core FI, MM, SD?</h4>
+            <ul class="quiz-options">
+                <li>A) Yes, completely</li>
+                <li>B) No—they extend and sit on top of core modules; you still use company code, G/L, materials, orders</li>
+                <li>C) Only for PM</li>
+                <li>D) Only for QM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Industry solutions build on core ERP.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: “Meter-to-cash” is typically associated with which industry?</h4>
+            <ul class="quiz-options">
+                <li>A) Only retail</li>
+                <li>B) Utilities—meter reading, billing, payment, dunning</li>
+                <li>C) Only banking</li>
+                <li>D) Only insurance</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>Meter-to-cash is the utilities process from meter reading to revenue collection.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: Where can industry solutions run?</h4>
+            <ul class="quiz-options">
+                <li>A) Only on-premise</li>
+                <li>B) On‑premise (industry add-ons / industry S/4HANA editions) and cloud (SAP Industry Cloud products on BTP)</li>
+                <li>C) Only in Excel</li>
+                <li>D) Only in BW</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>SAP offers industry solutions both on‑premise and in the cloud (industry cloud).</div>
+        </div>
+    </div>
+    <script>
+        function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    </script>
+</body>
+</html>

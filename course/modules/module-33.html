@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 33: Financial Supply Chain Management (FSCM)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        button:hover { background: #5568d3; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:hover { background: #218838; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 33: Financial Supply Chain Management (FSCM)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> FSCM extends <strong>FI</strong> (Module 3) into the full <strong>financial supply chain</strong>: from cash and liquidity (treasury, cash management), to credit decisions (who gets how much credit), to collecting money (collections, dunning) and resolving disputes (why a customer hasn’t paid). Core FI gives you G/L, AP, AR; FSCM adds <strong>Treasury and Risk Management (TRM)</strong>, <strong>Cash Management</strong>, <strong>Credit Management</strong>, <strong>Collections Management</strong>, and <strong>Dispute Management</strong>. Large enterprises use FSCM to optimize liquidity, control credit risk, and automate collections and dispute handling. Key terms: <strong>liquidity planning</strong>, <strong>credit limit</strong>, <strong>dispute case</strong>, <strong>in-house cash</strong>.
+    </div>
+
+    <p>SAP FSCM is a set of applications that sit alongside or on top of FI and AR/AP. They address treasury, cash, credit, collections, and disputes with dedicated workflows and reporting. FSCM is available on‑premise (S/4HANA, ECC) and in S/4HANA Cloud (scope may vary by edition).</p>
+
+    <h3>Purpose and scope</h3>
+    <p>FSCM covers: <strong>Treasury and Risk Management (TRM):</strong> Cash positioning, liquidity planning, in-house cash (IHC) for centralised cash pooling, bank communication management (BCM), debt/investment management, foreign exchange and hedging, and risk analysis. <strong>Cash Management:</strong> Cash position (current and planned), liquidity forecasts, bank account management, and integration with banks (e.g. bank statements, SWIFT). <strong>Credit Management:</strong> Centralised credit limit for customers (and optionally vendors); credit checks at order entry, delivery, or billing; risk classification and block reasons; integration with AR and SD. <strong>Collections Management:</strong> Worklists of overdue receivables, prioritisation by amount or risk, correspondence (dunning letters, reminders), promise-to-pay, and dispute creation. <strong>Dispute Management:</strong> Dispute cases linked to invoices or line items; reason codes, workflow, resolution; keeps disputes out of normal AR until resolved. Together these give a single view of financial supply chain from order to cash and from payables to treasury.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> When a customer is overdue, you don’t just “dun” them—you may open a <strong>dispute</strong> (e.g. “goods not received,” “price dispute”). Dispute Management tracks that case; when it’s resolved, you clear the dispute and the invoice can be collected. Credit Management ensures that before you ship or bill, the system checks whether the customer is within their <strong>credit limit</strong>; if not, the order or delivery can be blocked until credit is increased or approved.
+    </div>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>TRM — Cash and liquidity:</strong> Cash position shows current and forecasted cash by bank account, company, or group. Liquidity planner uses planned inflows/outflows (from AP, AR, treasury transactions). In-house cash (IHC) models internal bank: subsidiaries “deposit” and “withdraw”; net positions are settled with external banks. Reduces external borrowing and improves interest.</li>
+        <li><strong>TRM — Bank Communication Management (BCM):</strong> Central management of bank accounts, signatories, and formats (e.g. SEPA, SWIFT). Outbound payments and bank statements can be routed through BCM. Supports multi-bank and multi-company.</li>
+        <li><strong>Credit Management:</strong> Credit limit is stored per business partner (or credit group). Credit check can run at order (SD), delivery, or billing. If exposure (open AR + order value) exceeds limit, system can block (hard) or warn (soft). Credit limit can be updated via workflow (e.g. credit analyst approves increase). Integrates with FI-AR and SD.</li>
+        <li><strong>Collections Management:</strong> Collector sees worklist of overdue items (by customer, amount, days overdue). Can send reminder, record promise-to-pay, or create dispute. Dispute links to invoice so that disputed amount is excluded from collection until resolved. Reduces manual follow-up and improves cash flow.</li>
+        <li><strong>Dispute Management:</strong> Dispute case has reason (e.g. “quantity variance,” “pricing”), amount, and link to document (invoice, line item). Status: open, in progress, resolved. On resolution, case is closed and invoice can be paid or written off. Reporting: dispute volume, ageing, resolution time.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> FSCM uses its own tables and shared FI/AR data. Examples: credit limit and exposure (FSCM tables or AR with credit segments); dispute cases and items; cash position and liquidity items; TRM transactions (deals, positions). FI documents (BKPF/BSEG, ACDOCA) and AR (BSID/BSAD) remain the source for open items; FSCM reads and optionally writes (e.g. dispute status, credit block). <strong>Control plane:</strong> FSCM configuration in SPRO: credit control area, risk categories, credit check rules; collection segments and worklist config; dispute reason codes and workflow; TRM company settings, bank accounts, and liquidity config. See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> FSCM runs <strong>on‑premise</strong> (S/4HANA, ECC) and in <strong>S/4HANA Cloud</strong> (Credit Management, Collections, Dispute Management, and selected TRM/Cash Management capabilities depending on scope). <strong>Integration:</strong> Tight with FI (company code, G/L, AR/AP), SD (credit check at order/delivery/billing), and optionally with external banks (bank statements, payment files). Treasury can integrate with trading platforms and market data. Credit and collections use the same business partner and open item data as FI-AR.</p>
+
+    <div class="example-box">
+        <h4>Example: Credit check at order entry and dispute handling</h4>
+        <p><strong>Credit check:</strong> Customer 1000 has credit limit 50,000 EUR. Open AR: 30,000 EUR. Sales order for 25,000 EUR is entered. System calculates exposure: 30,000 + 25,000 = 55,000 EUR &gt; 50,000. Credit check (configured as “block”) prevents order release. Credit analyst increases limit to 60,000 EUR (with approval workflow) or assigns a one-time override. Order is released. At billing, check runs again; if still over limit, billing can be blocked until payment is received or limit updated.</p>
+        <p><strong>Dispute:</strong> Customer 1000 pays 28,000 EUR but withholds 2,000 EUR (“short delivery”). Collector opens a <strong>dispute case</strong>: reason “quantity variance,” amount 2,000 EUR, linked to invoice 9000000123. Dispute is in “in progress”; logistics and customer resolve the short delivery. Once agreed, analyst closes dispute (e.g. “credit memo to be created” or “customer will pay”). The 2,000 EUR is no longer in “dispute” bucket; it’s either cleared by credit memo or collected. Collections worklist excludes disputed amounts from “due” so collector focuses on collectable items.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Key FSCM components and concepts</h4>
+        <table>
+            <tr><th>Component / Term</th><th>Purpose</th></tr>
+            <tr><td>TRM (Treasury and Risk Management)</td><td>Cash position, liquidity planning, in-house cash, bank communication, FX, debt/hedging.</td></tr>
+            <tr><td>Cash Management</td><td>Cash position and liquidity forecast; bank account management.</td></tr>
+            <tr><td>Credit Management</td><td>Central credit limit; credit check at order/delivery/billing; block or warn.</td></tr>
+            <tr><td>Collections Management</td><td>Worklist, dunning, promise-to-pay, link to dispute.</td></tr>
+            <tr><td>Dispute Management</td><td>Dispute cases linked to invoices; reason, workflow, resolution.</td></tr>
+            <tr><td>In-house cash (IHC)</td><td>Internal cash pooling; subsidiaries settle via internal “bank”; net external position.</td></tr>
+        </table>
+    </div>
+
+    <div class="info-box"><strong>Relationship to Module 3 (FI):</strong> FI provides G/L, AP, AR, and basic dunning. FSCM adds centralised credit, structured collections, dispute tracking, and full treasury/cash management. Implement FI first; add FSCM when you need group-wide credit, dispute handling, or advanced cash and treasury.</div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: FSCM component by process</h4>
+        <p>Select a process to see which FSCM component supports it.</p>
+        <div style="margin: 16px 0;">
+            <button type="button" onclick="showFscm('credit')">Order entered, check customer limit</button>
+            <button type="button" onclick="showFscm('dispute')">Customer withholds payment, reason “wrong price”</button>
+            <button type="button" onclick="showFscm('cash')">Forecast next 30 days cash by bank</button>
+        </div>
+        <div id="fscm-reveal" class="reveal-box"></div>
+    </div>
+
+    <h3>Key tables and T-codes (on‑prem)</h3>
+    <p>Credit: Credit control area, credit segment, credit limit storage (e.g. custom or FSCM tables); credit check in SD (VKM3, VKM4) or FSCM transactions. Collections: FSCM Collections worklist and correspondence. Dispute: Dispute case tables; link to FI document. TRM/Cash: Liquidity and cash position tables; TRM deal and position tables. T-codes and Fiori apps vary by component (e.g. “Manage Credit Exposure,” “Manage Disputes,” “Cash Position”). See SAP Help for your release.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: What does FSCM Credit Management do?</h4>
+            <ul class="quiz-options">
+                <li>A) Only post invoices</li>
+                <li>B) Centralised credit limit and credit check at order/delivery/billing; can block if exposure exceeds limit</li>
+                <li>C) Only treasury</li>
+                <li>D) Only bank reconciliation</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>Credit Management maintains credit limits and runs credit checks; it integrates with SD and AR.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: Dispute Management is used when:</h4>
+            <ul class="quiz-options">
+                <li>A) Only for vendor invoices</li>
+                <li>B) Customer withholds payment and gives a reason (e.g. short delivery, wrong price); track case until resolved</li>
+                <li>C) Only for G/L posting</li>
+                <li>D) Only for production</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Dispute Management tracks dispute cases linked to receivables so that collections and AR reflect disputed vs collectable amounts.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: In-house cash (IHC) in TRM is used for:</h4>
+            <ul class="quiz-options">
+                <li>A) Only external payments</li>
+                <li>B) Internal cash pooling: subsidiaries settle via internal “bank”; net position with external banks</li>
+                <li>C) Only sales order</li>
+                <li>D) Only material master</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>IHC models an internal bank for group cash pooling and reduces external borrowing.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: FSCM integrates most closely with which module?</h4>
+            <ul class="quiz-options">
+                <li>A) Only PP</li>
+                <li>B) FI (AR, AP, G/L) and SD (for credit check at order)</li>
+                <li>C) Only QM</li>
+                <li>D) Only PM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>FSCM extends FI and uses AR/AP data; credit check is often at SD order/delivery/billing.</div>
+        </div>
+    </div>
+    <script>
+        function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+        function showFscm(x) {
+            var box = document.getElementById('fscm-reveal');
+            if (x === 'credit') box.innerHTML = '<strong>Credit Management.</strong> When the order is entered, the system runs a credit check: open AR + order value vs credit limit. If over limit (and config = block), order is blocked until limit is increased or override is applied.';
+            else if (x === 'dispute') box.innerHTML = '<strong>Dispute Management.</strong> A dispute case is created with reason “wrong price” (or short delivery, etc.) and linked to the invoice. The disputed amount is tracked separately; when resolved (e.g. credit memo or customer pays), the case is closed. Collections worklist can exclude disputed amounts.';
+            else if (x === 'cash') box.innerHTML = '<strong>Cash Management / TRM.</strong> Cash position and liquidity forecast use bank account data and planned flows (from AP, AR, treasury). You see forecasted cash for the next 30 days by bank or company for liquidity planning.';
+            box.classList.add('show');
+        }
+    </script>
+</body>
+</html>

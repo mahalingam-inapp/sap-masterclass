@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 38: SAP Revenue Accounting and Reporting (RAR)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        button:hover { background: #5568d3; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:hover { background: #218838; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+    </style>
+</head>
+<body>
+    <h2>Module 38: SAP Revenue Accounting and Reporting (RAR)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> Under accounting standards such as <strong>IFRS 15</strong> and <strong>ASC 606</strong>, revenue from contracts with customers must be recognised in a specific way: identify the contract, performance obligations, transaction price, allocate price to obligations, and recognise revenue when (or as) each obligation is satisfied. This can mean deferring revenue (e.g. for subscriptions or warranties) or recognising over time. <strong>SAP Revenue Accounting and Reporting (RAR)</strong> is the SAP solution that implements this: it takes source data (e.g. from SD billing, subscriptions, royalties), applies revenue recognition rules, and posts the correct revenue and contract assets/liabilities to FI. Key terms: <strong>performance obligation</strong>, <strong>contract asset / contract liability</strong>, <strong>revenue recognition</strong>, <strong>IFRS 15 / ASC 606</strong>.
+    </div>
+
+    <p>RAR is a separate application (on BTP or as an add-on) that works alongside S/4HANA (or ECC). Billing documents and other revenue-relevant events are replicated to RAR; RAR applies the revenue logic and posts journal entries back to FI. This keeps revenue accounting standards–compliant without overloading core SD/FI with complex allocation and timing rules.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>RAR covers: <strong>Contract and performance obligations:</strong> Model contracts and performance obligations (POs). Each PO has a type (e.g. product at a point in time, service over time, warranty). <strong>Transaction price and allocation:</strong> Determine transaction price (considering variable consideration, discounts, rebates). Allocate price to POs (e.g. relative standalone selling price or other method). <strong>Revenue recognition:</strong> Recognise revenue when (or as) each PO is satisfied. For “over time,” use a measure of progress (e.g. cost incurred, output method). For “point in time,” recognise at delivery/transfer of control. <strong>Contract assets and liabilities:</strong> Post contract asset (e.g. unbilled receivable when revenue is recognised before billing), contract liability (e.g. advance payment, deferred revenue). <strong>Disclosure and reporting:</strong> Reports for IFRS 15/ASC 606 disclosures (e.g. contract balance movement, remaining performance obligations).</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> You sell a product with a one-year warranty. The <strong>performance obligations</strong> are (1) deliver the product and (2) provide warranty service over one year. You allocate part of the transaction price to each. Revenue for the product is recognised at delivery; revenue for the warranty is recognised <strong>over time</strong> (e.g. straight line over 12 months). Until recognised, the warranty portion sits as <strong>contract liability</strong> (deferred revenue). RAR does this allocation and timing and posts the right amounts to the G/L.
+    </div>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Source data integration:</strong> RAR receives data from S/4HANA: billing documents (SD), sales orders, delivery, subscription/usage data. Replication can be event-driven or batch. Each source item is mapped to a “revenue relevant item” in RAR. Multiple sources (e.g. SD, Concur for rebates, custom billing) can feed RAR.</li>
+        <li><strong>Contract and PO modelling:</strong> Define contract types and PO types. Link source items (e.g. billing line) to POs. Define satisfaction type: point in time vs over time. For over time, define measure of progress (e.g. time-based, cost-based). Configuration is done in RAR; no need to code all logic in SD.</li>
+        <li><strong>Allocation and recognition:</strong> Transaction price is determined from source (e.g. billing amount) and adjusted for variable consideration (estimates, constraints). Allocation to POs uses configured rules (e.g. relative standalone selling price). Recognition runs (e.g. daily or at event) calculate how much revenue to recognise per PO and post to FI: revenue account, contract asset, contract liability. Reversals and adjustments (e.g. contract modification) are supported.</li>
+        <li><strong>FI integration:</strong> RAR posts to FI (company code, G/L accounts). Accounts used: revenue (by type/PO), contract asset (unbilled), contract liability (deferred revenue), and possibly receivables adjustments. Posting is typically via interface (e.g. IDoc or API) so FI has a full audit trail. Reconciliation between RAR and FI is important for month-end.</li>
+        <li><strong>Reporting and disclosure:</strong> Standard reports: contract balance rollforward, remaining performance obligations (RPO), revenue by period and PO. Export for external disclosure (e.g. annual report). Can feed into SAC or BW for management reporting.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> RAR stores contracts, POs, source items (replicated from SD/billing), allocation results, and recognition results. Its own database (or schema) holds the “revenue ledger.” FI stores the resulting G/L postings (from RAR). Source systems (S/4HANA SD) retain billing documents; RAR does not replace billing, only the revenue accounting. <strong>Control plane:</strong> RAR configuration: contract/PO types, allocation methods, recognition rules, account determination (which G/L accounts for revenue, contract asset, contract liability). Mapping from source document types and item types to RAR contract/PO. See Module 1 for FI account determination; RAR has its own config layer.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> RAR can run as an <strong>add-on</strong> to S/4HANA (on‑premise) or as a <strong>cloud service on BTP</strong> (SAP Revenue Accounting and Reporting service). S/4HANA Cloud has RAR integration; deployment model depends on your S/4HANA edition. <strong>Integration:</strong> Tight with FI (posting), SD (billing documents, sales orders). Optional: subscription billing, usage-based billing, Concur/Ariba for rebates or incentives that affect transaction price. Data flow: SD billing → replicate to RAR → RAR runs allocation and recognition → post to FI.</p>
+
+    <div class="example-box">
+        <h4>Example: Product with warranty and deferred revenue</h4>
+        <p>Customer buys a machine for 100,000 EUR; the contract includes a two-year warranty (estimated standalone value 4,000 EUR). Transaction price = 100,000 EUR. Two POs: (1) Machine — point in time; (2) Warranty — over time (24 months).</p>
+        <p><strong>Allocation:</strong> Allocate 96,000 EUR to machine, 4,000 EUR to warranty (e.g. relative standalone selling price). <strong>At delivery:</strong> Recognise 96,000 EUR revenue (machine); create contract liability 4,000 EUR (deferred revenue for warranty). <strong>Each month:</strong> Recognise 4,000/24 ≈ 166.67 EUR revenue (warranty); reduce contract liability by same amount. RAR runs recognition (e.g. monthly); posts revenue and contract liability movement to FI. After 24 months, contract liability is zero and all 4,000 EUR warranty revenue is recognised. If billing was 100,000 EUR at delivery, there is no contract asset (unbilled); if the customer pays in instalments, contract asset may appear when revenue is recognised before cash is received.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Key RAR components and terms</h4>
+        <table>
+            <tr><th>Component / Term</th><th>Purpose</th></tr>
+            <tr><td>Performance obligation (PO)</td><td>A promise to transfer a good or service; revenue is recognised when/as the PO is satisfied.</td></tr>
+            <tr><td>Contract asset</td><td>Right to consideration that is conditional (e.g. unbilled receivable when revenue recognised before billing).</td></tr>
+            <tr><td>Contract liability</td><td>Obligation to perform; e.g. deferred revenue when payment received before revenue is recognised.</td></tr>
+            <tr><td>Transaction price</td><td>Amount expected in exchange for satisfying the contract; may include variable consideration (discounts, rebates).</td></tr>
+            <tr><td>IFRS 15 / ASC 606</td><td>Revenue recognition standards (international and US); RAR implements the five-step model.</td></tr>
+        </table>
+    </div>
+
+    <div class="info-box"><strong>Relationship to Module 3 (FI):</strong> FI records all G/L postings. Standard SD billing posts revenue at billing time (one line: revenue, receivable). RAR adds a second layer: it may post different revenue amounts and timing, plus contract assets/liabilities, so that the G/L complies with IFRS 15/ASC 606. Companies with complex revenue (subscriptions, multi-element arrangements, warranties) use RAR; simple product sales might stay in SD/FI only with careful design. See Module 3 for basic revenue and receivables.</div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: Revenue recognition timing</h4>
+        <p>Select a scenario to see how revenue is typically recognised.</p>
+        <div style="margin: 16px 0;">
+            <button type="button" onclick="showRar('product')">One-time product sale, delivered today</button>
+            <button type="button" onclick="showRar('warranty')">Two-year warranty sold with product</button>
+            <button type="button" onclick="showRar('subscription')">One-year software subscription, paid upfront</button>
+        </div>
+        <div id="rar-reveal" class="reveal-box"></div>
+    </div>
+
+    <h3>Key tables and flows</h3>
+    <p>RAR uses its own data model (contracts, POs, revenue relevant items, recognition results). Replication from SD: billing document and item data are sent to RAR. Posting to FI: RAR creates accounting documents (or triggers FI posting via API/IDoc) with revenue, contract asset, contract liability. Key is reconciliation: sum of RAR recognition by period should match FI revenue and contract balance movements. T-codes and Fiori apps are product-specific (e.g. “Manage Revenue Contracts,” “Revenue Recognition Run”). See SAP Help for your RAR version.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: What is RAR used for?</h4>
+            <ul class="quiz-options">
+                <li>A) Only inventory</li>
+                <li>B) Revenue accounting under IFRS 15/ASC 606: contracts, performance obligations, allocation, recognition, contract assets/liabilities</li>
+                <li>C) Only AP</li>
+                <li>D) Only fixed assets</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>RAR implements the revenue recognition standard and posts to FI.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: When do you typically have a contract liability (deferred revenue)?</h4>
+            <ul class="quiz-options">
+                <li>A) Only when you have no contract</li>
+                <li>B) When you receive payment (or have a right to consideration) before satisfying the performance obligation—e.g. advance payment or subscription paid upfront</li>
+                <li>C) Only for inventory</li>
+                <li>D) Only for fixed assets</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Contract liability represents the obligation to perform; revenue is recognised as the obligation is satisfied.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: Where does RAR get its source data from?</h4>
+            <ul class="quiz-options">
+                <li>A) Only from FI</li>
+                <li>B) From SD (billing, sales orders), and optionally other sources (subscription, usage); replicated into RAR</li>
+                <li>C) Only from MM</li>
+                <li>D) Only from PM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>RAR consumes billing and contract data from SD and other revenue-relevant sources.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: How does RAR relate to FI?</h4>
+            <ul class="quiz-options">
+                <li>A) RAR replaces FI</li>
+                <li>B) RAR calculates revenue recognition and contract balances, then posts journal entries to FI (revenue, contract asset, contract liability)</li>
+                <li>C) FI replaces RAR</li>
+                <li>D) Only for CO</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>RAR is the revenue engine; FI holds the resulting G/L postings for reporting and close.</div>
+        </div>
+    </div>
+    <script>
+        function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+        function showRar(x) {
+            var box = document.getElementById('rar-reveal');
+            if (x === 'product') box.innerHTML = '<strong>Point in time.</strong> Revenue is recognised when control of the product transfers (e.g. at delivery). One revenue posting at that date.';
+            else if (x === 'warranty') box.innerHTML = '<strong>Over time.</strong> Warranty is a separate performance obligation satisfied over the warranty period. Revenue is recognised over time (e.g. straight line); until then, the allocated amount is contract liability (deferred revenue).';
+            else if (x === 'subscription') box.innerHTML = '<strong>Over time.</strong> Subscription is typically satisfied over the subscription period. Revenue is recognised over the period (e.g. monthly); upfront payment creates contract liability that reduces as revenue is recognised.';
+            box.classList.add('show');
+        }
+    </script>
+</body>
+</html>

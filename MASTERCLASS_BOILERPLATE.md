@@ -2,6 +2,8 @@
 
 This document describes how to replicate the AI Masterclass course structure, styling, and interactivity for new masterclasses. Treat the course as a **collection of concepts** (modules); you can organize them in one list or group them into sections (e.g., "Part 1", "Part 2") in the sidebar.
 
+**Learnings from production:** The boilerplate has been updated with patterns from a 47-module masterclass: consistent module anatomy (e.g. "For beginners" and "In plain terms" callouts), categorization into 6 sections, an overview/glossary module, cross-linking between modules, gamified and capstone chapters, and a clear checklist when adding or recategorizing modules.
+
 ---
 
 ## 1. File & Folder Structure
@@ -10,15 +12,16 @@ This document describes how to replicate the AI Masterclass course structure, st
 course/
 ├── index.html              # Main shell: sidebar + content area, loads welcome + modules in iframes
 ├── modules/
-│   ├── welcome.html        # Landing page with course overview and "Start Learning" CTA
-│   ├── module-1.html       # First concept/module
-│   ├── module-2.html
-│   └── ...                 # module-N.html (or section-module-N.html if you use sections)
+│   ├── welcome.html        # Landing page with course overview, section cards, and "Start Learning" CTA
+│   ├── module-1.html       # First concept/module (often "Foundation" or intro)
+│   ├── module-2.html       # Optional: overview/navigation + consolidated table + glossary
+│   └── ...                 # module-N.html (one file per module)
 ```
 
 - **Single entry point:** `index.html` (or e.g. `your-masterclass.html`).
 - **One HTML file per module** (and one for welcome). Each module is loaded in an iframe.
-- Module count and sidebar labels are configured in the main shell’s HTML and JS.
+- **Module count** and sidebar labels are configured in the main shell’s HTML and JS. When adding modules, update `totalModules`, add a sidebar button per module, and keep welcome stats and section cards in sync.
+- **Optional overview module:** One module (e.g. module-2) can hold a consolidated table of all modules (name, platform, brief description) and a glossary of key terms; update this table and glossary whenever you add or rename modules.
 
 ---
 
@@ -86,10 +89,10 @@ course/
 - **Purpose:** Introduce the course and provide a single CTA to enter the course (hides welcome, shows first module).
 - **Layout:**
   - **Title:** `<h1>` + optional `<p class="subtitle">`.
-  - **Stats (optional):** `<div class="stats">` with several `<div class="stat-item">`, each containing `.stat-value` and `.stat-label` (e.g. module count, duration).
+  - **Stats:** `<div class="stats">` with `.stat-item` elements; each has `.stat-value` and `.stat-label` (e.g. module count, section count). Keep these in sync with the actual number of modules and sidebar sections.
   - **Sections:** `<h2>`, `<p>`, `<ul>` as needed.
   - **Callout boxes:** `.info-box` (blue accent), `.highlight-box` (yellow/warning accent).
-  - **Course structure (optional):** `<div class="course-structure">` with grid of `.section-card` (each with `.section-title` and content like `.module-list`).
+  - **Course structure:** `<div class="course-structure">` with grid of `.section-card`. Each card has `.section-title` (e.g. "Foundation & Core ERP (Modules 1–12)") and `.module-list` (short list of topics). **Align section cards with sidebar subheadings** so learners see the same grouping on welcome and in the sidebar.
   - **CTA:** One button that triggers start:
     ```html
     <button class="start-button" onclick="window.parent.postMessage({type: 'startCourse'}, '*')">
@@ -104,50 +107,67 @@ Each module is a full HTML document (with its own `<head>` and `<style>`) loaded
 
 1. **Module title:** One `<h2>` at the top (e.g. "Module 1: Concept Name").
 2. **Concept blocks:** Use a consistent set of content blocks (see below).
-3. **Optional quiz:** A single `.quiz-section` at the end (see Quizzes).
+3. **Optional quiz:** A single `.quiz-section` at the end (see Quizzes). Omit for gamified or explicitly ungraded chapters.
+
+**Recommended module anatomy (for concept-heavy courses):**
+
+- **Opening:** `.plain-terms` box with **"For beginners"** — 2–4 sentences that set context, define the main idea, and list key terms. Helps every module stand alone.
+- **Body:** Purpose/scope → Features in detail → Data plane & control plane → Deployment & integration. Use **"In plain terms"** (another `.plain-terms` or a short callout) when introducing jargon or a non-obvious idea.
+- **Examples:** `.example-box` with step-by-step narrative; optional `.step-box` or `.flow-step` for procedures.
+- **Reference:** Table of key components/terms (`.step-box` with `<table>`); `.info-box` for **"Relationship to other modules"** (cross-links like "See Module 3").
+- **Interactivity (optional):** `.interactive-container` with buttons that reveal short explanations (`.reveal-box.show`).
+- **Closing:** Key tables/T-codes or summary; then `.quiz-section` (unless the chapter is ungraded).
 
 **Content blocks (use as needed):**
 
 | Block | Class | Use |
 |-------|--------|-----|
-| Concept / example card | `.example-box` | White card, border, padding; wrap a concept or example with `<h3>`, `<p>`, lists. |
-| Interactive demo | `.interactive-container` | Border in primary color; contains canvas, sliders, buttons, or other controls. |
-| Info / tip | `.info-box` | Blue left border, light blue background. |
+| For beginners / plain language | `.plain-terms` | Light blue bg, left border #764ba2; **"For beginners:"** or **"In plain terms:"** with `<strong>`. Define terms on first use. |
+| Concept / example card | `.example-box` | White card, border, padding; wrap a concept or example with `<h4>`, `<p>`, lists. |
+| Interactive demo | `.interactive-container` | Border in primary color; contains buttons, `.reveal-box` (display:none → .show), or other controls. |
+| Info / tip | `.info-box` | Blue left border, light blue background. Use for "Relationship to Module X" and similar. |
 | Warning / tip | `.highlight-box` or `.warning-box` | Yellow left border. |
 | Success | `.success-box` | Green left border. |
 | Inline highlight | `<span class="highlight">` | Yellow background for terms. |
-| Tables | `.truth-table` or generic `table` | Styled in module CSS (header #667eea, stripes). |
-| Step-by-step | `.step-box` | For procedures; optional `<h4>` inside. |
+| Tables | Generic `table` inside `.step-box` or standalone | th #667eea white text, td padding, tr:nth-child(even) background. |
+| Step-by-step / procedure | `.step-box` | For procedures; optional `<h4>` and `<table>` inside. |
+| Flow step (timeline) | `.flow-step` | Single step in a sequence; left border, padding; optional `.module-tag` (pill) for "which module." |
 | Calculation / code | `.calculation-box` | Monospace, blue accent. |
-| Sliders | `.slider-container` → `.slider-group` → `.slider-wrapper` with `<input type="range" class="slider">` and `.slider-value`. |
+| Reveal (interactive) | `.reveal-box` | Initially `display: none`; add class `.show` via JS to display. |
+| Sliders | `.slider-container` → `.slider` and `.slider-value` | As needed. |
 | Buttons | `<button>` | Primary style in module CSS (purple, hover darker). |
 
 **Heading hierarchy:**
 
 - **h2** – Module title (once per page).
-- **h3** – Major sections (concept, example, quiz title).
-- **h4** – Subsections within an example or question.
+- **h3** – Major sections (Purpose, Features, Data plane, Quiz).
+- **h4** – Subsections within an example, table, or question.
 
 ### 3.3 Quizzes (inside a module)
 
-- **Container:** `<div class="quiz-section">` with `<h3>📝 Module Quiz</h3>` (or similar).
+- **Container:** `<div class="quiz-section">` with `<h3>📝 Module Quiz</h3>` (or similar). Omit entirely for **ungraded** or **gamified** chapters.
 - **Per question:**
   ```html
   <div class="quiz-question">
-      <h4>Question N: Question text?</h4>
+      <h4>QN: Question text?</h4>
       <ul class="quiz-options">
           <li>A) Option A</li>
           <li>B) Option B</li>
-          <!-- C, D ... -->
       </ul>
       <button class="show-answer-btn" id="btn-N" onclick="showAnswer(N)">Show Answer</button>
       <div class="quiz-answer" id="answer-N">
-          <strong>Correct Answer: X</strong><br>
+          <strong>Correct: X</strong><br>
           Explanation text.
       </div>
   </div>
   ```
-- **Behavior:** `showAnswer(questionNum)` toggles the corresponding `.quiz-answer` to visible (e.g. add class `show`), disables the button, and optionally changes button text to "Answer Revealed". No automatic scoring; answers are reveal-on-click only.
+- **Behavior:** `showAnswer(questionNum)` adds class `show` to the corresponding `.quiz-answer`, disables the button, and sets button text to "Answer Revealed". No submission or scoring; reveal-on-click only.
+
+### 3.4 Special chapter types
+
+**Capstone (example-based, no quiz):** One narrative company; walk through end-to-end flows (e.g. order-to-cash, procure-to-pay) with step-by-step "who does what" and which modules are used. Include a **roles × modules** table and a short "one action, many effects" section. Good as the penultimate chapter before a simulator.
+
+**Gamified / simulator (ungraded, no quiz):** Fictitious company that uses most course concepts. Structure: intro + progress bar + **missions** (e.g. 5–6). Each mission: short story, 2–3 **steps** with an "Execute" or "Run" button that reveals the outcome and **which modules were used** (e.g. small pills: SD, FI, FSCM). **Badges** unlock when a mission is completed; **progress** (e.g. "Missions completed: 3/6") and optional "All complete" message. Use a distinct theme (e.g. dark background, accent colors) so it feels like a separate "game" block. All state is client-side (resets on reload); no grading.
 
 ---
 
@@ -383,20 +403,26 @@ Each of `welcome.html` and `module-N.html` includes its own `<style>` in `<head>
 - **h2:** `#667eea`, bottom border, margin.
 - **h3:** `#764ba2`, section spacing.
 - **h4:** `#667eea`, smaller than h3.
+- **.plain-terms:** Background #f0f7ff, border-left 4px #764ba2, padding 15px, border-radius 4px. Use for "For beginners" and "In plain terms"; `.plain-terms strong { color: #764ba2; }`.
 - **.example-box:** White, 2px border #e0e0e0, border-radius 8px, padding 25px, box-shadow.
+- **.step-box:** Light gray bg, border #e0e0e0, border-radius 8px, padding 20px; often wraps a table or procedure.
+- **.flow-step:** Single step in a sequence; background #e8f0ff, border-left 4px #667eea, padding 10px 14px, border-radius 4px. Optional **.module-tag** or **.module-pill:** inline-block, small pill (e.g. #667eea bg, white text) for "SD", "FI", etc.
 - **.interactive-container:** White, 2px solid #667eea, border-radius 8px, padding 20px.
+- **.reveal-box:** `display: none`; with class `.show` → `display: block`; border, padding, light background; use for button-triggered reveals.
 - **.info-box:** Background #e8f4f8, border-left 4px #667eea, padding 15px, border-radius 4px.
 - **.highlight-box / .warning-box:** Background #fff3cd, border-left 4px #ffc107.
 - **.success-box:** Background #d4edda, border-left 4px #28a745.
 - **.highlight:** Inline yellow background, padding, border-radius.
-- **button:** Purple bg, white text, rounded, hover darker + translateY(-2px); disabled: opacity 0.5.
-- **.slider:** Range input; custom thumb (e.g. 18px circle #667eea); `.slider-value` for numeric display.
+- **button:** Purple bg, white text, rounded, hover darker + translateY(-2px); disabled: opacity 0.7, cursor not-allowed.
+- **.slider:** Range input; custom thumb; `.slider-value` for numeric display.
 - **Tables:** border-collapse, th #667eea white text, td padding, tr:nth-child(even) background.
 - **.quiz-section:** White, 2px solid #667eea, border-radius 8px, padding 30px, box-shadow.
 - **.quiz-question:** Light gray bg, left border #764ba2, padding 20px.
-- **.quiz-options li:** White bg, border, rounded, padding, cursor pointer; hover border #667eea.
+- **.quiz-options li:** White bg, border, rounded, padding.
 - **.quiz-answer:** Initially `display: none`; with `.show` → `display: block`; green left border, padding.
 - **.show-answer-btn:** Green button; disabled state gray.
+
+**Gamified chapter theme (optional):** Use a distinct body style for the simulator module only: e.g. dark gradient background (#1a1a2e → #0f3460), light text (#e8e8e8), accent colors (#e94560, #4ecca3). Progress bar, mission cards, badges (`.badge`, `.badge.unlocked`), and "Execute" buttons with a different primary color.
 
 ### 5.4 Responsive (Modules & Welcome)
 
@@ -410,8 +436,8 @@ Each of `welcome.html` and `module-N.html` includes its own `<style>` in `<head>
 
 ### 6.1 Configuration
 
-- `totalModules` – number of module iframes to create (e.g. 18).
-- Module URLs: either one pattern (e.g. `modules/module-${i}.html`) or two (e.g. 1–9 → `module-${i}.html`, 10–18 → `business-module-${i - 9}.html`). Adjust in `initializeIframes()`.
+- **`totalModules`** — Number of module iframes to create (e.g. 47). Must equal the number of `.sidebar-tab` buttons (subheadings are not tabs). When adding modules, increment this and add one button per new module.
+- **Module URLs:** One pattern is enough for most courses (e.g. `modules/module-${i}.html` for i = 1 to totalModules). Adjust in `initializeIframes()`.
 
 ### 6.2 Core Behaviors
 
@@ -434,7 +460,7 @@ Each of `welcome.html` and `module-N.html` includes its own `<style>` in `<head>
    - Welcome iframe: same idea; adjust height on load and after short delays.
 
 5. **Showing a module**
-   - `showModule(moduleNumber)`: if `!courseStarted`, call `startCourse()` first. Set `currentModule = moduleNumber`. Remove `.active` from all module iframes, add `.active` to `iframes[moduleNumber]`. Remove `.active` from all `.sidebar-tab`, add to the tab that corresponds to `moduleNumber` (by index: tab at index `moduleNumber - 1`). Call `adjustIframeHeight` for the active iframe. Optionally close mobile sidebar and scroll `.content` to top.
+   - `showModule(moduleNumber)`: if `!courseStarted`, call `startCourse()` first. Set `currentModule = moduleNumber`. Remove `.active` from all module iframes, add `.active` to `iframes[moduleNumber]`. Remove `.active` from all `.sidebar-tab`, add to the tab at **index `moduleNumber - 1`** (first tab = module 1, second = module 2, etc.). Call `adjustIframeHeight` for the active iframe. Optionally close mobile sidebar and scroll `.content` to top. **Important:** The number of sidebar-tab buttons must match `totalModules`; subheadings do not count as tabs.
 
 6. **Showing welcome**
    - `showWelcome()`: show `#welcome-container`, hide `#module-container`, clear active state from all tabs, close mobile menu if open, scroll content to top.
@@ -465,12 +491,25 @@ Each of `welcome.html` and `module-N.html` includes its own `<style>` in `<head>
 
 1. **Copy** the main shell HTML (with embedded CSS and JS) and rename (e.g. `data-masterclass.html`).
 2. **Set** `<title>` and `.sidebar-title` to the course name.
-3. **Set** `totalModules` and the iframe `src` pattern(s) in `initializeIframes()`.
-4. **Build** sidebar: one or more `.sidebar-subheading` + `.sidebar-tab` with correct `onclick="showModule(N)"` (N from 1 to totalModules).
-5. **Create** `modules/welcome.html`: same structure and classes as above; CTA must post `startCourse`.
-6. **Create** each `modules/module-N.html` (or section-module-N): same CSS patterns, one h2, then example-box / interactive-container / info-box / tables / quiz-section as needed.
-7. **Optional:** Change primary/secondary colors by replacing `#667eea` and `#764ba2` across the main shell and module CSS for a different theme.
-8. **Test:** Desktop, 768px, 480px; mobile menu open/close; welcome → start → module 1; keyboard arrows; iframe height and scrolling.
+3. **Set** `totalModules` and the iframe `src` pattern (e.g. `modules/module-${i}.html`).
+4. **Build** sidebar: one or more `.sidebar-subheading` + `.sidebar-tab` with `onclick="showModule(N)"` for N = 1 to totalModules. **Count:** total tab buttons must equal `totalModules`.
+5. **Create** `modules/welcome.html`: title, stats (e.g. module count, section count), course structure (section cards), CTA that posts `startCourse`.
+6. **Create** each `modules/module-N.html`: same CSS patterns; recommended anatomy: h2 → .plain-terms ("For beginners") → purpose/scope → features → data/control plane → deployment → .example-box → key concepts table → .info-box (relationship to other modules) → optional .interactive-container → .quiz-section (unless ungraded).
+7. **Optional:** One overview module (e.g. module-2) with a consolidated table of all modules and a glossary; update it when adding or renaming modules.
+8. **Optional:** Change primary/secondary colors (#667eea, #764ba2) for a different theme.
+9. **Test:** Desktop, 768px, 480px; mobile menu; welcome → start → module 1; keyboard arrows; iframe height and scrolling.
+
+**When adding new modules:**
+
+- **index.html:** Add one `<button class="sidebar-tab" onclick="showModule(N)">N: Title</button>` per new module; insert under the correct `.sidebar-subheading`. Set `totalModules` to the new total.
+- **welcome.html:** Update stats (e.g. "47 Modules"); update or add a section card if the new module belongs to a new section; keep "Sections" stat correct.
+- **Overview module (if any):** Add a row to the consolidated modules table and, if applicable, new glossary entries.
+- **Other modules:** Add cross-references (e.g. "See Module 38 (RAR)") where the new topic is relevant.
+
+**When recategorizing sections:**
+
+- **index.html:** Add or rename `.sidebar-subheading` labels; move `.sidebar-tab` buttons so they sit under the right section. Do not change module numbers or totalModules.
+- **welcome.html:** Rename or split/merge `.section-card` titles and `.module-list` text so they match the new section boundaries; update the "Sections" stat if the number of sections changed.
 
 ---
 
@@ -479,13 +518,28 @@ Each of `welcome.html` and `module-N.html` includes its own `<style>` in `<head>
 | Context | Class | Purpose |
 |---------|--------|--------|
 | Shell | `.container`, `.main-wrapper` | Layout wrapper |
-| Shell | `.sidebar`, `.sidebar-title`, `.sidebar-tabs`, `.sidebar-tab`, `.sidebar-subheading` | Navigation |
+| Shell | `.sidebar`, `.sidebar-title`, `.sidebar-tabs`, `.sidebar-tab`, `.sidebar-subheading` | Navigation (tab count = totalModules) |
 | Shell | `.content`, `.module-content`, `.module-iframe`, `.module-iframe.active` | Content area and iframes |
 | Shell | `.mobile-menu-toggle`, `.sidebar-overlay`, `.sidebar.open`, `.sidebar-overlay.active` | Mobile menu |
-| Welcome | `.welcome-container`, `.stats`, `.stat-item`, `.course-structure`, `.section-card`, `.start-button` | Welcome layout and CTA |
-| Module | `.example-box`, `.interactive-container`, `.info-box`, `.highlight-box`, `.success-box`, `.warning-box` | Content blocks |
-| Module | `.slider-container`, `.slider-group`, `.slider`, `.slider-value` | Sliders |
-| Module | `.quiz-section`, `.quiz-question`, `.quiz-options`, `.quiz-answer`, `.show-answer-btn` | Quiz |
-| Module | `table`, `.truth-table` | Tables |
+| Welcome | `.welcome-container`, `.stats`, `.stat-item`, `.course-structure`, `.section-card`, `.section-title`, `.module-list`, `.start-button` | Welcome layout, section cards, CTA |
+| Module | `.plain-terms` | "For beginners" / "In plain terms" callout |
+| Module | `.example-box`, `.step-box`, `.flow-step`, `.module-tag` / `.module-pill` | Example card; procedure; timeline step; module pill |
+| Module | `.interactive-container`, `.reveal-box`, `.reveal-box.show` | Interactive block; reveal area |
+| Module | `.info-box`, `.highlight-box`, `.success-box`, `.warning-box` | Info, warning, success |
+| Module | `.quiz-section`, `.quiz-question`, `.quiz-options`, `.quiz-answer`, `.show-answer-btn` | Quiz (omit for ungraded/gamified) |
+| Module | `table` (th, td, stripes) | Tables |
+| Gamified | `.progress-section`, `.progress-fill`, `.badge`, `.badge.unlocked`, `.mission-card`, `.btn-execute` | Progress, badges, missions |
 
-Using this boilerplate, you can replicate the same responsive layout, navigation, welcome flow, and module structure (including quizzes and interactive blocks) for any new masterclass.
+---
+
+## 10. Scaling and Categorization (Learnings from Large Courses)
+
+**Section structure:** For courses with many modules (e.g. 30+), group the sidebar into **5–6 sections** with clear `.sidebar-subheading` labels. Keep welcome **section cards** aligned: one card per section, with `.section-title` and `.module-list` describing that range. Update the "Sections" stat in welcome to match.
+
+**Example categorization:** Foundation & Core → Products / Cloud → Technical & Development → Extended Core → Extended & Implementation → Capstone & Simulator.
+
+**Cross-linking:** Add an `.info-box` "Relationship to other modules" in each module; when adding a new module, update the overview table/glossary and add backward references from related modules.
+
+**Consistency:** Use "For beginners" and "In plain terms" in every standard module; keep quiz format uniform (e.g. 4 questions, Show Answer, no scoring).
+
+Using this boilerplate, you can replicate the same responsive layout, navigation, welcome flow, module anatomy (including plain-terms callouts, examples, and quizzes), and scaling patterns for any new masterclass.

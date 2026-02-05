@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 40: SAP S/4HANA Migration</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:hover { background: #218838; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+    </style>
+</head>
+<body>
+    <h2>Module 40: SAP S/4HANA Migration</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> Moving from an older SAP system (typically <strong>ECC</strong> on any database) to <strong>S/4HANA</strong> is a major project. “Migration” here means moving your data, configuration, and custom code to S/4HANA, which runs only on <strong>SAP HANA</strong> and has a simplified data model (e.g. universal journal in FI, material ledger, no redundant tables). You can do a <strong>technical conversion</strong> (same system, upgrade and convert in place), a <strong>greenfield</strong> (new S/4HANA, load only what you need), or a <strong>brownfield</strong> (selective data migration to a new S/4HANA). Key terms: <strong>conversion</strong>, <strong>greenfield</strong>, <strong>brownfield</strong>, <strong>SUM</strong> (Software Update Manager), <strong>custom code adaptation</strong>.
+    </div>
+
+    <p>S/4HANA migration is not just an upgrade: the application is redesigned for HANA, and many ECC structures (e.g. separate FI tables, material ledger variants) are replaced or simplified. Migration therefore involves technical steps (database, code), data transformation (e.g. table conversions, new fields), and process/business alignment (Fiori, new processes). SAP provides tools (SUM, DMO, migration tools) and methodology (SAP Activate, see Module 41).</p>
+
+    <h3>Purpose and scope</h3>
+    <p><strong>Technical conversion (system conversion):</strong> Upgrade ECC (on any DB) to S/4HANA on HANA. Same system ID; data is converted in place. Uses <strong>SUM</strong> (Software Update Manager) and <strong>DMO</strong> (Database Migration Option) to switch database to HANA and apply S/4HANA changes. Custom code must be adapted (ABAP for HANA, removal of obsolete objects). <strong>Greenfield:</strong> New S/4HANA system; no historical data migration (or only reference data). Configure from scratch using best practices. Suited to companies that want a clean start or have simple requirements. <strong>Brownfield (selective data transition):</strong> New S/4HANA system; migrate selected data (e.g. open items, current master data, last N years of documents) from ECC. Combines new design with historical data where needed. <strong>Central Finance as stepping stone:</strong> Introduce S/4HANA as Central Finance first (replicate from ECC), then later convert or migrate source systems (see Module 39).</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> <strong>Technical conversion</strong> = “we keep our one ECC box, switch its database to HANA and turn it into S/4HANA.” <strong>Greenfield</strong> = “we build a new S/4HANA from scratch and don’t carry over old data.” <strong>Brownfield</strong> = “we build new S/4HANA but copy over some data (e.g. open orders, master data) from ECC.”
+    </div>
+
+    <h3>Key migration steps (technical conversion)</h3>
+    <ul>
+        <li><strong>Readiness and preparation:</strong> Run SAP Readiness Check (or equivalent): identifies custom code issues, add-ons compatibility, and configuration gaps. Resolve custom code (ABAP that uses obsolete APIs or tables). Plan for HANA sizing and infrastructure. Decide on Unicode if not already (S/4HANA is Unicode).</li>
+        <li><strong>Software Update Manager (SUM) and DMO:</strong> SUM runs the upgrade and conversion. DMO (Database Migration Option) converts the database to HANA (if coming from non-HANA) and runs table conversions (e.g. merge of FI tables into ACDOCA, material document conversions). Downtime is required; duration depends on data volume. Pre-checks and post-checks are part of the process.</li>
+        <li><strong>Custom code adaptation:</strong> S/4HANA deprecates many tables and APIs. Custom programs that read/write these must be adapted (e.g. use new CDS views, new APIs). ABAP Test Cockpit (ATC) and custom code checks (e.g. “S/4HANA compatibility”) identify issues. Fix before or during migration; some can be done after with remediation projects.</li>
+        <li><strong>Data conversion and reconciliation:</strong> After conversion, verify data: FI totals (G/L, AR, AP), inventory, open orders. Reconciliation reports compare ECC (pre) vs S/4HANA (post). Fix any conversion errors or mapping issues. Business sign-off on key figures is critical.</li>
+        <li><strong>Fiori and UX:</strong> S/4HANA emphasises Fiori and SAP GUI for backend. Plan Fiori activation, roles, and catalog. Train users on new transactions and apps. Some ECC transactions are replaced by Fiori apps or simplified transactions.</li>
+    </ul>
+
+    <h3>Data and landscape</h3>
+    <p><strong>Data:</strong> In technical conversion, existing tables are converted (e.g. BKPF/BSEG → ACDOCA for FI; material document tables consolidated). Historical data is preserved but stored in the new structure. In greenfield, only master and initial data (if any) are loaded. In brownfield, migration tools (e.g. SAP Data Services, migration objects) extract from ECC and load into S/4HANA with transformation. <strong>Landscape:</strong> Conversion is typically done in dev → test → prod order (each system converted or cloned and converted). Brownfield and greenfield use new S/4HANA systems; data is migrated or not as per design.</p>
+
+    <h3>Deployment options</h3>
+    <p><strong>On‑premise:</strong> S/4HANA on your own or partner data centre; HANA database on your infrastructure. Conversion or new installation with migration. <strong>Cloud:</strong> S/4HANA Cloud (public cloud) is a subscription; no “migration” in the same sense—you configure in the cloud and may load data via migration tools or integrate from on‑premise. <strong>Hybrid:</strong> Central Finance on S/4HANA Cloud with replication from ECC on‑premise; then convert ECC to S/4HANA on‑premise or move to cloud. See Module 30 for S/4HANA overview and Module 41 for SAP Activate methodology.</p>
+
+    <div class="example-box">
+        <h4>Example: Technical conversion from ECC 6.0 on Oracle to S/4HANA</h4>
+        <p>Company runs ECC 6.0 EHP 8 on Oracle. They choose technical conversion to S/4HANA 2022 on HANA. Steps: (1) Run Readiness Check; fix 200+ custom code issues (mostly table references to obsolete FI tables). (2) Unicode conversion already done. (3) In maintenance window, run SUM with DMO: export ECC data, install HANA, load data into HANA, run S/4HANA conversion (table splits/merges, new fields). Downtime 36 hours. (4) Post-conversion: run reconciliation (G/L, AR, AP, inventory); a few conversion errors in cost centre assignment—fix with correction postings. (5) Activate Fiori, assign roles, train users. (6) Decommission Oracle; system is now S/4HANA on HANA. Same company codes, same historical data; new data model and UX.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Key migration terms</h4>
+        <table>
+            <tr><th>Term</th><th>Purpose</th></tr>
+            <tr><td>Technical conversion</td><td>Upgrade and convert ECC to S/4HANA in place; same system, new DB and app.</td></tr>
+            <tr><td>Greenfield</td><td>New S/4HANA; no or minimal data migration; start fresh.</td></tr>
+            <tr><td>Brownfield</td><td>New S/4HANA with selective data migration from ECC.</td></tr>
+            <tr><td>SUM (Software Update Manager)</td><td>Tool that runs upgrade and conversion (including DMO for DB migration).</td></tr>
+            <tr><td>Custom code adaptation</td><td>Adjust ABAP and other code for S/4HANA (new tables, APIs, simplifications).</td></tr>
+        </table>
+    </div>
+
+    <div class="info-box"><strong>Relationship to other modules:</strong> Module 30 (S/4HANA Overview) describes the target. Module 41 (SAP Activate) is the implementation methodology. Module 43 (SAP HANA) is the database. Module 26 (Basis) and Module 27 (Security) are involved in migration (roles, transports, sizing). Central Finance (Module 39) can be a pre-step before full conversion.</div>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: What is “technical conversion” to S/4HANA?</h4>
+            <ul class="quiz-options">
+                <li>A) Only greenfield</li>
+                <li>B) Upgrade and convert ECC to S/4HANA in place; same system, database switched to HANA, data and structures converted</li>
+                <li>C) Only brownfield</li>
+                <li>D) Only cloud</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>Technical conversion keeps the same system and converts it to S/4HANA on HANA.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: Why is custom code adaptation needed for S/4HANA?</h4>
+            <ul class="quiz-options">
+                <li>A) Only for Fiori</li>
+                <li>B) S/4HANA removes or changes many tables and APIs; custom programs that use them must be updated</li>
+                <li>C) Only for SD</li>
+                <li>D) Only for MM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Simplification and new data model require code changes for compatibility.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: What is the main use of SUM in migration?</h4>
+            <ul class="quiz-options">
+                <li>A) Only for reporting</li>
+                <li>B) Software Update Manager runs the upgrade and conversion (including database migration to HANA via DMO)</li>
+                <li>C) Only for FI</li>
+                <li>D) Only for HR</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>SUM is the standard tool for technical conversion.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: Greenfield vs brownfield: which typically involves migrating historical data from ECC?</h4>
+            <ul class="quiz-options">
+                <li>A) Greenfield</li>
+                <li>B) Brownfield—new S/4HANA with selective data migration; greenfield is new system without old data</li>
+                <li>C) Both equally</li>
+                <li>D) Neither</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>Brownfield implies migrating selected data; greenfield starts fresh.</div>
+        </div>
+    </div>
+    <script>
+        function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    </script>
+</body>
+</html>

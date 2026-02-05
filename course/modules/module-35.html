@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 35: Master Data Governance (MDG)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        button:hover { background: #5568d3; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 35: Master Data Governance (MDG)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> In SAP, <strong>master data</strong> (e.g. material, vendor, customer, G/L account) is created and changed in the application modules (MM, FI, SD). When many people or many systems can change it, you get duplicates, inconsistencies, and poor data quality. <strong>SAP MDG</strong> (Master Data Governance) centralises master data creation and change with <strong>workflow and approval</strong>: a request to create or change a vendor goes through a process (validation, approval); once approved, the system creates or updates the master record in S/4HANA (and optionally in other systems). MDG also supports <strong>data quality</strong> (e.g. duplicate check, enrichment) and <strong>consolidation</strong> (merge master data from multiple sources). Key terms: <strong>governance</strong>, <strong>change request</strong>, <strong>activation</strong>, <strong>data quality</strong>.
+    </div>
+
+    <p>SAP MDG provides governed, workflow-driven master data management. It is used when you need a single place to create and change master data with approval, auditability, and consistent quality. MDG can run on the same S/4HANA system (embedded) or on a separate MDG system that replicates to other systems.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>MDG covers: <strong>Governed master data:</strong> Create and change master data (e.g. material, vendor, customer, G/L account, cost center) via <strong>change requests</strong>. Request goes through validation and workflow (e.g. approver); on release, data is <strong>activated</strong> (written to the active area and to consuming systems). <strong>Data model:</strong> MDG uses a flexible data model (entity types, attributes, relationships) that can extend standard S/4HANA master data. <strong>Data quality:</strong> Duplicate check (e.g. “similar vendor already exists”), enrichment (e.g. address validation, tax number check), and quality rules. <strong>Consolidation:</strong> Collect master data from multiple source systems (e.g. several ERPs), match and merge, and publish golden records to target systems. <strong>Central governance:</strong> One process for “create vendor” or “change material” across the group; full history and audit trail.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> Without MDG, anyone with the right role can create a vendor in MM (transaction XK01) and the record is live immediately. With MDG, they submit a <strong>change request</strong> (“new vendor ABC, address, bank, etc.”). The request is validated (e.g. duplicate check); then it goes to an approver. When the approver releases it, MDG <strong>activates</strong> the data—the vendor is created in S/4HANA (and optionally in Ariba, SuccessFactors, etc.). So you have one controlled process and a clear audit trail of who requested and who approved.
+    </div>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Change request (CR):</strong> A change request is the container for create or change. User fills in the master data (e.g. vendor name, address, company code data). CR can be “in process” or “released.” Validation runs on save (e.g. mandatory fields, format). Workflow can be multi-level (e.g. requestor → department head → master data owner). On release, activation creates or updates the active record.</li>
+        <li><strong>Activation:</strong> Activation writes the change request data to the active master data (e.g. LFA1, LFB1 for vendor). In distributed landscapes, replication (e.g. via ALE/IDoc or API) sends the new or changed record to other systems. So one approval flows to all systems that need the master.</li>
+        <li><strong>Data quality:</strong> Duplicate check: before creating a vendor, MDG can search for similar existing vendors (e.g. by name, address) and warn or block. Enrichment: call external services (e.g. address validation, tax ID verification) and propose or fill fields. Quality rules can block activation until certain conditions are met.</li>
+        <li><strong>MDG domains:</strong> SAP delivers MDG for several domains: Material, Vendor, Customer, Financial (G/L account, cost center, profit center, etc.), and custom (extensible). Each domain has a data model, UI (Fiori or Web UI), and workflow.</li>
+        <li><strong>Consolidation (MDG-C):</strong> In consolidation scenario, master data is loaded from source systems (e.g. multiple ERPs). MDG matches records (e.g. “vendor X in system A = vendor Y in system B”), merges them into a golden record, and distributes the golden record back to targets. Used in group-wide master data harmonisation.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> MDG stores change requests and staging data (the “draft” before activation). Active master data lives in the same S/4HANA tables as without MDG (e.g. LFA1, MARA); activation writes to them. In consolidation, MDG has its own consolidation repository and golden records. <strong>Control plane:</strong> MDG configuration: data model (entity types, attributes), workflow (steps, agents), validation rules, duplicate check config, replication (outbound to which systems). See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> MDG can run <strong>embedded in S/4HANA</strong> (same system; change requests and activation in one box) or on a <strong>separate MDG system</strong> (central MDG that replicates to one or more S/4HANA or ECC systems). S/4HANA Cloud supports MDG for certain domains (e.g. business partner, material) with predefined scope. <strong>Integration:</strong> With S/4HANA: activation writes to local tables; with other systems: replication via ALE/IDoc, API, or CPI. MDG can also consume data from data quality or enrichment services (e.g. external address validation).</p>
+
+    <div class="example-box">
+        <h4>Example: Create vendor via MDG change request</h4>
+        <p>Procurement needs a new vendor “Global Supplies Inc.” with address and bank details.</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Create change request:</strong> User opens “Create Vendor” (MDG Fiori app or Web UI). Enters general data (name, address, country, tax number) and company code data (payment terms, reconciliation account). Saves as change request. System runs duplicate check: “Vendor with similar name exists (ID 100001)—possible duplicate?” User confirms “new vendor”; request continues.</li>
+            <li><strong>Workflow:</strong> Change request is submitted. Workflow sends task to “Master Data Approver.” Approver reviews data, checks that bank account and reconciliation account are correct, and releases the request.</li>
+            <li><strong>Activation:</strong> On release, MDG activates the vendor: records are written to LFA1 (general), LFB1 (company code), and bank data. Vendor number (e.g. 100002) is assigned. If replication is configured, the new vendor is sent to Ariba or another system. Request is completed; audit log shows who created and who approved.</li>
+        </ol>
+        <p>Result: One governed process, no direct creation in XK01; duplicate check and approval ensure quality and traceability.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Key MDG concepts</h4>
+        <table>
+            <tr><th>Term / Concept</th><th>Purpose</th></tr>
+            <tr><td>Change request (CR)</td><td>Container for create/change of master data; goes through validation and workflow.</td></tr>
+            <tr><td>Activation</td><td>Writing CR data to active master data (and optionally replicating to other systems).</td></tr>
+            <tr><td>Data quality</td><td>Duplicate check, enrichment, quality rules to ensure consistent and correct master data.</td></tr>
+            <tr><td>Consolidation</td><td>Collect from multiple sources, match/merge, publish golden record to targets.</td></tr>
+            <tr><td>MDG domain</td><td>Scope of master data: e.g. Material, Vendor, Customer, Financial (G/L, cost center).</td></tr>
+        </table>
+    </div>
+
+    <div class="info-box"><strong>Relationship to MM, SD, FI:</strong> Those modules own the “active” master data (e.g. vendor in LFA1, material in MARA). MDG does not replace them—it adds a governed <em>process</em> for creating and changing that data. You can still create master data directly in the application (e.g. XK01) if allowed by policy; MDG is for when you want central governance, approval, and quality checks.</div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: MDG vs direct creation</h4>
+        <p>Select an approach to see the difference.</p>
+        <div style="margin: 16px 0;">
+            <button type="button" onclick="showMdg('direct')">Direct creation (e.g. XK01 vendor)</button>
+            <button type="button" onclick="showMdg('mdg')">MDG change request</button>
+        </div>
+        <div id="mdg-reveal" class="reveal-box"></div>
+    </div>
+
+    <h3>Key tables and Fiori apps</h3>
+    <p>MDG uses staging tables for change request data and standard master data tables (LFA1, MARA, etc.) for active data. Fiori apps: “Create Vendor,” “Create Customer,” “Create Material,” “Manage Change Requests,” etc. T-codes depend on domain (e.g. MDG workflow monitor). See SAP Help for MDG.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: What is the main benefit of MDG over creating master data directly in MM/FI/SD?</h4>
+            <ul class="quiz-options">
+                <li>A) Only faster posting</li>
+                <li>B) Governed process with workflow, approval, duplicate check, and audit trail</li>
+                <li>C) Only more modules</li>
+                <li>D) Only reporting</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>MDG adds workflow, validation, and approval so that master data is created in a controlled way with full traceability.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: What happens when a change request is “released” in MDG?</h4>
+            <ul class="quiz-options">
+                <li>A) Only an email is sent</li>
+                <li>B) Data is activated—written to active master data (e.g. LFA1) and optionally replicated to other systems</li>
+                <li>C) Only deleted</li>
+                <li>D) Only locked</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Release triggers activation: the change request content becomes the active master record.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: MDG consolidation is used for:</h4>
+            <ul class="quiz-options">
+                <li>A) Only posting documents</li>
+                <li>B) Collecting master data from multiple source systems, matching/merging, and publishing golden records</li>
+                <li>C) Only production orders</li>
+                <li>D) Only deliveries</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>Consolidation harmonises master data across multiple systems into a single golden record.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: Which master data domains does MDG support (among others)?</h4>
+            <ul class="quiz-options">
+                <li>A) Only FI document</li>
+                <li>B) Material, Vendor, Customer, Financial (G/L, cost center)</li>
+                <li>C) Only sales order</li>
+                <li>D) Only purchase order</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>MDG supports these and other domains; each has a data model and workflow.</div>
+        </div>
+    </div>
+    <script>
+        function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+        function showMdg(x) {
+            var box = document.getElementById('mdg-reveal');
+            if (x === 'direct') box.innerHTML = '<strong>Direct creation.</strong> User runs XK01 (or similar); enters vendor data and saves. Record is active immediately. No approval, no duplicate check in a central process. Fast but no governance.';
+            else if (x === 'mdg') box.innerHTML = '<strong>MDG change request.</strong> User creates a change request in MDG UI; data is validated and duplicate check may run. Request goes to workflow; approver releases. On release, data is activated (written to LFA1, etc.) and optionally replicated. Full audit trail and quality control.';
+            box.classList.add('show');
+        }
+    </script>
+</body>
+</html>

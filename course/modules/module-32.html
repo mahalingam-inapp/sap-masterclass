@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 32: Governance, Risk & Compliance (GRC)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        button:hover { background: #5568d3; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:hover { background: #218838; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 32: Governance, Risk &amp; Compliance (GRC)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> SAP GRC (Governance, Risk, and Compliance) is a suite that helps companies stay <strong>compliant</strong> and manage <strong>risk</strong>. It sits on top of your ERP and security: instead of only defining who can do what (that is Security, Module 27), GRC <em>monitors</em> whether users have conflicting access (e.g. one person creating vendors and also approving payments—a <strong>SOD</strong> violation), runs <strong>access reviews</strong> (recertification), and manages <strong>risk</strong> and <strong>controls</strong> (e.g. for SOX, internal audit). Key components: <strong>Access Control</strong> (SOD, user provisioning, emergency access), <strong>Process Control</strong> (control monitoring, compliance), and <strong>Risk Management</strong>. GRC can run on‑premise or in the cloud and integrates with S/4HANA (reads users and roles).
+    </div>
+
+    <p>SAP GRC addresses governance, risk, and compliance across the enterprise. It complements Security (Module 27) by adding risk analysis, access reviews, control monitoring, and audit support. Many organizations use GRC to satisfy regulatory requirements (e.g. Sarbanes-Oxley, SOX) and internal audit.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>GRC ensures that access and processes are <strong>governed</strong> (policies, roles, approval workflows), <strong>risks</strong> are identified and mitigated (access risk, process risk), and the organization remains <strong>compliant</strong> with regulations and internal controls. Scope includes: <strong>Access Control:</strong> Segregation of duties (SOD), compliant user provisioning, enterprise role management, risk analysis and remediation, superuser privilege management (e.g. firefighter), and access recertification. <strong>Process Control:</strong> Control framework (policies, control objectives), control monitoring (automated and manual tests), and compliance reporting. <strong>Risk Management:</strong> Risk identification, assessment, mitigation plans, and risk reporting. <strong>Audit Management:</strong> Audit planning, workpapers, findings, and follow-up (included in some GRC deployments). GRC aligns with the <strong>Three Lines of Defense</strong> (1st: operations; 2nd: risk/compliance; 3rd: internal audit).</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> Security (SU01, PFCG) defines roles and authorizations. GRC asks: “Do those roles create <em>risks</em>?” (e.g. one role that can both create a vendor and post payments = SOD risk.) GRC runs risk reports, supports access reviews (“recertify this user’s access every 90 days”), and tracks controls so that auditors and compliance teams have evidence that the organization is in control.
+    </div>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Access Control — SOD (Segregation of Duties):</strong> SOD rules define conflicting permission combinations (e.g. “create vendor” + “post payment” = critical risk). GRC reads users and roles from S/4HANA (and other systems), runs risk analysis, and flags users with SOD violations. Remediation: remove one of the roles, add mitigation (compensating control), or accept risk with approval. Rules can be delivered by SAP (rule set) or customized.</li>
+        <li><strong>Access Control — Compliant User Provisioning:</strong> Workflow-driven user provisioning: request access → approval → provisioning in target systems (S/4HANA, SuccessFactors, etc.). Reduces “grant everything” and ensures access is approved and documented.</li>
+        <li><strong>Access Control — Enterprise Role Management:</strong> Design and maintain roles (including from S/4HANA PFCG) in a central place; simulate risk before role is activated; transport or push roles to connected systems.</li>
+        <li><strong>Access Control — Superuser Privilege Management (e.g. Firefighter):</strong> Restrict use of powerful access (e.g. SAP_ALL or critical transactions). Users request temporary “firefighter” access; usage is logged and time-limited. Reduces standing superuser IDs.</li>
+        <li><strong>Access Control — Access Recertification:</strong> Periodic review of user access (e.g. quarterly). Managers or owners recertify “this user still needs these roles”; revoke if not. Evidence for auditors.</li>
+        <li><strong>Process Control:</strong> Define control objectives and controls (e.g. “Vendor master change is approved”). Link controls to risks. Run control tests (automated: e.g. “no payment over X without two approvals”; manual: checklist). Document results and exceptions. Report on control effectiveness and compliance status.</li>
+        <li><strong>Risk Management:</strong> Risk catalog (e.g. “Unauthorized payment”); assess likelihood and impact; define mitigation; track actions. Can link to Process Control (control mitigates risk) and to Access Control (access risk).</li>
+        <li><strong>Audit Management:</strong> Plan audits; create audit workpapers; record findings and recommendations; track remediation. Integrates with Process Control and Risk Management for a full audit trail.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> GRC stores its own data: risk analysis results (users with SOD violations), role and user snapshots from connected systems, control test results, risk registers, audit workpapers. Data is read from S/4HANA (and other systems) via connectors (RFC, API) for analysis; GRC does not replace S/4HANA’s user/role tables—it <em>analyzes</em> them. <strong>Control plane:</strong> GRC configuration: connection to S/4HANA (and other systems), SOD rule set, control framework, workflow and approval config, recertification cycles. Access to GRC itself is controlled by GRC roles (e.g. GRC Admin, Risk Analyst, Approver). See Module 1 for data vs control plane.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> SAP GRC can run <strong>on‑premise</strong> (GRC 12.0 and later, on NetWeaver; often on a dedicated GRC system or shared with BW) or in the <strong>cloud</strong> (SAP offers cloud editions of Access Control and Process Control; roadmap varies by region). Hybrid: GRC on‑prem connected to S/4HANA Cloud or to cloud applications. <strong>Integration:</strong> GRC connects to S/4HANA (and ECC, BW, SuccessFactors, Ariba, etc.) to read users, roles, and authorizations; to run risk analysis; and (with Access Control) to provision users or push roles. Connectors use RFC, OData, or product-specific APIs. Identity (e.g. IAS) can integrate for SSO and user sync. GRC feeds compliance and audit reports; data can be exported to BI or Audit Management.</p>
+
+    <div class="example-box">
+        <h4>Example: SOD violation and remediation</h4>
+        <p>Company policy: the same person must not be able to <em>create or change a vendor</em> and <em>post payments</em> (SOD).</p>
+        <ol style="padding-left: 22px; margin: 10px 0;">
+            <li><strong>Risk analysis:</strong> GRC Access Control runs a risk analysis (e.g. daily or on demand). It reads all users and their roles from S/4HANA. Rule set says: “Role with transaction X (vendor maintenance) + Role with transaction Y (payment posting) = SOD risk.” User JOHN has both roles → flagged as SOD violation (e.g. “Critical”).</li>
+            <li><strong>Remediation options:</strong> (a) Remove one role from JOHN (e.g. remove payment posting; only procurement keeps vendor maintenance). (b) Mitigate: document a compensating control (e.g. “All payments over 10k require second approval”) and accept residual risk with manager sign-off. (c) Emergency: grant temporary firefighter for one task, with log.</li>
+            <li><strong>Recertification:</strong> In the next access review cycle, JOHN’s manager sees JOHN’s roles and the SOD finding. Manager recertifies “JOHN still needs vendor maintenance” but revokes “payment posting” → violation cleared. GRC stores the review and decision for audit.</li>
+        </ol>
+        <p>Result: SOD risk is identified, remediated, and documented. Process Control can define a control “SOD for vendor and payment is monitored and remediated”; evidence comes from GRC reports and recertification history.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Key GRC concepts and components</h4>
+        <table>
+            <tr><th>Term / Component</th><th>Purpose</th></tr>
+            <tr><td>SOD (Segregation of Duties)</td><td>Preventing conflicting permissions (e.g. create vendor + post payment); GRC analyzes and reports violations.</td></tr>
+            <tr><td>Access Control</td><td>SOD, user provisioning, role management, firefighter, access recertification.</td></tr>
+            <tr><td>Process Control</td><td>Control framework, control monitoring, compliance tests, reporting.</td></tr>
+            <tr><td>Risk Management</td><td>Risk catalog, assessment, mitigation, risk reporting.</td></tr>
+            <tr><td>Rule set</td><td>Definition of SOD risk rules (which transaction combinations = risk).</td></tr>
+            <tr><td>Recertification</td><td>Periodic review and re-approval of user access; evidence for compliance.</td></tr>
+            <tr><td>Firefighter</td><td>Temporary elevated access with logging; reduces standing superuser IDs.</td></tr>
+        </table>
+    </div>
+
+    <div class="info-box"><strong>Relationship to Module 27 (Security):</strong> Security defines <em>what</em> users can do (SU01, PFCG, authorizations). GRC adds <em>governance</em>: are those permissions risky? Are they reviewed? Are controls in place? Implement Security first; then add GRC for risk analysis, provisioning workflows, and compliance.</div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: GRC components at a glance</h4>
+        <p>Click a component to see what it does in one sentence.</p>
+        <div style="margin: 16px 0;">
+            <button type="button" onclick="showGrc('access')">Access Control</button>
+            <button type="button" onclick="showGrc('process')">Process Control</button>
+            <button type="button" onclick="showGrc('risk')">Risk Management</button>
+            <button type="button" onclick="showGrc('sod')">SOD</button>
+        </div>
+        <div id="grc-reveal" class="reveal-box"></div>
+    </div>
+
+    <h3>Key tables and integration points</h3>
+    <p>GRC uses its own repository (e.g. GRC backend tables for rules, analysis results, workflow, controls). It does not replace S/4HANA tables like USR02 or AGR_*; it <em>reads</em> them via connectors. Key integration: <strong>S/4HANA (or ECC):</strong> RFC or API connection; GRC pulls user master, role assignments, and (optionally) authorization data for risk analysis. <strong>User provisioning:</strong> GRC can create or change users in S/4HANA via BAPI or API when a request is approved. <strong>Process Control:</strong> Connectors to S/4HANA (or other systems) for automated control tests (e.g. “read payment documents and check approval”).</p>
+
+    <h3>Important T-codes and Fiori apps (on‑prem GRC)</h3>
+    <p>On‑premise GRC Access Control uses transactions such as <strong>GRAC_SPRO</strong> (GRC customizing), <strong>GRAC_USER_RISK_ANALYSIS</strong> (risk analysis for users), <strong>GRAC_ROLE_RISK_ANALYSIS</strong> (risk for roles), and Fiori apps (e.g. “Manage Access Risks,” “Manage User Access,” “Access Request”). Process Control and Risk Management have their own work centers and apps. Cloud GRC uses web UIs and Fiori-style apps in the GRC cloud tenant. Consult SAP Help for the current list of transactions and apps for your GRC version.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Question 1: What is the main purpose of SAP GRC Access Control in relation to Security (Module 27)?</h4>
+            <ul class="quiz-options">
+                <li>A) Replace SU01 and PFCG</li>
+                <li>B) Analyze access for risks (e.g. SOD), run recertification, and govern provisioning</li>
+                <li>C) Only create users</li>
+                <li>D) Only run reports</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1">
+                <strong>Correct Answer: B</strong><br>
+                Access Control analyzes users and roles for SOD and other risks, supports access recertification, and can govern user provisioning. It does not replace Security; it adds governance and compliance on top.
+            </div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 2: What does SOD mean in GRC?</h4>
+            <ul class="quiz-options">
+                <li>A) Same order date</li>
+                <li>B) Segregation of Duties—preventing one person from having conflicting permissions (e.g. create vendor and post payment)</li>
+                <li>C) Only a table name</li>
+                <li>D) Only a report</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2">
+                <strong>Correct Answer: B</strong><br>
+                SOD = Segregation of Duties. GRC uses rule sets to identify users who have conflicting authorizations and supports remediation and recertification.
+            </div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 3: Which GRC component focuses on control monitoring and compliance tests?</h4>
+            <ul class="quiz-options">
+                <li>A) Only Access Control</li>
+                <li>B) Process Control</li>
+                <li>C) Only Risk Management</li>
+                <li>D) Only Basis</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3">
+                <strong>Correct Answer: B</strong><br>
+                Process Control manages the control framework, control objectives, and control tests (automated and manual) for compliance reporting.
+            </div>
+        </div>
+        <div class="quiz-question">
+            <h4>Question 4: How does GRC typically get user and role data from S/4HANA?</h4>
+            <ul class="quiz-options">
+                <li>A) By replacing S/4HANA tables</li>
+                <li>B) Via connectors (RFC, API)—GRC reads users and roles from S/4HANA for risk analysis</li>
+                <li>C) Only manually</li>
+                <li>D) Only from FI</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4">
+                <strong>Correct Answer: B</strong><br>
+                GRC connects to S/4HANA (and other systems) via RFC or APIs to read user and role data. It analyzes that data for risks; it does not replace the source system’s user/role tables.
+            </div>
+        </div>
+    </div>
+    <script>
+        function showAnswer(n) {
+            document.getElementById('answer-' + n).classList.add('show');
+            var btn = document.getElementById('btn-' + n);
+            btn.disabled = true;
+            btn.textContent = 'Answer Revealed';
+        }
+        function showGrc(type) {
+            var box = document.getElementById('grc-reveal');
+            var text = '';
+            if (type === 'access') text = '<strong>Access Control:</strong> Manages SOD analysis, user provisioning workflows, role management, firefighter/superuser privilege management, and access recertification.';
+            else if (type === 'process') text = '<strong>Process Control:</strong> Defines and monitors controls (policies, control objectives, tests); supports compliance and audit evidence.';
+            else if (type === 'risk') text = '<strong>Risk Management:</strong> Identifies, assesses, and mitigates risks; risk catalog, mitigation plans, and risk reporting.';
+            else if (type === 'sod') text = '<strong>SOD (Segregation of Duties):</strong> Prevents conflicting permissions (e.g. create vendor + post payment). GRC runs rule-based risk analysis and supports remediation and recertification.';
+            box.innerHTML = text;
+            box.classList.add('show');
+        }
+    </script>
+</body>
+</html>

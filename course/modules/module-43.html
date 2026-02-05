@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 43: SAP HANA (Platform)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:hover { background: #218838; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+    </style>
+</head>
+<body>
+    <h2>Module 43: SAP HANA (Platform)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> <strong>SAP HANA</strong> is SAP’s in-memory database and platform. “In-memory” means data is stored primarily in RAM (random access memory) instead of only on disk, which allows very fast reads and writes. HANA is the <strong>required database</strong> for S/4HANA, BW/4HANA, and many other SAP products. It also offers advanced capabilities: <strong>columnar storage</strong> for analytics, <strong>built-in analytics</strong> (e.g. calculation views), and an <strong>application server</strong> (XS/XSA) for running lightweight apps. Key terms: <strong>in-memory</strong>, <strong>column store</strong>, <strong>row store</strong>, <strong>calculation view</strong>, <strong>S/4HANA</strong>.
+    </div>
+
+    <p>HANA was designed for both transactional (OLTP) and analytical (OLAP) workloads. S/4HANA runs only on HANA; the simplified data model and real-time reporting in S/4HANA depend on HANA’s speed and columnar storage. HANA is available on‑premise (hardware or certified appliances) and in the cloud (SAP HANA Cloud).</p>
+
+    <h3>Purpose and scope</h3>
+    <p><strong>Database:</strong> Store and retrieve data with high throughput and low latency. Support for SQL, full ACID transactions. Used by S/4HANA, BW/4HANA, and custom applications. <strong>Storage:</strong> Data can be stored in <strong>row store</strong> (good for single-row operations, e.g. “get one order”) or <strong>column store</strong> (good for aggregations and scans, e.g. “sum revenue by region”). Many tables use column store by default. <strong>In-memory:</strong> Hot data resides in memory; cold data can be tiered to disk (e.g. HANA extended storage). Persistence to disk still exists for durability. <strong>Advanced analytics:</strong> Calculation views (graphical or SQL-based) for multi-table logic and aggregations; can be consumed by reporting tools. Text search, spatial, and graph capabilities. <strong>Application layer:</strong> SAP HANA XS/XSA (extended application services) for running small apps and services on the same platform (less common now with BTP).</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> <strong>Column store</strong> stores data by column (all “revenue” values together) instead of by row (one row = one order with many columns). When you run “sum(revenue) by region,” the database only reads the revenue and region columns and can compress them heavily—so analytics run much faster. <strong>Row store</strong> is better when you often read or update one full row (e.g. one sales order document).
+    </div>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Columnar storage and compression:</strong> Column store tables compress very well (similar values in a column). Aggregations (SUM, COUNT, AVG) and filters on columns are fast. HANA automatically chooses row vs column for optimal performance; application tables in S/4HANA use both (e.g. header row store, line item column store).</li>
+        <li><strong>Calculation views:</strong> Built in SAP HANA Studio or Web IDE. Combine tables, add joins, filters, and calculated columns. Expose as consumption models for reporting (e.g. from SAC, BW, or Fiori). Support for hierarchy, variables, and input parameters. Enable “push-down” of logic to the database so only result set is sent to the client.</li>
+        <li><strong>SQL and scripting:</strong> Native SQL (SQLScript) for complex logic; procedures and functions. Used by ABAP (e.g. CDS views with HANA-specific optimisations) and by BW/4HANA. Full SQL standard support plus HANA extensions.</li>
+        <li><strong>High availability and scale-out:</strong> Multiple nodes (scale-out) for very large databases. Replication (e.g. system replication) for disaster recovery. Backup and recovery (snapshots, log backup).</li>
+        <li><strong>SAP HANA Cloud:</strong> HANA as a managed service in the cloud (SAP BTP or hyperscaler). Same engine; no customer-managed infrastructure. Used by S/4HANA Cloud and other SAP cloud services. Smaller footprint options (e.g. HANA Cloud for development and mid-size).</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> Data is stored in HANA tables (row or column). S/4HANA application tables (e.g. ACDOCA, VBAK, VBAP) live in HANA. Logs and persistence ensure durability. Calculation views and virtual tables (e.g. to remote sources) are metadata and definitions. <strong>Control plane:</strong> Database administration: create schemas, users, roles; monitor memory, CPU, and disk; tune parameters. Backup and recovery configuration. In S/4HANA, much of this is done via the application layer (Basis); standalone HANA (e.g. for BW/4HANA or custom) is administered via SAP HANA Cockpit or Studio. No SPRO—HANA is the database; configuration of the SAP application (S/4HANA) is in the application.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> <strong>On‑premise:</strong> HANA on certified hardware (e.g. SAP HANA Appliances) or supported virtualised environments. S/4HANA and BW/4HANA run on top. <strong>Cloud:</strong> SAP HANA Cloud (managed by SAP) or HANA on hyperscaler (e.g. AWS, Azure, GCP) for SAP workloads. S/4HANA Cloud uses HANA Cloud. <strong>Integration:</strong> Applications (ABAP, Java, etc.) connect to HANA via standard drivers (e.g. ODBC, JDBC). SAP applications are built to use HANA-specific features (e.g. CDS with HANA optimisations). Reporting tools (SAC, BW, Datasphere) can connect to HANA calculation views or tables. See Module 26 (Basis) for application-database relationship and Module 30 for S/4HANA.</p>
+
+    <div class="example-box">
+        <h4>Example: Why S/4HANA needs HANA</h4>
+        <p>S/4HANA uses a <strong>universal journal</strong> (table ACDOCA) that stores all FI and many CO postings in one columnar table. Reports that aggregate by account, cost centre, profit centre, or time run directly on this table without copying data to an external BW cube first. In ECC on a traditional database, such reporting would often be slow or require pre-aggregation in BW. With HANA’s column store and in-memory speed, S/4HANA can offer “real-time” reporting on the same data as transactions. Similarly, material ledger and inventory reporting in S/4HANA rely on HANA for fast multi-dimensional queries. The simplification of the data model (e.g. removing redundant indexes and aggregate tables) is possible because HANA can answer complex queries on the single source table quickly.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Key HANA concepts</h4>
+        <table>
+            <tr><th>Term</th><th>Purpose</th></tr>
+            <tr><td>In-memory</td><td>Data kept in RAM for fast access; persisted to disk for durability.</td></tr>
+            <tr><td>Column store</td><td>Storage by column; optimised for analytics (aggregations, scans).</td></tr>
+            <tr><td>Row store</td><td>Storage by row; optimised for single-row read/update.</td></tr>
+            <tr><td>Calculation view</td><td>HANA artefact that defines joins, aggregations, and logic; consumed by reporting.</td></tr>
+            <tr><td>SAP HANA Cloud</td><td>Managed HANA service in the cloud; used by S/4HANA Cloud and BTP.</td></tr>
+        </table>
+    </div>
+
+    <div class="info-box"><strong>Relationship to other modules:</strong> S/4HANA (Module 30) runs only on HANA. Migration (Module 40) includes moving the database to HANA. BW/4HANA (Module 25) runs on HANA. Basis (Module 26) administers the application layer that sits on HANA. Datasphere (Module 21) can connect to HANA as a source. ABAP (Module 24) uses HANA via CDS and Open SQL.</div>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: What is SAP HANA?</h4>
+            <ul class="quiz-options">
+                <li>A) Only a reporting tool</li>
+                <li>B) SAP’s in-memory database and platform; required for S/4HANA; supports column/row store, calculation views, high performance</li>
+                <li>C) Only an HR module</li>
+                <li>D) Only for SD</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>HANA is the database and platform that S/4HANA and others run on.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: Why is “column store” important for analytics?</h4>
+            <ul class="quiz-options">
+                <li>A) Only for PM</li>
+                <li>B) Data stored by column allows fast aggregations (SUM, AVG) and scans over few columns; compresses well</li>
+                <li>C) Only for QM</li>
+                <li>D) Only for FI</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Column store is optimised for analytical queries.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: Can S/4HANA run on a database other than HANA?</h4>
+            <ul class="quiz-options">
+                <li>A) Yes, on Oracle or SQL Server</li>
+                <li>B) No—S/4HANA runs only on SAP HANA</li>
+                <li>C) Only on Excel</li>
+                <li>D) Only on BW</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>S/4HANA is designed for HANA only.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: What is a calculation view in HANA?</h4>
+            <ul class="quiz-options">
+                <li>A) A Fiori app</li>
+                <li>B) A HANA artefact that defines joins, aggregations, and logic; consumed by reporting tools for push-down analytics</li>
+                <li>C) Only a table</li>
+                <li>D) Only for MM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>Calculation views are the main way to build reusable analytical models in HANA.</div>
+        </div>
+    </div>
+    <script>
+        function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+    </script>
+</body>
+</html>

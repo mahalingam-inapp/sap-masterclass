@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 34: Global Trade Services (GTS)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9f9f9; padding: 20px; color: #333; line-height: 1.7; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 8px; margin-bottom: 20px; font-size: 1.5em; }
+        h3 { color: #764ba2; margin: 24px 0 12px; font-size: 1.15em; }
+        h4 { color: #667eea; margin: 16px 0 8px; font-size: 1em; }
+        p, ul { margin-bottom: 14px; }
+        ul { padding-left: 24px; }
+        .example-box { background: white; border: 2px solid #e0e0e0; border-radius: 8px; padding: 25px; margin: 18px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .info-box { background: #e8f4f8; border-left: 4px solid #667eea; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms { background: #f0f7ff; border-left: 4px solid #764ba2; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .plain-terms strong { color: #764ba2; }
+        .step-box { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .interactive-container { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 24px; margin: 20px 0; }
+        .reveal-box { display: none; margin-top: 14px; padding: 16px; border-radius: 6px; border: 1px solid #667eea; background: #f0f4ff; }
+        .reveal-box.show { display: block; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 0.95em; }
+        th { background: #667eea; color: white; padding: 10px 12px; text-align: left; }
+        td { padding: 10px 12px; border: 1px solid #e0e0e0; }
+        tr:nth-child(even) { background: #f8f9fa; }
+        button { background: #667eea; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin: 4px 8px 4px 0; }
+        button:hover { background: #5568d3; }
+        .quiz-section { background: white; border: 2px solid #667eea; border-radius: 8px; padding: 30px; margin-top: 35px; }
+        .quiz-question { background: #f8f9fa; border-left: 4px solid #764ba2; padding: 20px; margin: 18px 0; border-radius: 4px; }
+        .quiz-options { list-style: none; padding-left: 0; }
+        .quiz-options li { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px 14px; margin: 6px 0; }
+        .show-answer-btn { background: #28a745; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+        .show-answer-btn:disabled { background: #6c757d; cursor: not-allowed; opacity: 0.8; }
+        .quiz-answer { display: none; margin-top: 12px; padding: 12px; background: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; }
+        .quiz-answer.show { display: block; }
+        .flow-step { padding: 10px 14px; margin: 8px 0; background: #e8f0ff; border-left: 4px solid #667eea; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h2>Module 34: Global Trade Services (GTS)</h2>
+
+    <div class="plain-terms">
+        <strong>For beginners:</strong> When you ship or receive goods across borders, you must comply with <strong>customs</strong> (duties, declarations, licenses) and <strong>trade regulations</strong> (export control, sanctioned parties, preferences). SAP <strong>GTS</strong> (Global Trade Services) handles this: it checks sales and purchase documents against customs and compliance rules, supports <strong>customs declarations</strong>, <strong>export control</strong> (e.g. dual-use goods), and <strong>sanctioned-party list screening</strong> (so you don’t do business with blocked entities). GTS can run embedded in S/4HANA or as a separate GTS system that connects to S/4HANA (or ECC). Key terms: <strong>customs declaration</strong>, <strong>export control</strong>, <strong>SPL</strong> (sanctioned party list), <strong>preference</strong> (e.g. tariff preference for origin).
+    </div>
+
+    <p>SAP GTS addresses customs and global trade compliance. It integrates with SD (sales, delivery), MM (purchasing, goods movement), and FI. Companies that trade internationally use GTS to avoid penalties, speed up customs clearance, and manage export and embargo controls.</p>
+
+    <h3>Purpose and scope</h3>
+    <p>GTS covers: <strong>Customs Management:</strong> Customs declarations (import/export), duty calculation, customs tariff (e.g. HS codes), customs procedures (e.g. inward/outward processing), and communication with customs authorities (e.g. ATLAS, AEP). <strong>Export Control:</strong> Legal control (e.g. dual-use, military), classification (ECCN, control list), license determination, and blocking of documents if export is not allowed. <strong>Sanctioned Party List (SPL) screening:</strong> Check business partners (customer, vendor, etc.) and optionally addresses against official lists (e.g. OFAC, EU sanctions); block or alert if hit. <strong>Preference and origin:</strong> Determine origin of goods (e.g. for free-trade agreements); support preference certificates and duty savings. <strong>Risk management:</strong> Customs and trade risk (e.g. classification risk). GTS can be used for both outbound (export) and inbound (import) and for intra-EU or non-EU trade depending on configuration.</p>
+    <div class="plain-terms">
+        <strong>In plain terms:</strong> Before you ship to a customer, GTS can run a <strong>sanctioned-party check</strong>: is the customer or ship-to address on a government block list? If yes, the system can block the delivery and alert compliance. For customs, when the truck leaves your warehouse for another country, a <strong>customs declaration</strong> (e.g. export declaration) is required; GTS can create and submit it using data from the delivery and material (e.g. HS code, weight, value).
+    </div>
+
+    <h3>Features in detail</h3>
+    <ul>
+        <li><strong>Customs declaration:</strong> Declaration is created from delivery or shipment (reference to material, quantity, value, origin, HS code). Can be export, import, or transit. GTS calculates duties and taxes where applicable; declaration can be sent to customs (e.g. via EDI or national system). Status (released, cleared) is tracked. Supports multiple countries and procedures.</li>
+        <li><strong>Export control:</strong> Material is classified (e.g. ECCN, control list). When a sales order or delivery is created, GTS checks whether the combination of material, destination country, and (optionally) end user requires a license or is prohibited. If license required, document can be blocked until license is entered or exception is approved. Prevents illegal exports.</li>
+        <li><strong>SPL screening:</strong> When you create or change a business partner (or at order/delivery), GTS runs screening: compare partner name and address to sanctioned lists. If match (hit), system can block the transaction or require compliance release. Lists are updated (e.g. from official sources); screening can be real-time or batch.</li>
+        <li><strong>Preference and origin:</strong> Origin of material (e.g. “EU,” “US”) is stored and used for preference determination (e.g. EU–UK FTA). Preference certificate (e.g. EUR.1) can be generated. Reduces duty when conditions are met.</li>
+        <li><strong>Integration with SD/MM:</strong> GTS is called from SD (order, delivery) and MM (purchasing, GR) for checks and document creation. Blocking can prevent delivery or GR until compliance is resolved. Customs documents and status can flow back to S/4HANA.</li>
+    </ul>
+
+    <h3>Data plane and control plane</h3>
+    <p><strong>Data plane:</strong> GTS stores customs declarations, screening results, licenses, and classification data. It reads master data (material, business partner) and transaction data (order, delivery, PO) from S/4HANA via integration. GTS has its own repository for trade documents and compliance results. <strong>Control plane:</strong> GTS configuration: legal control settings, customs procedures, SPL list sources and update jobs, preference rules, and integration settings (connection to S/4HANA, customs systems). See Module 1.</p>
+
+    <h3>Deployment and integration</h3>
+    <p><strong>Deployment:</strong> GTS can run <strong>embedded in S/4HANA</strong> (same system) or as a <strong>separate GTS system</strong> (e.g. central GTS for multiple ERPs). S/4HANA Cloud may offer GTS capabilities depending on scope. <strong>Integration:</strong> With S/4HANA (or ECC): RFC or API to read and write; delivery or order is sent to GTS for checks and declaration creation; block or release is sent back. With customs authorities: EDI or national interfaces (e.g. ATLAS in Germany). With list providers: SPL lists are loaded into GTS periodically or on demand.</p>
+
+    <div class="example-box">
+        <h4>Example: SPL screening at order and export declaration at delivery</h4>
+        <p><strong>SPL at order:</strong> Sales order is created for customer “ABC Trading,” ship-to country XY. GTS runs SPL screening on sold-to and ship-to. “ABC Trading” matches a name on the sanctioned list (e.g. fuzzy match). GTS returns “hit”; order is blocked. Compliance officer reviews: false positive (different entity). Officer releases the block with comment. Order is released and can be delivered.</p>
+        <p><strong>Export declaration at delivery:</strong> Delivery 8000000500 is created for export to country Z. GTS receives delivery data (material, quantity, value, incoterms). Material has HS code and origin in master. GTS creates export declaration; declaration is submitted to customs (e.g. via national gateway). Customs clears the declaration. GTS updates status “cleared”; delivery can proceed (e.g. goods issue). Without GTS, you would create declarations manually or in a separate customs system.</p>
+    </div>
+
+    <div class="step-box">
+        <h4>Key GTS concepts</h4>
+        <table>
+            <tr><th>Term / Component</th><th>Purpose</th></tr>
+            <tr><td>Customs declaration</td><td>Official document for import/export/transit; created from delivery/shipment; submitted to customs.</td></tr>
+            <tr><td>Export control</td><td>Check if material/destination/end user requires license or is prohibited; block if not compliant.</td></tr>
+            <tr><td>SPL (Sanctioned Party List)</td><td>Screening of business partners against official block lists; block or alert on hit.</td></tr>
+            <tr><td>Preference / origin</td><td>Origin of goods for free-trade agreements; preference certificates; duty savings.</td></tr>
+            <tr><td>HS code</td><td>Harmonized System code (tariff number) for customs classification of goods.</td></tr>
+        </table>
+    </div>
+
+    <div class="info-box"><strong>Relationship to SD and MM:</strong> SD creates sales orders and deliveries; MM creates purchase orders and goods movements. GTS does not replace them—it adds compliance checks and customs documents. Configure GTS to run at the right point (e.g. order save, delivery creation) so that non-compliant transactions are blocked before execution.</div>
+
+    <div class="interactive-container">
+        <h4>🎯 Interactive: When does GTS run?</h4>
+        <p>Select a trigger to see what GTS does.</p>
+        <div style="margin: 16px 0;">
+            <button type="button" onclick="showGts('spl')">New customer created / Order saved</button>
+            <button type="button" onclick="showGts('export')">Delivery created for export</button>
+            <button type="button" onclick="showGts('import')">Goods receipt for imported material</button>
+        </div>
+        <div id="gts-reveal" class="reveal-box"></div>
+    </div>
+
+    <h3>Key tables and T-codes</h3>
+    <p>GTS uses its own data model (customs documents, screening log, licenses, etc.). Integration with S/4HANA uses IDocs, RFC, or APIs. T-codes and Fiori apps depend on GTS release (e.g. customs declaration workbench, screening log, export control checks). See SAP Help for GTS.</p>
+
+    <div class="quiz-section">
+        <h3>📝 Module Quiz</h3>
+        <div class="quiz-question">
+            <h4>Q1: What is SPL screening in GTS?</h4>
+            <ul class="quiz-options">
+                <li>A) Only material classification</li>
+                <li>B) Checking business partners (and optionally addresses) against sanctioned party lists; block or alert on hit</li>
+                <li>C) Only pricing</li>
+                <li>D) Only production</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-1" onclick="showAnswer(1)">Show Answer</button>
+            <div class="quiz-answer" id="answer-1"><strong>Correct: B</strong><br>SPL screening prevents doing business with sanctioned entities by comparing partners to official lists.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q2: Export control in GTS is used to:</h4>
+            <ul class="quiz-options">
+                <li>A) Only calculate price</li>
+                <li>B) Check if material/destination/end user requires a license or is prohibited; block document if not compliant</li>
+                <li>C) Only post to FI</li>
+                <li>D) Only create purchase order</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-2" onclick="showAnswer(2)">Show Answer</button>
+            <div class="quiz-answer" id="answer-2"><strong>Correct: B</strong><br>Export control ensures you do not export controlled goods without a license or to prohibited destinations.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q3: GTS integrates most with which modules?</h4>
+            <ul class="quiz-options">
+                <li>A) Only PP</li>
+                <li>B) SD (sales, delivery) and MM (purchasing, GR) for customs and compliance checks</li>
+                <li>C) Only QM</li>
+                <li>D) Only PM</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-3" onclick="showAnswer(3)">Show Answer</button>
+            <div class="quiz-answer" id="answer-3"><strong>Correct: B</strong><br>GTS is triggered from SD and MM documents for export/import and screening.</div>
+        </div>
+        <div class="quiz-question">
+            <h4>Q4: Customs declaration in GTS is typically created from:</h4>
+            <ul class="quiz-options">
+                <li>A) Only G/L posting</li>
+                <li>B) Delivery or shipment (material, quantity, value, HS code, origin)</li>
+                <li>C) Only cost center</li>
+                <li>D) Only asset</li>
+            </ul>
+            <button class="show-answer-btn" id="btn-4" onclick="showAnswer(4)">Show Answer</button>
+            <div class="quiz-answer" id="answer-4"><strong>Correct: B</strong><br>Declaration uses delivery/shipment data and material master (e.g. HS code, origin) to create and submit the customs document.</div>
+        </div>
+    </div>
+    <script>
+        function showAnswer(n) { document.getElementById('answer-' + n).classList.add('show'); var b = document.getElementById('btn-' + n); b.disabled = true; b.textContent = 'Answer Revealed'; }
+        function showGts(x) {
+            var box = document.getElementById('gts-reveal');
+            if (x === 'spl') box.innerHTML = '<strong>SPL screening.</strong> When a new customer is created or an order is saved, GTS can run sanctioned-party list screening on the business partner (and ship-to). If the partner matches a list entry, the order can be blocked until compliance releases it.';
+            else if (x === 'export') box.innerHTML = '<strong>Export declaration.</strong> When a delivery is created for export, GTS uses the delivery and material data (HS code, value, origin) to create the export declaration and can submit it to customs. Delivery may be blocked until declaration is cleared.';
+            else if (x === 'import') box.innerHTML = '<strong>Import / customs.</strong> For imported goods, GTS can create the import declaration and support duty calculation and clearance. Goods receipt in MM may be linked to the customs status (e.g. cleared for free circulation).';
+            box.classList.add('show');
+        }
+    </script>
+</body>
+</html>
